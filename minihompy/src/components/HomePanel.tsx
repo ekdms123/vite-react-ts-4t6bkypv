@@ -7,6 +7,7 @@ type Loaded = {
   due: (Entry & { sections: { label: string } })[]
   recent: Awaited<ReturnType<typeof api.recentEntries>>
   counts: Record<string, number>
+  words: Awaited<ReturnType<typeof api.wordsFromFriends>>
 }
 
 /**
@@ -26,13 +27,14 @@ export default function HomePanel({ profile, sections, isOwner, uid, energy, onJ
   const [saved, setSaved] = useState(false)
 
   async function reload() {
-    const [todos, due, recent, counts] = await Promise.all([
+    const [todos, due, recent, counts, words] = await Promise.all([
       api.openTodos(profile.id),
       api.dueSoon(profile.id),
       api.recentEntries(profile.id, 5),
       api.countsBySection(profile.id),
+      api.wordsFromFriends(profile.id),
     ])
-    setD({ todos, due, recent, counts })
+    setD({ todos, due, recent, counts, words })
   }
   useEffect(() => { void reload() /* eslint-disable-next-line */ }, [profile.id])
 
@@ -119,6 +121,18 @@ export default function HomePanel({ profile, sections, isOwner, uid, energy, onJ
                 </span>
               </div>
             ))}
+
+        {d.words.length > 0 && (
+          <div className="friends-say">
+            <div className="fs-title">What friends say</div>
+            {d.words.map((w, i) => (
+              <div key={i} className="fs-row">
+                <b>{w.who}</b>
+                <span>{w.note}</span>
+              </div>
+            ))}
+          </div>
+        )}
 
         <div className="counts">
           {sections.map(s => (

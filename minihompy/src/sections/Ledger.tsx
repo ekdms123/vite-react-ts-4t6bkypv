@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import * as api from '../lib/api'
 import { INCOME_CATEGORIES, LEDGER_CATEGORIES, type Section } from '../lib/types'
+import Editable from '../components/Editable'
 
 const won = (n: number) => n.toLocaleString('ko-KR') + '원'
 type Stats = Awaited<ReturnType<typeof api.moneyStats>>
@@ -151,7 +152,10 @@ export default function Ledger({ section, isOwner, uid }: {
             {d.rows.filter(r => !r.is_planned).map(r => (
               <li key={r.id} data-income={r.is_income}>
                 <span className="chip">{r.category}</span>
-                <span className="what">{r.title}</span>
+                <Editable className="what" value={r.title} disabled={!isOwner}
+                          onSave={async next => {
+                            await api.updateEntry(r.id, { title: next }); await reload()
+                          }} />
                 <b>{r.is_income ? '+' : '−'}{won(r.amount ?? 0)}</b>
                 <span className="when">{new Date(r.created_at).getDate()}일</span>
                 {isOwner && (

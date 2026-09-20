@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import * as api from '../lib/api'
 import type { Entry, Section } from '../lib/types'
+import Editable from '../components/Editable'
 
 const DAY = 86_400_000
 
@@ -71,7 +72,10 @@ export default function Todo({ section, isOwner, uid }: {
                   <button className="tick" aria-label="완료"
                           onClick={async () => { await api.toggleDone(r.id, true); await reload() }}
                           disabled={!isOwner} />
-                  <span className="what">{r.title}</span>
+                  <Editable className="what" value={r.title} disabled={!isOwner}
+                            onSave={async next => {
+                              await api.updateEntry(r.id, { title: next }); await reload()
+                            }} />
                   {d && <span className={`dday ${d.tone}`}>{d.text}</span>}
                   {isOwner && (
                     <button className="x" title="지우기"

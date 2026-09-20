@@ -9,6 +9,7 @@ import TabRail from './components/TabRail'
 import HomePanel from './components/HomePanel'
 import Friends from './components/Friends'
 import Settings from './components/Settings'
+import Search from './components/Search'
 import SectionView from './sections/SectionView'
 import Landing from './components/Landing'
 import Setup from './components/Setup'
@@ -38,7 +39,9 @@ export default function App() {
   const [notFound, setNotFound] = useState(false)
 
   const wantedHandle = hash.startsWith('#/@') ? hash.slice(3).split('/')[0] : null
-  const sheet = hash === '#/friends' ? 'friends' : hash === '#/settings' ? 'settings' : null
+  const sheet = hash === '#/friends' ? 'friends'
+              : hash === '#/settings' ? 'settings'
+              : hash === '#/find' ? 'find' : null
 
   /** 볼 집을 정한다. 주소가 있으면 그 집, 없으면 내 집. */
   const load = useCallback(async () => {
@@ -117,6 +120,7 @@ export default function App() {
                 <h1>{viewing.title}</h1>
                 <div className="acts">
                   {!isOwner && <button onClick={() => location.hash = '#/friends'}>+일촌맺기</button>}
+                  {isOwner && <button onClick={() => location.hash = '#/find'}>찾기</button>}
                   {isOwner && <button onClick={() => location.hash = '#/settings'}>꾸미기</button>}
                   <button onClick={signOut}>로그아웃</button>
                 </div>
@@ -143,12 +147,16 @@ export default function App() {
       {!isDesktop && (
         <div className="dock">
           <button className="btn" onClick={() => setTab('home')}>홈</button>
+          {isOwner && <button className="btn ghost"
+                              onClick={() => location.hash = '#/find'}>찾기</button>}
           <button className="btn ghost" onClick={() => location.hash = '#/friends'}>일촌</button>
           {isOwner && <button className="btn ghost"
                               onClick={() => location.hash = '#/settings'}>꾸미기</button>}
         </div>
       )}
 
+      {sheet === 'find' && isOwner &&
+        <Search me={me} onJump={setTab} onClose={() => (location.hash = '#/')} />}
       {sheet === 'friends'  && <Friends me={me} onClose={() => (location.hash = '#/')} />}
       {sheet === 'settings' && isOwner &&
         <Settings me={me} sections={sections}

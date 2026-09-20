@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import * as api from '../lib/api'
 import type { Entry, Section } from '../lib/types'
+import Editable from '../components/Editable'
 
 const key = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 const WEEK = ['일', '월', '화', '수', '목', '금', '토']
@@ -108,7 +109,10 @@ export default function Calendar({ section, isOwner, uid }: {
                 <li key={r.id} data-moving={moving?.id === r.id}>
                   <time>{new Date(r.starts_at!).toLocaleTimeString('ko-KR',
                     { hour: '2-digit', minute: '2-digit' })}</time>
-                  <span className="what">{r.title}</span>
+                  <Editable className="what" value={r.title} disabled={!isOwner}
+                            onSave={async next => {
+                              await api.updateEntry(r.id, { title: next }); await reload()
+                            }} />
                   {isOwner && (
                     <>
                       <button className="crumb move"

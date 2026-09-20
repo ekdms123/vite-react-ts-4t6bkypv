@@ -936,3 +936,67 @@ textarea { resize: vertical; line-height: 1.7; }
   .money-grid .mcell.net { grid-column: span 2; }
   .pp-photo, .pp-note, .pp-comments { max-width: none; }
 }
+
+/* ── 알림 ──────────────────────────────────────────── */
+.toasts {
+  position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%);
+  display: flex; flex-direction: column; gap: 6px; z-index: 90;
+  pointer-events: none; width: min(92vw, 380px);
+}
+.toast {
+  background: #2c3038; color: #fff; border-radius: 9px;
+  padding: 10px 14px; font-size: 12px; line-height: 1.6;
+  box-shadow: 0 5px 18px rgba(0,0,0,.3);
+  animation: toast-in .16s ease-out;
+}
+.toast[data-kind="bad"] { background: #8d3b3b; }
+@keyframes toast-in { from { opacity: 0; transform: translateY(8px) } }
+@media (prefers-reduced-motion: reduce) { .toast { animation: none } }
+@media (max-width: 760px) { .toasts { bottom: 130px; } }
+
+/* ── 그 자리에서 고치기 ────────────────────────────── */
+.editable {
+  border: 0; background: none; padding: 1px 3px; margin: -1px -3px;
+  font: inherit; color: inherit; text-align: left; border-radius: 4px;
+  cursor: text; max-width: 100%;
+}
+.editable:hover { background: #f1f6f8; box-shadow: inset 0 -1px 0 var(--line); }
+.editable .ph { color: #c2c2c2; }
+.editing {
+  font: inherit; color: inherit; width: 100%;
+  border: 1px solid var(--tab); border-radius: 5px; padding: 3px 6px;
+  background: #fff;
+}
+.diary-text { display: block; white-space: pre-wrap; line-height: 1.85; width: 100%; }
+.sticky-text {
+  display: block; white-space: pre-wrap; word-break: break-word;
+  font-size: 11px; line-height: 1.65; width: 100%; margin-bottom: auto;
+}
+.sticky-text:hover { background: rgba(255,255,255,.45); box-shadow: none; }
+
+/* ── 찾기 ──────────────────────────────────────────── */
+.hits { display: grid; gap: 2px; margin-top: 10px; }
+.hit {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  border: 0; background: none; font-family: inherit; text-align: left;
+  padding: 8px 6px; border-radius: 6px; border-bottom: 1px solid var(--line);
+}
+.hit:hover { background: #f4f9fb; }
+.hit-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.hit-text b { font-size: 12px; color: var(--ink);
+              overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hit-text em {
+  font-style: normal; font-size: 10px; color: var(--ink-soft);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* ── 일촌평 ────────────────────────────────────────── */
+.friends-say {
+  margin-top: 14px; padding: 10px 11px;
+  background: #f7fbfc; border-radius: 8px;
+}
+.fs-title { font-size: 11px; color: var(--accent); font-weight: 700; padding-bottom: 6px; }
+.fs-row { display: flex; gap: 7px; font-size: 11px; padding: 3px 0; }
+.fs-row b { color: var(--title); white-space: nowrap; }
+.fs-row span { color: var(--ink-soft); min-width: 0;
+               overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

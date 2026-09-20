@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import * as api from '../lib/api'
 import { KIND_LABEL, type Entry, type Section } from '../lib/types'
+import Editable from '../components/Editable'
 
 /**
  * 던져둔 것들이 쌓이는 곳. 여기의 일은 보관이 아니라 비우기다.
@@ -52,7 +53,14 @@ export default function Inbox({ section, sections, isOwner, uid }: {
         : <div className="stickies">
             {rows.map((r, i) => (
               <div key={r.id} className="sticky" data-hue={i % 4}>
-                <p>{r.body || r.title}</p>
+                <Editable className="sticky-text" value={r.body || r.title} multiline
+                          disabled={!isOwner}
+                          onSave={async next => {
+                            await api.updateEntry(r.id, {
+                              body: next, title: next.split('\n')[0].slice(0, 50),
+                            })
+                            await reload()
+                          }} />
                 <div className="sticky-foot">
                   <span className="when">
                     {new Date(r.created_at).toLocaleDateString('ko-KR',

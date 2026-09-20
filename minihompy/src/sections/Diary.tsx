@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import * as api from '../lib/api'
 import { MOODS, type Entry, type Section } from '../lib/types'
+import Editable from '../components/Editable'
 
 const MOOD_FACE: Record<string, string> = {
   행복: '🌷', 뿌듯: '🌟', 설렘: '🎀', 그냥그럼: '☁️', 피곤: '🫧',
@@ -100,7 +101,11 @@ export default function Diary({ section, isOwner, uid }: {
                                 }}>×</button>
                       )}
                     </div>
-                    <p>{r.body}</p>
+                    <Editable className="diary-text" value={r.body} multiline
+                              disabled={!isOwner} placeholder="비어 있다"
+                              onSave={async next => {
+                                await api.updateEntry(r.id, { body: next }); await reload()
+                              }} />
                     {r.images.length > 0 && (
                       <div className="diary-pics">
                         {r.images.map((src, i) => <img key={i} src={src} alt="" loading="lazy" />)}

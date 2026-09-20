@@ -453,3 +453,46 @@ export async function moveEvent(id: string, when: Date) {
     .update({ starts_at: when.toISOString() }).eq('id', id)
   if (error) throw error
 }
+
+/* ── 검색 ───────────────────────────────────────────── */
+
+/**
+ * 탭을 가로질러 찾는다. 세 달쯤 지나면 "그때 그거"가 어느 탭에 있었는지
+ * 기억나지 않는데, 그때 탭을 하나씩 뒤지게 만들면 그냥 포기한다.
+ */
+export async function searchAll(owner: string, q: string, limit = 40) {
+  const term = q.trim()
+  if (term.length < 1) return []
+  const like = `%${term}%`
+  const { data, error } = await supabase
+    .from('entries').select('*, sections(label, kind)')
+    .eq('owner', owner)
+    .or(`title.ilike.${like},body.ilike.${like},category.ilike.${like}`)
+    .order('created_at', { ascending: false })
+    .limit(limit)
+  if (error) throw error
+  return (data ?? []) as (Entry & { sections: { label: string; kind: SectionKind } })[]
+}
+
+/* ── 일촌평 ─────────────────────────────────────────── */
+
+/** 대문의 "What friends say". 나를 어떻게 적어뒀는지 모아 온다. */
+export async function wordsFromFriends(home: string, limit = 4) {
+  const { data, error } = await supabase
+    .from('friendships').select('*').eq('status', 'accepted')
+    .or(`requester.eq.${home},addressee.eq.${home}`)
+  if (error) throw error
+  const rows = (data ?? []) as Friendship[]
+  const out: { who: string; note: string }[] = []
+  const ids: string[] = []
+  for (const f of rows) {
+    // 상대가 나를 두고 적은 쪽만 고른다
+    const note = f.requester === home ? f.addressee_note : f.requester_note
+    const other = f.requester === home ? f.addressee : f.requester
+    if (note?.trim()) { out.push({ who: other, note: note.trim() }); ids.push(other) }
+  }
+  if (!out.length) return []
+  const people = await profilesByIds(ids)
+  const byId = Object.fromEntries(people.map(p => [p.id, p.title]))
+  return out.slice(0, limit).map(o => ({ who: byId[o.who] ?? '누군가', note: o.note }))
+}
