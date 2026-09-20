@@ -355,16 +355,23 @@ textarea { resize: vertical; line-height: 1.7; }
     overflow: visible;              /* 페이지 자체가 스크롤된다 */
   }
 
-  /* 하단 고정 바 — 엄지로 닿는 자리 */
+  /* 하단 고정 바 — 엄지로 닿는 자리.
+     호스팅이 화면 아래 가운데에 배지를 띄우는 경우가 있어 버튼이 가려졌다.
+     배지 높이만큼 띄우고 아래는 배경이 비치게 둔다. 배지가 없는 곳에서는
+     그냥 살짝 떠 있는 바로 보이므로 어느 쪽이든 버튼이 눌린다. */
   .dock {
-    position: fixed; left: 0; right: 0; bottom: 0;
-    display: flex; gap: 8px; padding: 8px 12px;
-    background: rgba(255,255,255,.96);
-    border-top: 1px solid var(--line);
-    box-shadow: 0 -2px 10px rgba(0,0,0,.08);
-    z-index: 20;
+    position: fixed; left: 8px; right: 8px;
+    bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+    display: flex; gap: 8px; padding: 8px;
+    background: rgba(255,255,255,.97);
+    border: 1px solid var(--line); border-radius: 12px;
+    box-shadow: 0 3px 14px rgba(0,0,0,.16);
+    z-index: 30;
   }
-  .dock .btn { flex: 1; padding: 10px; font-size: 12px; }
+  .dock .btn { flex: 1; padding: 11px 6px; font-size: 12px; }
+
+  /* 마지막 줄이 바 뒤로 숨지 않게 바닥을 비워둔다 */
+  .stage { padding-bottom: calc(124px + env(safe-area-inset-bottom, 0px)); }
 }
 
 @media (min-width: 761px) {
