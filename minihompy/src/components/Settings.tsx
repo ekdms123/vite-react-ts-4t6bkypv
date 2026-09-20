@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import * as api from '../lib/api'
+import { todayKey } from '../lib/day'
 import { CREATABLE_KINDS, KIND_LABEL, SKINS, type Profile, type Section, type SectionKind } from '../lib/types'
 
 /** 주소 · 이름 · 스킨 · 탭 구성 · 백업. 전부 본인만 만진다. */
@@ -130,7 +131,7 @@ export default function Settings({ me, sections, onChanged, onClose }: {
         </p>
         <button className="btn" onClick={async () => {
           api.downloadJson(
-            `minihompy-${me.handle}-${new Date().toISOString().slice(0, 10)}.json`,
+            `minihompy-${me.handle}-${todayKey()}.json`,
             await api.exportBackup(me.id),
           )
         }}>내 기록 전부 내려받기</button>

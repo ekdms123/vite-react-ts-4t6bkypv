@@ -2,8 +2,9 @@ import { useEffect, useMemo, useState } from 'react'
 import * as api from '../lib/api'
 import type { Entry, Section } from '../lib/types'
 import Editable from '../components/Editable'
+import { dayKey as key } from '../lib/day'
 
-const key = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+
 const WEEK = ['일', '월', '화', '수', '목', '금', '토']
 
 /** 달을 한 판에 보여주고, 누른 날만 아래로 펼친다. */

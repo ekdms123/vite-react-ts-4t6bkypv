@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 import * as api from '../lib/api'
 import type { Entry, Section } from '../lib/types'
+import { dayKey } from '../lib/day'
 
 const DAY = 86_400_000
-const key = (d: Date) => d.toISOString().slice(0, 10)
+
 
 /**
  * 연속일만 보여주는 트래커는 한 번 끊긴 사람을 돌려보낸다.
@@ -46,7 +47,7 @@ export default function Challenge({ section, isOwner, uid }: {
     await check(name.trim()); setName('')
   }
 
-  const today = key(new Date())
+  const today = dayKey(new Date())
 
   return (
     <div>
@@ -73,7 +74,7 @@ export default function Challenge({ section, isOwner, uid }: {
             // 지난 5주. 빈 칸도 그대로 둔다 — 비어 있는 게 실패는 아니다.
             const cells = Array.from({ length: 35 }, (_, i) => {
               const d = new Date(Date.now() - (34 - i) * DAY)
-              return { k: key(d), on: days.has(key(d)), today: key(d) === today }
+              return { k: dayKey(d), on: days.has(dayKey(d)), today: dayKey(d) === today }
             })
             return (
               <div key={label} className="challenge">

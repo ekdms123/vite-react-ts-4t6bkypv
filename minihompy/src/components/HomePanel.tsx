@@ -79,7 +79,14 @@ export default function HomePanel({ profile, sections, isOwner, uid, energy, onJ
               {top.map(t => (
                 <li key={t.id}>
                   <button className="tick" aria-label="완료" disabled={!isOwner}
-                          onClick={async () => { await api.toggleDone(t.id, true); await reload() }} />
+                          onClick={async () => {
+                            // 먼저 목록에서 지우고, 서버는 뒤따라간다
+                            setD(prev => prev && {
+                              ...prev, todos: prev.todos.filter(x => x.id !== t.id),
+                            })
+                            try { await api.toggleDone(t.id, true) }
+                            catch (e) { await reload(); throw e }
+                          }} />
                   <span className="what">{t.title}</span>
                 </li>
               ))}

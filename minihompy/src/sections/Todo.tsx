@@ -39,6 +39,26 @@ export default function Todo({ section, isOwner, uid }: {
     } finally { setBusy(false) }
   }
 
+  /**
+   * 체크는 눌린 순간 화면에서 먼저 옮기고, 서버는 뒤따라간다.
+   * 쓰기와 다시 읽기를 기다리면 폰에서 반 박자씩 멍해지는데, 그 반 박자가
+   * 쌓이면 체크 자체를 안 하게 된다. 실패하면 제자리로 돌려놓는다.
+   */
+  async function flip(row: Entry, next: boolean) {
+    setRows(rs => rs.map(r => (r.id === row.id ? { ...r, done: next } : r)))
+    try { await api.toggleDone(row.id, next) }
+    catch (e) {
+      setRows(rs => rs.map(r => (r.id === row.id ? { ...r, done: !next } : r)))
+      throw e
+    }
+  }
+
+  async function drop(row: Entry) {
+    setRows(rs => rs.filter(r => r.id !== row.id))
+    try { await api.deleteEntry(row.id) }
+    catch (e) { await reload(); throw e }
+  }
+
   const open = rows.filter(r => !r.done)
   const done = rows.filter(r => r.done)
 
@@ -70,8 +90,7 @@ export default function Todo({ section, isOwner, uid }: {
               return (
                 <li key={r.id}>
                   <button className="tick" aria-label="완료"
-                          onClick={async () => { await api.toggleDone(r.id, true); await reload() }}
-                          disabled={!isOwner} />
+                          onClick={() => flip(r, true)} disabled={!isOwner} />
                   <Editable className="what" value={r.title} disabled={!isOwner}
                             onSave={async next => {
                               await api.updateEntry(r.id, { title: next }); await reload()
@@ -79,7 +98,7 @@ export default function Todo({ section, isOwner, uid }: {
                   {d && <span className={`dday ${d.tone}`}>{d.text}</span>}
                   {isOwner && (
                     <button className="x" title="지우기"
-                            onClick={async () => { await api.deleteEntry(r.id); await reload() }}>×</button>
+                            onClick={() => drop(r)}>×</button>
                   )}
                 </li>
               )
@@ -96,12 +115,11 @@ export default function Todo({ section, isOwner, uid }: {
               {done.map(r => (
                 <li key={r.id}>
                   <button className="tick on" aria-label="되돌리기"
-                          onClick={async () => { await api.toggleDone(r.id, false); await reload() }}
-                          disabled={!isOwner} />
+                          onClick={() => flip(r, false)} disabled={!isOwner} />
                   <span className="what">{r.title}</span>
                   {isOwner && (
                     <button className="x"
-                            onClick={async () => { await api.deleteEntry(r.id); await reload() }}>×</button>
+                            onClick={() => drop(r)}>×</button>
                   )}
                 </li>
               ))}

@@ -1,4 +1,5 @@
 import { supabase } from './supabase'
+import { dayKey, todayKey } from './day'
 import type { Comment, Entry, Friendship, GuestbookEntry, Profile, Section, SectionKind } from './types'
 
 /* ── 프로필 ─────────────────────────────────────────── */
@@ -194,7 +195,7 @@ export async function bumpVisit(home: string) {
 }
 
 export async function getVisitCounts(home: string) {
-  const today = new Date().toISOString().slice(0, 10)
+  const today = todayKey()
   const [{ data: t }, { data: p }] = await Promise.all([
     supabase.from('visits').select('count').eq('home', home).eq('day', today).maybeSingle(),
     supabase.from('profiles').select('total_visits').eq('id', home).maybeSingle(),
@@ -294,15 +295,11 @@ export async function monthMoney(sectionId: string, month: Date) {
  * 한 번 끊긴 사람은 다시 안 온다. 끊기는 건 연속뿐이다.
  */
 export function streakOf(dates: string[]) {
-  const days = new Set(dates.map(d => d.slice(0, 10)))
-  let streak = 0
+  const days = new Set(dates.map(dayKey))
   const cur = new Date()
-  // 오늘 아직 안 했을 수 있으니 어제부터 이어져 있으면 연속으로 친다.
-  if (!days.has(cur.toISOString().slice(0, 10))) cur.setDate(cur.getDate() - 1)
-  for (;;) {
-    if (!days.has(cur.toISOString().slice(0, 10))) break
-    streak++; cur.setDate(cur.getDate() - 1)
-  }
+  if (!days.has(dayKey(cur))) cur.setDate(cur.getDate() - 1)
+  let streak = 0
+  while (days.has(dayKey(cur))) { streak++; cur.setDate(cur.getDate() - 1) }
   return { streak, total: days.size }
 }
 
