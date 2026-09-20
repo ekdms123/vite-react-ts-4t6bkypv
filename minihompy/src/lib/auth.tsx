@@ -37,6 +37,9 @@ function readable(message: string): string {
     return '메일함에서 인증 링크를 눌러야 한다. (Supabase에서 이메일 확인을 끄면 바로 된다)'
   if (m.includes('rate limit') || m.includes('too many'))
     return '잠깐 사이에 너무 많이 시도했다. 조금 뒤에 다시.'
+  // 가입 명단에 없는 이메일은 데이터베이스가 거절한다. 그 예외가 여기로 온다.
+  if (message.includes('초대받지 않은') || m.includes('database error saving new user'))
+    return '초대된 이메일이 아니다. 집주인에게 명단에 넣어달라고 하면 된다.'
   return message
 }
 
