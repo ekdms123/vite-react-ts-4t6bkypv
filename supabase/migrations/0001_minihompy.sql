@@ -25,7 +25,8 @@ create table sections (
   owner       uuid not null references profiles on delete cascade,
   label       text not null,                 -- 탭에 보일 이름: "일정", "다이어리", 뭐든
   kind        text not null check (kind in
-                ('diary','photo','board','calendar','jukebox','guestbook','free')),
+                ('diary','photo','board','calendar','todo','ledger','challenge',
+                 'jukebox','guestbook','free')),
   position    integer not null default 0,
   visibility  text not null default 'public'
                 check (visibility in ('public','friends','private')),
@@ -45,6 +46,14 @@ create table entries (
   weather     text,                          -- diary
   starts_at   timestamptz,                   -- calendar
   ends_at     timestamptz,                   -- calendar
+  done        boolean not null default false, -- todo
+  done_at     timestamptz,                   -- todo · challenge
+  due_at      timestamptz,                   -- todo (마감)
+  amount      numeric(12,0),                 -- ledger (원 단위)
+  category    text,                          -- ledger · challenge
+  -- 가계부는 '쓸 생각이던 돈'과 '실제로 쓴 돈'을 갈라야 회고가 된다.
+  -- 한 칸에 섞으면 어디서 어긋났는지 물어볼 수가 없다.
+  is_planned  boolean not null default false,
   meta        jsonb not null default '{}',   -- kind별 자유 필드
   visibility  text not null default 'public'
                 check (visibility in ('public','friends','private')),
@@ -53,6 +62,7 @@ create table entries (
 );
 create index on entries (section_id, created_at desc);
 create index on entries (owner, starts_at);
+create index on entries (owner, due_at) where done = false;
 
 -- 방명록: 남의 집에 내가 쓴다
 create table guestbook (
@@ -153,12 +163,15 @@ begin
   new_handle := 'u' || substr(replace(new.id::text, '-', ''), 1, 8);
   insert into profiles (id, handle) values (new.id, new_handle);
   insert into sections (owner, label, kind, position) values
-    (new.id, '다이어리', 'diary',     1),
-    (new.id, '사진첩',   'photo',     2),
-    (new.id, '일정',     'calendar',  3),
-    (new.id, '게시판',   'board',     4),
-    (new.id, '쥬크박스', 'jukebox',   5),
-    (new.id, '방명록',   'guestbook', 6);
+    (new.id, '오늘',     'todo',      1),
+    (new.id, '달력',     'calendar',  2),
+    (new.id, '다이어리', 'diary',     3),
+    (new.id, '사진첩',   'photo',     4),
+    (new.id, '가계부',   'ledger',    5),
+    (new.id, '챌린지',   'challenge', 6),
+    (new.id, '쥬크박스', 'jukebox',   7),
+    (new.id, '보관함',   'free',      8),
+    (new.id, '방명록',   'guestbook', 9);
   return new;
 end;
 $$;

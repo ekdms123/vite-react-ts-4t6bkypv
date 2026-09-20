@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import * as api from '../lib/api'
-import { MOODS, type Entry, type Profile, type Section } from '../lib/types'
+import { EMPTY_NOTE, MOODS, type Entry, type Profile, type Section } from '../lib/types'
+import Todo from './Todo'
+import Ledger from './Ledger'
+import Challenge from './Challenge'
+import Calendar from './Calendar'
 
 interface Props {
   section: Section
@@ -22,9 +26,12 @@ export default function SectionView({ section, owner, isOwner, uid }: Props) {
   }
   useEffect(() => { void reload() /* eslint-disable-next-line */ }, [section.id])
 
-  if (section.kind === 'guestbook') {
-    return <Guestbook owner={owner} uid={uid} isOwner={isOwner} />
-  }
+  // kind 가 렌더러를 고른다. 탭을 늘리는 건 코드가 아니라 데이터다.
+  if (section.kind === 'guestbook') return <Guestbook owner={owner} uid={uid} isOwner={isOwner} />
+  if (section.kind === 'todo')      return <Todo      section={section} isOwner={isOwner} uid={uid} />
+  if (section.kind === 'ledger')    return <Ledger    section={section} isOwner={isOwner} uid={uid} />
+  if (section.kind === 'challenge') return <Challenge section={section} isOwner={isOwner} uid={uid} />
+  if (section.kind === 'calendar')  return <Calendar  section={section} isOwner={isOwner} uid={uid} />
 
   return (
     <div>
@@ -47,7 +54,11 @@ export default function SectionView({ section, owner, isOwner, uid }: Props) {
 
       {loading ? <div className="empty-note">불러오는 중…</div>
         : entries.length === 0
-          ? <div className="empty-note">아직 아무것도 없다.<br />{isOwner ? '첫 글을 남겨보자.' : ''}</div>
+          ? <div className="empty-note">
+              {EMPTY_NOTE[section.kind].split('\n').map((line, i) => (
+                <span key={i}>{line}<br /></span>
+              ))}
+            </div>
           : <EntryList section={section} entries={entries} isOwner={isOwner} onChange={reload} />}
     </div>
   )
@@ -76,29 +87,6 @@ function EntryList({ section, entries, isOwner, onChange }: {
           </figure>
         )))}
       </div>
-    )
-  }
-
-  if (section.kind === 'calendar') {
-    const sorted = [...entries].sort(
-      (a, b) => (a.starts_at ?? '').localeCompare(b.starts_at ?? ''))
-    return (
-      <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
-        {sorted.map(e => (
-          <li key={e.id} style={{ display: 'flex', gap: 10, padding: '7px 0',
-                                  borderBottom: '1px solid var(--line)' }}>
-            <time style={{ flex: '0 0 92px', color: 'var(--title)', fontWeight: 700, fontSize: 11 }}>
-              {e.starts_at ? new Date(e.starts_at).toLocaleString('ko-KR',
-                { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }) : '—'}
-            </time>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontWeight: 700 }}>{e.title || '(제목 없음)'}</div>
-              {e.body && <div style={{ color: 'var(--ink-soft)', whiteSpace: 'pre-wrap' }}>{e.body}</div>}
-            </div>
-            {isOwner && <button className="btn ghost" onClick={() => remove(e.id)}>×</button>}
-          </li>
-        ))}
-      </ul>
     )
   }
 

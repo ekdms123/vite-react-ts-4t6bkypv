@@ -1,5 +1,5 @@
 import { supabase } from './supabase'
-import type { Entry, Friendship, GuestbookEntry, Profile, Section, SectionKind, Visibility } from './types'
+import type { Entry, Friendship, GuestbookEntry, Profile, Section, SectionKind } from './types'
 
 /* ── 프로필 ─────────────────────────────────────────── */
 
@@ -229,4 +229,110 @@ export function downloadJson(name: string, payload: unknown) {
   a.download = name
   a.click()
   URL.revokeObjectURL(a.href)
+}
+
+/* ── 오늘 화면이 묻는 것들 ──────────────────────────── */
+
+/** 마감이 지났거나 오늘까지인, 아직 안 끝난 일. 탭을 가로질러 모은다. */
+export async function dueSoon(owner: string, days = 3) {
+  const until = new Date(); until.setDate(until.getDate() + days)
+  const { data, error } = await supabase
+    .from('entries').select('*, sections(label)')
+    .eq('owner', owner).eq('done', false)
+    .not('due_at', 'is', null).lte('due_at', until.toISOString())
+    .order('due_at')
+  if (error) throw error
+  return (data ?? []) as (Entry & { sections: { label: string } })[]
+}
+
+/** 아직 안 끝난 할 일. 오늘 화면은 여기서 에너지만큼만 잘라 쓴다. */
+export async function openTodos(owner: string) {
+  const { data, error } = await supabase
+    .from('entries').select('*, sections(label, kind)')
+    .eq('owner', owner).eq('done', false)
+    .order('due_at', { ascending: true, nullsFirst: false })
+    .order('created_at', { ascending: true })
+  if (error) throw error
+  return (data ?? []).filter(
+    (r: any) => r.sections?.kind === 'todo',
+  ) as (Entry & { sections: { label: string; kind: SectionKind } })[]
+}
+
+export async function toggleDone(id: string, done: boolean) {
+  const { error } = await supabase.from('entries')
+    .update({ done, done_at: done ? new Date().toISOString() : null })
+    .eq('id', id)
+  if (error) throw error
+}
+
+/* ── 가계부 ─────────────────────────────────────────── */
+
+/** 쓸 생각이던 돈과 실제로 쓴 돈을 갈라서 돌려준다. 합계가 아니라 그 차이가 질문이다. */
+export async function monthMoney(sectionId: string, month: Date) {
+  const from = new Date(month.getFullYear(), month.getMonth(), 1)
+  const to   = new Date(month.getFullYear(), month.getMonth() + 1, 1)
+  const { data, error } = await supabase
+    .from('entries').select('*').eq('section_id', sectionId)
+    .gte('created_at', from.toISOString()).lt('created_at', to.toISOString())
+  if (error) throw error
+  const rows = (data ?? []) as Entry[]
+  const spent   = rows.filter(r => !r.is_planned).reduce((s, r) => s + (r.amount ?? 0), 0)
+  const planned = rows.filter(r =>  r.is_planned).reduce((s, r) => s + (r.amount ?? 0), 0)
+  const byCategory: Record<string, number> = {}
+  for (const r of rows) {
+    if (r.is_planned) continue
+    const k = r.category || '기타'
+    byCategory[k] = (byCategory[k] ?? 0) + (r.amount ?? 0)
+  }
+  return { rows, spent, planned, byCategory }
+}
+
+/* ── 챌린지 ─────────────────────────────────────────── */
+
+/**
+ * 연속과 누적을 따로 센다. 하루 빠졌다고 누적까지 0으로 돌리면
+ * 한 번 끊긴 사람은 다시 안 온다. 끊기는 건 연속뿐이다.
+ */
+export function streakOf(dates: string[]) {
+  const days = new Set(dates.map(d => d.slice(0, 10)))
+  let streak = 0
+  const cur = new Date()
+  // 오늘 아직 안 했을 수 있으니 어제부터 이어져 있으면 연속으로 친다.
+  if (!days.has(cur.toISOString().slice(0, 10))) cur.setDate(cur.getDate() - 1)
+  for (;;) {
+    if (!days.has(cur.toISOString().slice(0, 10))) break
+    streak++; cur.setDate(cur.getDate() - 1)
+  }
+  return { streak, total: days.size }
+}
+
+export async function challengeLog(sectionId: string) {
+  const { data, error } = await supabase
+    .from('entries').select('*').eq('section_id', sectionId)
+    .order('created_at', { ascending: false })
+  if (error) throw error
+  return (data ?? []) as Entry[]
+}
+
+/* ── 캡처 ───────────────────────────────────────────── */
+
+/**
+ * 무엇이든 일단 받는 입구. 어디에 넣을지 고르는 그 결정이 제일 비싸서,
+ * 분류를 나중으로 미룰 수 있어야 애초에 적는다. 보관함으로 떨어진다.
+ */
+export async function captureTo(owner: string, sections: Section[], text: string) {
+  const inbox = sections.find(s => s.kind === 'free') ?? sections[0]
+  if (!inbox) throw new Error('받을 곳이 없다')
+  const firstLine = text.trim().split('\n')[0].slice(0, 60)
+  return createEntry({
+    section_id: inbox.id, owner,
+    title: firstLine, body: text.trim(), visibility: inbox.visibility,
+  })
+}
+
+/** 캡처한 걸 나중에 제자리로 옮긴다. 분류는 여유 있을 때 한다. */
+export async function moveEntry(id: string, sectionId: string) {
+  const { error } = await supabase.from('entries')
+    .update({ section_id: sectionId }).eq('id', id)
+  if (error) throw error
 }
