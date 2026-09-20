@@ -1,11 +1,17 @@
--- 미니홈피 스키마
--- 하나의 사이트, 로그인 하나당 미니홈피 하나.
--- 탭(섹션)은 하드코딩이 아니라 사용자가 만드는 데이터다.
+-- 미니홈피 스키마 — 전체를 한 번에 실행한다.
+--
+-- 여러 번 실행해도 안전하다. 붙여넣다 잘렸거나 중간에 멈췄으면
+-- 이 파일 전체를 다시 그대로 실행하면 된다.
+--
+-- 실행 후 아래로 확인:
+--   select table_name from information_schema.tables
+--   where table_schema = 'public' order by table_name;
+--   → profiles, sections, entries, guestbook, friendships, visits 여섯 개가 나와야 한다.
 
 create extension if not exists "pgcrypto";
 
 -- 로그인 1개 = 미니홈피 1개
-create table profiles (
+create table if not exists profiles (
   id          uuid primary key references auth.users on delete cascade,
   handle      text unique not null,          -- 주소: /@daeun
   title       text not null default '님의 미니홈피',
@@ -20,7 +26,7 @@ create table profiles (
 
 -- 탭. 사용자가 직접 만들고 순서를 바꾼다.
 -- kind가 렌더러를 고른다 → '일정'이면 kind='calendar'
-create table sections (
+create table if not exists sections (
   id          uuid primary key default gen_random_uuid(),
   owner       uuid not null references profiles on delete cascade,
   label       text not null,                 -- 탭에 보일 이름: "일정", "다이어리", 뭐든
@@ -35,7 +41,7 @@ create table sections (
 create index on sections (owner, position);
 
 -- 글·사진·일정 전부 여기로. 컬럼은 kind별로 쓰는 것만 채운다.
-create table entries (
+create table if not exists entries (
   id          uuid primary key default gen_random_uuid(),
   section_id  uuid not null references sections on delete cascade,
   owner       uuid not null references profiles on delete cascade,
@@ -65,7 +71,7 @@ create index on entries (owner, starts_at);
 create index on entries (owner, due_at) where done = false;
 
 -- 방명록: 남의 집에 내가 쓴다
-create table guestbook (
+create table if not exists guestbook (
   id         uuid primary key default gen_random_uuid(),
   home       uuid not null references profiles on delete cascade,
   author     uuid not null references profiles on delete cascade,
@@ -76,7 +82,7 @@ create table guestbook (
 create index on guestbook (home, created_at desc);
 
 -- 일촌: 상호 수락
-create table friendships (
+create table if not exists friendships (
   id             uuid primary key default gen_random_uuid(),
   requester      uuid not null references profiles on delete cascade,
   addressee      uuid not null references profiles on delete cascade,
@@ -90,7 +96,7 @@ create table friendships (
 );
 
 -- TODAY / TOTAL 카운터
-create table visits (
+create table if not exists visits (
   home  uuid not null references profiles on delete cascade,
   day   date not null default current_date,
   count integer not null default 0,
@@ -125,34 +131,48 @@ alter table friendships enable row level security;
 alter table visits      enable row level security;
 
 -- 프로필은 누구나 보되, 고치는 건 본인만 (R8)
+drop policy if exists profiles_read   on profiles;
 create policy profiles_read   on profiles for select using (true);
+drop policy if exists profiles_insert on profiles;
 create policy profiles_insert on profiles for insert with check (auth.uid() = id);
+drop policy if exists profiles_update on profiles;
 create policy profiles_update on profiles for update using (auth.uid() = id);
 
 -- 탭/글: 공개범위대로 읽고, 쓰는 건 주인만 (R2)
+drop policy if exists sections_read on sections;
 create policy sections_read on sections for select using (can_view(owner, visibility));
+drop policy if exists sections_write on sections;
 create policy sections_write on sections for all
   using (auth.uid() = owner) with check (auth.uid() = owner);
 
+drop policy if exists entries_read on entries;
 create policy entries_read on entries for select using (can_view(owner, visibility));
+drop policy if exists entries_write on entries;
 create policy entries_write on entries for all
   using (auth.uid() = owner) with check (auth.uid() = owner);
 
 -- 방명록: 집주인과 글쓴이만 비밀글을 본다
+drop policy if exists guestbook_read on guestbook;
 create policy guestbook_read on guestbook for select
   using (not is_secret or auth.uid() = home or auth.uid() = author);
+drop policy if exists guestbook_insert on guestbook;
 create policy guestbook_insert on guestbook for insert with check (auth.uid() = author);
+drop policy if exists guestbook_delete on guestbook;
 create policy guestbook_delete on guestbook for delete
   using (auth.uid() = author or auth.uid() = home);
 
 -- 일촌: 당사자만 (R5)
+drop policy if exists friendships_read on friendships;
 create policy friendships_read on friendships for select
   using (auth.uid() in (requester, addressee));
+drop policy if exists friendships_insert on friendships;
 create policy friendships_insert on friendships for insert
   with check (auth.uid() = requester);
+drop policy if exists friendships_update on friendships;
 create policy friendships_update on friendships for update
   using (auth.uid() in (requester, addressee));
 
+drop policy if exists visits_read on visits;
 create policy visits_read on visits for select using (true);
 
 -- 가입하면 미니홈피가 자동으로 생긴다: 프로필 + 기본 탭 6개
@@ -176,6 +196,7 @@ begin
 end;
 $$;
 
+drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users for each row execute function handle_new_user();
 
@@ -199,11 +220,15 @@ values ('media', 'media', true)
 on conflict (id) do nothing;
 
 -- 경로 첫 칸이 uid다. 그래서 경로 모양이 곧 권한이 된다.
-create policy "media read"   on storage.objects for select
+drop policy if exists "media read" on storage.objects;
+create policy "media read" on storage.objects for select
   using (bucket_id = 'media');
+drop policy if exists "media insert" on storage.objects;
 create policy "media insert" on storage.objects for insert to authenticated
   with check (bucket_id = 'media' and (storage.foldername(name))[1] = auth.uid()::text);
+drop policy if exists "media update" on storage.objects;
 create policy "media update" on storage.objects for update to authenticated
   using (bucket_id = 'media' and (storage.foldername(name))[1] = auth.uid()::text);
+drop policy if exists "media delete" on storage.objects;
 create policy "media delete" on storage.objects for delete to authenticated
   using (bucket_id = 'media' and (storage.foldername(name))[1] = auth.uid()::text);
