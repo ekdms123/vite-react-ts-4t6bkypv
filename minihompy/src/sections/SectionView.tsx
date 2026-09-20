@@ -5,16 +5,21 @@ import Todo from './Todo'
 import Ledger from './Ledger'
 import Challenge from './Challenge'
 import Calendar from './Calendar'
+import Diary from './Diary'
+import Photos from './Photos'
+import Jukebox from './Jukebox'
+import Inbox from './Inbox'
 
 interface Props {
   section: Section
+  sections: Section[]
   owner: Profile
   isOwner: boolean
   uid: string | null
 }
 
 /** 탭 하나를 그린다. 어떻게 그릴지는 section.kind 가 고른다. */
-export default function SectionView({ section, owner, isOwner, uid }: Props) {
+export default function SectionView({ section, sections, owner, isOwner, uid }: Props) {
   const [entries, setEntries] = useState<Entry[]>([])
   const [loading, setLoading] = useState(true)
   const [composing, setComposing] = useState(false)
@@ -32,6 +37,11 @@ export default function SectionView({ section, owner, isOwner, uid }: Props) {
   if (section.kind === 'ledger')    return <Ledger    section={section} isOwner={isOwner} uid={uid} />
   if (section.kind === 'challenge') return <Challenge section={section} isOwner={isOwner} uid={uid} />
   if (section.kind === 'calendar')  return <Calendar  section={section} isOwner={isOwner} uid={uid} />
+  if (section.kind === 'diary')     return <Diary     section={section} isOwner={isOwner} uid={uid} />
+  if (section.kind === 'photo')     return <Photos    section={section} isOwner={isOwner} uid={uid} />
+  if (section.kind === 'jukebox')   return <Jukebox   section={section} isOwner={isOwner} uid={uid} />
+  if (section.kind === 'free')
+    return <Inbox section={section} sections={sections} isOwner={isOwner} uid={uid} />
 
   return (
     <div>

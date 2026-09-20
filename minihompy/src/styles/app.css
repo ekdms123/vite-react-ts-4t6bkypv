@@ -603,3 +603,175 @@ textarea { resize: vertical; line-height: 1.7; }
 .gate-or::before, .gate-or::after {
   content: ''; flex: 1; height: 1px; background: var(--line);
 }
+
+/* ── 다이어리 ──────────────────────────────────────── */
+.diary-open {
+  width: 100%; border: 1px dashed var(--tab); background: #fbfdfe;
+  border-radius: 8px; padding: 11px; color: var(--tab-dark);
+  font-family: inherit; font-size: 12px; margin-bottom: 14px;
+}
+.diary-open:hover { background: #f1f8fb; }
+
+.diary-write {
+  border: 1px solid var(--line); border-radius: 8px; padding: 10px;
+  margin-bottom: 14px; display: grid; gap: 7px; background: #fffef9;
+}
+.dw-row { display: flex; gap: 6px; align-items: center; }
+.dw-row select { width: 120px; }
+.dw-row input[type=file] { flex: 1; font-size: 10px; }
+.weather-pick { display: flex; gap: 3px; }
+.weather-pick button {
+  border: 1px solid var(--line); background: #fff; border-radius: 5px;
+  width: 27px; height: 26px; font-size: 13px; line-height: 1; padding: 0;
+}
+.weather-pick button[data-on="true"] { border-color: var(--tab); background: #eaf4f8; }
+
+.diary-list { display: grid; gap: 16px; }
+.diary-day { display: flex; gap: 11px; }
+
+/* 달력에서 찢어낸 쪽지 */
+.tearoff {
+  flex: 0 0 46px; height: 54px; border-radius: 5px;
+  background: #fff; border: 1px solid var(--paper-edge);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  box-shadow: 0 1px 2px rgba(0,0,0,.08);
+  position: relative; overflow: hidden;
+}
+.tearoff::before {
+  content: ''; position: absolute; inset: 0 0 auto 0; height: 13px;
+  background: var(--tab);
+}
+.tearoff b { font-size: 17px; color: var(--title); line-height: 1; margin-top: 11px; }
+.tearoff span { font-size: 9px; color: var(--ink-soft); }
+.tearoff em { font-style: normal; font-size: 9px; color: #bbb; }
+
+.diary-body { flex: 1; min-width: 0; border-bottom: 1px solid var(--line); padding-bottom: 12px; }
+.diary-meta { display: flex; align-items: center; gap: 6px; padding-bottom: 5px; }
+.mood-tag {
+  font-size: 10px; background: #f3f8fa; color: var(--tab-dark);
+  border-radius: 10px; padding: 2px 8px;
+}
+.wx { font-size: 13px; }
+.diary-body p { margin: 0; white-space: pre-wrap; line-height: 1.85; }
+.diary-pics { display: flex; gap: 6px; flex-wrap: wrap; padding-top: 8px; }
+.diary-pics img {
+  max-width: 132px; border-radius: 5px; border: 1px solid var(--line);
+}
+
+/* ── 사진첩 (폴라로이드) ───────────────────────────── */
+.photo-drop {
+  width: 100%; border: 1px dashed var(--tab); background: #fbfdfe;
+  border-radius: 8px; padding: 11px; color: var(--tab-dark);
+  font-family: inherit; font-size: 12px; margin-bottom: 16px;
+}
+.photo-drop:hover { background: #f1f8fb; }
+
+.polaroids {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(124px, 1fr));
+  gap: 16px 12px; padding: 4px;
+}
+.polaroids figure {
+  margin: 0; background: #fff; padding: 7px 7px 4px;
+  border-radius: 2px; box-shadow: 0 2px 7px rgba(0,0,0,.16);
+  transform: rotate(var(--tilt, 0deg));
+  transition: transform .14s, box-shadow .14s;
+  position: relative;
+}
+.polaroids figure:hover {
+  transform: rotate(0deg) scale(1.03);
+  box-shadow: 0 5px 16px rgba(0,0,0,.24); z-index: 2;
+}
+.polaroids img {
+  width: 100%; aspect-ratio: 1/1; object-fit: cover;
+  display: block; background: #eee; cursor: zoom-in;
+}
+.polaroids figcaption { padding: 6px 2px 4px; min-height: 22px; }
+.polaroids figcaption input {
+  border: 0; padding: 0; font-size: 10px; text-align: center; background: transparent;
+}
+.polaroids figcaption input:focus { border-bottom: 1px solid var(--line); outline: none; }
+.polaroids figcaption span { font-size: 10px; color: var(--ink-soft); display: block; text-align: center; }
+.polaroids .pull {
+  position: absolute; top: -6px; right: -6px;
+  width: 19px; height: 19px; border-radius: 50%; border: 0;
+  background: var(--today); color: #fff; font-size: 12px; line-height: 1;
+  opacity: 0; transition: opacity .12s;
+}
+.polaroids figure:hover .pull { opacity: 1; }
+
+.lightbox {
+  position: fixed; inset: 0; z-index: 60; background: rgba(0,0,0,.82);
+  display: flex; align-items: center; justify-content: center; cursor: zoom-out;
+}
+.lightbox img { max-width: 92vw; max-height: 92vh; border-radius: 4px; }
+
+/* ── 쥬크박스 ──────────────────────────────────────── */
+.deck {
+  background: linear-gradient(180deg, #4a5568 0%, #333c4c 100%);
+  border-radius: 9px; padding: 9px; margin-bottom: 14px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.14);
+}
+.deck-screen { border-radius: 5px; overflow: hidden; background: #000; }
+.deck-screen iframe { display: block; width: 100%; aspect-ratio: 16/9; border: 0; }
+.deck-label {
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  padding-top: 8px; color: #e6ebf2; font-size: 11px;
+}
+.reel {
+  width: 13px; height: 13px; border-radius: 50%;
+  border: 2px solid #8b97a8; background: #5a6577;
+}
+
+.tracklist { list-style: none; margin: 0; padding: 0; counter-reset: t; }
+.tracklist li {
+  display: flex; align-items: center; gap: 9px;
+  padding: 7px 8px; border-bottom: 1px solid var(--line); border-radius: 5px;
+}
+.tracklist li[data-on="true"] { background: #f2f8fa; }
+.tracklist .no { font-size: 10px; color: #c0c0c0; width: 18px; }
+.tracklist .what {
+  flex: 1; min-width: 0; border: 0; background: none; text-align: left;
+  font-family: inherit; font-size: 12px; color: var(--ink);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0;
+}
+.tracklist li[data-on="true"] .what { color: var(--title); font-weight: 700; }
+.tracklist .what:hover { color: var(--title); }
+.eq { display: flex; gap: 2px; align-items: flex-end; height: 11px; }
+.eq i { width: 2px; background: var(--tab); animation: eq .9s ease-in-out infinite; }
+.eq i:nth-child(1) { height: 5px;  animation-delay: 0s }
+.eq i:nth-child(2) { height: 11px; animation-delay: .25s }
+.eq i:nth-child(3) { height: 7px;  animation-delay: .5s }
+@keyframes eq { 0%,100% { transform: scaleY(.4) } 50% { transform: scaleY(1) } }
+@media (prefers-reduced-motion: reduce) { .eq i { animation: none } }
+
+/* ── 보관함 (포스트잇) ─────────────────────────────── */
+.stickies {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(146px, 1fr)); gap: 10px;
+}
+.sticky {
+  background: #fff8b8; border-radius: 2px; padding: 10px 10px 7px;
+  box-shadow: 0 2px 5px rgba(0,0,0,.14);
+  display: flex; flex-direction: column; min-height: 96px;
+}
+.sticky[data-hue="1"] { background: #d7f2dd; }
+.sticky[data-hue="2"] { background: #ffd9e0; }
+.sticky[data-hue="3"] { background: #d6ecfb; }
+.sticky p {
+  margin: 0 0 auto; font-size: 11px; line-height: 1.65;
+  white-space: pre-wrap; word-break: break-word;
+}
+.sticky-foot {
+  display: flex; align-items: center; gap: 4px; padding-top: 8px;
+  border-top: 1px dashed rgba(0,0,0,.14); margin-top: 8px;
+}
+.sticky-foot select {
+  flex: 1; min-width: 0; font-size: 10px; padding: 2px 3px;
+  background: rgba(255,255,255,.6); border-color: rgba(0,0,0,.12);
+}
+.sticky-foot .when { font-size: 9px; }
+
+@media (max-width: 760px) {
+  .polaroids { grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); }
+  .stickies  { grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); }
+  .tearoff { flex-basis: 40px; height: 48px; }
+}

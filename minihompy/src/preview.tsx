@@ -212,8 +212,122 @@ function Guest() {
   )
 }
 
+
+const PHOTOS = [
+  ['#f3c9d4','한강 노을'], ['#cfe0f5','고양이'], ['#d9eede','카페'],
+  ['#f6e3c5','생일'], ['#e0d6f2','비 오는 날'], ['#f9d7c9','바다'],
+]
+
+function Dia() {
+  const days: [number, string, string, string, string][] = [
+    [20, '9월', '금', '🌷 행복', '오늘 과제 겨우 냈다. 끝나고 먹은 아이스크림이 제일 맛있었음.\n내일은 좀 쉬어야지.'],
+    [19, '9월', '목', '☁️ 그냥그럼', '커피 두 잔이나 마셨다. 잠이 안 온다.'],
+    [17, '9월', '화', '🌟 뿌듯', '3주 미루던 병원 예약 드디어 했다.'],
+  ]
+  return (
+    <div>
+      <div className="sec-title">다이어리<span style={{ float: 'right', fontWeight: 400, color: '#b0b0b0' }}>31일</span></div>
+      <button className="diary-open">✎ 오늘 쓰기</button>
+      <div className="diary-list">
+        {days.map(([d, m, w, mood, body]) => (
+          <article key={d} className="diary-day">
+            <div className="tearoff"><b>{d}</b><span>{m}</span><em>{w}</em></div>
+            <div className="diary-body">
+              <div className="diary-meta">
+                <span className="mood-tag">{mood}</span>
+                <span className="wx">{d === 19 ? '🌧' : '☀️'}</span>
+                <button className="x" style={{ marginLeft: 'auto' }}>×</button>
+              </div>
+              <p>{body}</p>
+              {d === 20 && (
+                <div className="diary-pics">
+                  <div style={{ width: 132, height: 88, borderRadius: 5, background: '#f3c9d4', border: '1px solid var(--line)' }} />
+                </div>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function Pics() {
+  return (
+    <div>
+      <div className="sec-title">사진첩<span style={{ float: 'right', fontWeight: 400, color: '#b0b0b0' }}>64장</span></div>
+      <button className="photo-drop">＋ 사진 올리기</button>
+      <div className="polaroids">
+        {PHOTOS.map(([c, cap], i) => (
+          <figure key={cap} style={{ '--tilt': `${(i % 5) - 2}deg` } as React.CSSProperties}>
+            <div style={{ width: '100%', aspectRatio: '1/1', background: c }} />
+            <figcaption><span>{cap}</span></figcaption>
+            <button className="pull">×</button>
+          </figure>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function Juke() {
+  const songs = ['좋은 날', 'Through the Night', '밤편지', '너의 의미', 'Spring Day']
+  return (
+    <div>
+      <div className="sec-title">쥬크박스<span style={{ float: 'right', fontWeight: 400, color: '#b0b0b0' }}>5곡</span></div>
+      <div className="deck">
+        <div className="deck-screen"><div style={{ width: '100%', aspectRatio: '16/9', background: '#111' }} /></div>
+        <div className="deck-label"><span className="reel" /> <b>좋은 날</b> <span className="reel" /></div>
+      </div>
+      <div className="quick-add">
+        <input type="text" placeholder="유튜브 주소 붙여넣기" />
+        <input type="text" placeholder="곡 이름" style={{ maxWidth: 120 }} />
+        <button className="btn">담기</button>
+      </div>
+      <ol className="tracklist">
+        {songs.map((s, i) => (
+          <li key={s} data-on={i === 0}>
+            <span className="no">{String(i + 1).padStart(2, '0')}</span>
+            <button className="what">{s}</button>
+            {i === 0 && <span className="eq"><i /><i /><i /></span>}
+            <button className="x">×</button>
+          </li>
+        ))}
+      </ol>
+    </div>
+  )
+}
+
+function Box() {
+  const notes = ['그 영화 제목 뭐였지\n— 주인공이 시계 고치던 거',
+    '엄마 생신 선물 알아보기', '다음 학기 시간표 겹치는지 확인',
+    '치과 예약 — 오른쪽 어금니', '읽다 만 책 3권 정리']
+  return (
+    <div>
+      <div className="sec-title">보관함<span style={{ float: 'right', fontWeight: 400, color: '#b0b0b0' }}>5장</span></div>
+      <div className="quick-add">
+        <input type="text" placeholder="아무거나 던져두기" />
+        <button className="btn">붙이기</button>
+      </div>
+      <div className="stickies">
+        {notes.map((n, i) => (
+          <div key={n} className="sticky" data-hue={i % 4}>
+            <p>{n}</p>
+            <div className="sticky-foot">
+              <span className="when">9/{20 - i}</span>
+              <select defaultValue=""><option value="">어디로 →</option></select>
+              <button className="x">×</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 const PANES: Record<string, () => JSX.Element> = {
   홈: Home, 오늘: Todo, 달력: Cal, 가계부: Money, 챌린지: Ch, 방명록: Guest,
+  다이어리: Dia, 사진첩: Pics, 쥬크박스: Juke, 보관함: Box,
 }
 
 function Preview() {

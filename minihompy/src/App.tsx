@@ -128,7 +128,8 @@ export default function App() {
                   ? <HomePanel profile={viewing} sections={sections} isOwner={isOwner}
                                uid={me.id} energy={energy} onJump={setTab} />
                   : current
-                    ? <SectionView section={current} owner={viewing} isOwner={isOwner} uid={me.id} />
+                    ? <SectionView section={current} sections={sections} owner={viewing}
+                                 isOwner={isOwner} uid={me.id} />
                     : <div className="empty-note">없는 탭이다.</div>}
               </div>
             </div>
