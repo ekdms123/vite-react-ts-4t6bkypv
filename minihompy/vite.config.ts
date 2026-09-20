@@ -41,6 +41,15 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     rollupOptions: {
+      output: {
+        // 라이브러리는 거의 안 바뀌므로 따로 떼어 캐시가 오래 살게 하고,
+        // 껍데기가 먼저 그려진 뒤에 데이터 계층이 붙게 한다.
+        manualChunks(id) {
+          if (!id.includes('node_modules')) return
+          if (id.includes('@supabase')) return 'supabase'
+          if (id.includes('react')) return 'react'
+        },
+      },
       input: {
         main: resolve(__dirname, 'index.html'),
         preview: resolve(__dirname, 'preview.html'),

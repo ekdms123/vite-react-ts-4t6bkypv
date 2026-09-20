@@ -1,14 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import * as api from '../lib/api'
 import { EMPTY_NOTE, MOODS, type Entry, type Profile, type Section } from '../lib/types'
-import Todo from './Todo'
-import Ledger from './Ledger'
-import Challenge from './Challenge'
-import Calendar from './Calendar'
-import Diary from './Diary'
-import Photos from './Photos'
-import Jukebox from './Jukebox'
-import Inbox from './Inbox'
+import { Suspense } from 'react'
+import { Todo, Ledger, Challenge, Calendar, Diary, Photos, Jukebox, Inbox } from './lazy'
 
 interface Props {
   section: Section
@@ -33,15 +27,24 @@ export default function SectionView({ section, sections, owner, isOwner, uid }: 
 
   // kind 가 렌더러를 고른다. 탭을 늘리는 건 코드가 아니라 데이터다.
   if (section.kind === 'guestbook') return <Guestbook owner={owner} uid={uid} isOwner={isOwner} />
-  if (section.kind === 'todo')      return <Todo      section={section} isOwner={isOwner} uid={uid} />
-  if (section.kind === 'ledger')    return <Ledger    section={section} isOwner={isOwner} uid={uid} />
-  if (section.kind === 'challenge') return <Challenge section={section} isOwner={isOwner} uid={uid} />
-  if (section.kind === 'calendar')  return <Calendar  section={section} isOwner={isOwner} uid={uid} />
-  if (section.kind === 'diary')     return <Diary     section={section} isOwner={isOwner} uid={uid} />
-  if (section.kind === 'photo')     return <Photos    section={section} isOwner={isOwner} uid={uid} />
-  if (section.kind === 'jukebox')   return <Jukebox   section={section} isOwner={isOwner} uid={uid} />
-  if (section.kind === 'free')
-    return <Inbox section={section} sections={sections} isOwner={isOwner} uid={uid} />
+
+  const lazyPane =
+    section.kind === 'todo'      ? <Todo      section={section} isOwner={isOwner} uid={uid} /> :
+    section.kind === 'ledger'    ? <Ledger    section={section} isOwner={isOwner} uid={uid} /> :
+    section.kind === 'challenge' ? <Challenge section={section} isOwner={isOwner} uid={uid} /> :
+    section.kind === 'calendar'  ? <Calendar  section={section} isOwner={isOwner} uid={uid} /> :
+    section.kind === 'diary'     ? <Diary     section={section} isOwner={isOwner} uid={uid} /> :
+    section.kind === 'photo'     ? <Photos    section={section} isOwner={isOwner} uid={uid} /> :
+    section.kind === 'jukebox'   ? <Jukebox   section={section} isOwner={isOwner} uid={uid} /> :
+    section.kind === 'free'      ? <Inbox section={section} sections={sections}
+                                          isOwner={isOwner} uid={uid} /> : null
+  if (lazyPane) {
+    return (
+      <Suspense fallback={<div className="pane-skeleton" aria-busy="true" />}>
+        {lazyPane}
+      </Suspense>
+    )
+  }
 
   return (
     <div>

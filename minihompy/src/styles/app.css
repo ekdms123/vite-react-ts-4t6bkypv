@@ -1028,3 +1028,12 @@ textarea { resize: vertical; line-height: 1.7; }
    제목 색을 고정한다. 변수는 흰 종이를 전제로 맞춰둔 값이라 여기선 어긋난다. */
 .photopage .news-title { color: #37697c; }
 .photopage[data-dark="true"] .news-title { color: #dfe4ef; }
+
+/* 탭 코드를 받아오는 찰나에 자리를 비워두면 화면이 출렁인다. 높이를 미리 잡는다. */
+.pane-skeleton { min-height: 320px; }
+
+/* 화면 밖 목록은 그리지 않는다. 사진이 수백 장이어도 스크롤이 버티게. */
+.polaroids figure, .diary-day, .stickies .sticky, .tracklist li {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 120px;
+}

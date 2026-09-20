@@ -11,6 +11,7 @@ import Friends from './components/Friends'
 import Settings from './components/Settings'
 import Search from './components/Search'
 import SectionView from './sections/SectionView'
+import { warmSections } from './sections/lazy'
 import Landing from './components/Landing'
 import Setup from './components/Setup'
 
@@ -68,6 +69,7 @@ export default function App() {
   }, [viewing, me])
 
   useEffect(() => { setTab('home') }, [viewing?.id])
+  useEffect(() => { if (me) warmSections() }, [me])
   useEffect(() => { localStorage.setItem('energy', energy) }, [energy])
   useEffect(() => {
     document.documentElement.dataset.skin = viewing?.skin_key ?? 'sky'
