@@ -9,14 +9,36 @@ interface AuthValue {
   me: Profile | null
   loading: boolean
   refreshMe: () => Promise<void>
-  signIn: () => Promise<void>
+  signInGoogle: () => Promise<void>
+  signUpEmail: (email: string, password: string) => Promise<string | null>
+  signInEmail: (email: string, password: string) => Promise<string | null>
   signOut: () => Promise<void>
 }
 
 const Ctx = createContext<AuthValue>({
   session: null, me: null, loading: true,
-  refreshMe: async () => {}, signIn: async () => {}, signOut: async () => {},
+  refreshMe: async () => {},
+  signInGoogle: async () => {},
+  signUpEmail: async () => null,
+  signInEmail: async () => null,
+  signOut: async () => {},
 })
+
+/** Supabase가 돌려주는 영어 오류를 그대로 보여주면 무슨 소린지 모른다. */
+function readable(message: string): string {
+  const m = message.toLowerCase()
+  if (m.includes('invalid login credentials')) return '이메일이나 비밀번호가 틀렸다.'
+  if (m.includes('already registered') || m.includes('already been registered'))
+    return '이미 가입된 이메일이다. 로그인 쪽으로.'
+  if (m.includes('password should be at least')) return '비밀번호는 6글자 이상이어야 한다.'
+  if (m.includes('unable to validate email') || m.includes('invalid email'))
+    return '이메일 모양이 아니다.'
+  if (m.includes('email not confirmed'))
+    return '메일함에서 인증 링크를 눌러야 한다. (Supabase에서 이메일 확인을 끄면 바로 된다)'
+  if (m.includes('rate limit') || m.includes('too many'))
+    return '잠깐 사이에 너무 많이 시도했다. 조금 뒤에 다시.'
+  return message
+}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null)
@@ -51,11 +73,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const value: AuthValue = {
     session, me, loading,
     refreshMe: () => loadProfile(session?.user.id),
-    signIn: async () => {
+    signInGoogle: async () => {
       await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: { redirectTo: window.location.origin },
       })
+    },
+    signUpEmail: async (email, password) => {
+      const { error } = await supabase.auth.signUp({ email, password })
+      return error ? readable(error.message) : null
+    },
+    signInEmail: async (email, password) => {
+      const { error } = await supabase.auth.signInWithPassword({ email, password })
+      return error ? readable(error.message) : null
     },
     signOut: async () => { await supabase.auth.signOut(); setMe(null) },
   }

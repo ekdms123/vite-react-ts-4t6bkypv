@@ -25,7 +25,7 @@ function useHashRoute() {
 }
 
 export default function App() {
-  const { session, me, loading, refreshMe, signIn, signOut } = useAuth()
+  const { session, me, loading, refreshMe, signOut } = useAuth()
   const hash = useHashRoute()
   const isDesktop = useIsDesktop()
 
@@ -83,7 +83,7 @@ export default function App() {
 
   if (!isConfigured) return <NeedsKeys />
   if (loading) return <div className="stage"><div className="boot">여는 중…</div></div>
-  if (!session) return <Landing onSignIn={signIn} />
+  if (!session) return <Landing />
   if (!me) return <div className="stage"><div className="boot">집을 짓는 중…</div></div>
   if (notFound) return (
     <div className="stage"><div className="boot">
