@@ -2,9 +2,12 @@ import { useRef } from 'react'
 import * as api from '../lib/api'
 import { ENERGY, MOODS, type EnergyKey, type Profile } from '../lib/types'
 
+export interface RoomStat { days: number; entries: number; friends: number; since: string }
+
 interface Props {
   profile: Profile
   isOwner: boolean
+  stat?: RoomStat | null
   visits: { today: number; total: number }
   energy: EnergyKey
   onEnergy: (e: EnergyKey) => void
@@ -14,7 +17,7 @@ interface Props {
 
 /** 바인더 왼쪽 면. 카운터 · 기분 · 미니미 · 이름 · 파도타기. */
 export default function LeftPage({
-  profile, isOwner, visits, energy, onEnergy, onChanged, onWave,
+  profile, isOwner, visits, energy, onEnergy, onChanged, onWave, stat,
 }: Props) {
   const fileRef = useRef<HTMLInputElement>(null)
 
@@ -78,6 +81,18 @@ export default function LeftPage({
           <span>파도타기</span>
           <button onClick={onWave} aria-label="파도타기 — 일촌 집에 가기">▲</button>
         </div>
+
+        {/* 큰 화면에서 이 아래가 그냥 비어 있었다. 싸이월드에서 그 자리를
+            차지하던 건 미니룸이었고, 그게 홈피를 '방'으로 만들던 것이다.
+            방 꾸미기는 아직이니, 대신 지금 이 집의 상태를 적어둔다. */}
+        {stat && (
+          <dl className="room">
+            <div><dt>쓴 날</dt><dd>{stat.days}일</dd></div>
+            <div><dt>남긴 것</dt><dd>{stat.entries}개</dd></div>
+            <div><dt>일촌</dt><dd>{stat.friends}명</dd></div>
+            <div><dt>집들이</dt><dd>{stat.since}</dd></div>
+          </dl>
+        )}
       </div>
     </div>
   )

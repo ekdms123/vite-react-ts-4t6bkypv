@@ -493,3 +493,25 @@ export async function wordsFromFriends(home: string, limit = 4) {
   const byId = Object.fromEntries(people.map(p => [p.id, p.title]))
   return out.slice(0, limit).map(o => ({ who: byId[o.who] ?? '누군가', note: o.note }))
 }
+
+/* ── 이 집의 상태 ───────────────────────────────────── */
+
+/** 좌측 면 아래에 적는 네 줄. 숫자가 자기 집을 자기 집처럼 보이게 한다. */
+export async function roomStat(owner: string) {
+  const [{ data: entries }, { data: prof }, friends] = await Promise.all([
+    supabase.from('entries').select('created_at').eq('owner', owner),
+    supabase.from('profiles').select('created_at').eq('id', owner).maybeSingle(),
+    listFriendships(owner),
+  ])
+  const rows = (entries ?? []) as { created_at: string }[]
+  const days = new Set(rows.map(r => dayKey(r.created_at))).size
+  const since = prof?.created_at
+    ? new Date(prof.created_at).toLocaleDateString('ko-KR',
+        { year: '2-digit', month: 'numeric', day: 'numeric' })
+    : '—'
+  return {
+    days, entries: rows.length,
+    friends: friends.filter(f => f.status === 'accepted').length,
+    since,
+  }
+}

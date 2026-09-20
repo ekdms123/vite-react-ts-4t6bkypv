@@ -58,24 +58,42 @@ function Home() {
 }
 
 function Todo() {
+  const G: [string,string,string,[string,string|null][]][] = [
+    ['past','지났다','오늘로 당기거나 지워도 된다',[['병원 예약 전화','2일 지남'],['책 반납','5일 지남']]],
+    ['today','오늘','',[['교양 레포트 제출','오늘'],['빨래 돌리기',null],['약 먹기',null]]],
+    ['week','이번 주','',[['동아리 회비 보내기','D-3'],['장보기','D-4'],['미용실','D-6']]],
+    ['later','나중에','',[['여권 갱신','D-24']]],
+    ['someday','언젠가','날짜를 안 정한 것들',[['책장 정리',null],['사진 백업',null]]],
+  ]
   return (
     <div>
-      <div className="sec-title">오늘<span style={{ float: 'right', fontWeight: 400, color: '#636363' }}>7개 남음</span></div>
+      <div className="sec-title">오늘<span style={{float:'right',fontWeight:400,color:'#636363'}}>11개 남음</span></div>
       <div className="quick-add">
         <input type="text" placeholder="할 일 한 줄" />
-        <input type="date" style={{ width: 126 }} aria-label="마감 날짜" />
+        <input type="date" style={{width:126}} aria-label="마감 날짜" />
         <button className="btn">담기</button>
       </div>
-      <ul className="checklist">
-        <li><button className="tick" aria-label="다 했음으로 표시" /><span className="what">교양 레포트 제출</span><span className="dday now">오늘</span><button className="x" aria-label="지우기">×</button></li>
-        <li><button className="tick" aria-label="다 했음으로 표시" /><span className="what">병원 예약 전화</span><span className="dday past">2일 지남</span><button className="x" aria-label="지우기">×</button></li>
-        <li><button className="tick" aria-label="다 했음으로 표시" /><span className="what">동아리 회비 보내기</span><span className="dday soon">D-3</span><button className="x" aria-label="지우기">×</button></li>
-        <li><button className="tick" aria-label="다 했음으로 표시" /><span className="what">빨래 돌리기</span><button className="x" aria-label="지우기">×</button></li>
-        <li><button className="tick" aria-label="다 했음으로 표시" /><span className="what">책 반납</span><span className="dday soon">D-5</span><button className="x" aria-label="지우기">×</button></li>
-      </ul>
-      <div style={{ marginTop: 14 }}>
-        <button className="fold">▸ 끝낸 것 12</button>
-      </div>
+      {G.map(([key,label,hint,items]) => (
+        <details key={key} className="bucket" open={key!=='later'&&key!=='someday'} data-tone={key}>
+          <summary>
+            <span className="b-label">{label}</span>
+            <span className="b-count">{items.length}</span>
+            {hint && <span className="b-hint">{hint}</span>}
+          </summary>
+          <ul className="checklist">
+            {items.map(([t,d]) => (
+              <li key={t}>
+                <button className="tick" aria-label="다 했음으로 표시" />
+                <span className="what">{t}</span>
+                {key==='past' && <button className="crumb pull-today">오늘로</button>}
+                {d && <span className={`dday ${d==='오늘'?'now':d.includes('지남')?'past':'soon'}`}>{d}</span>}
+                <button className="x" aria-label="지우기">×</button>
+              </li>
+            ))}
+          </ul>
+        </details>
+      ))}
+      <div style={{marginTop:14}}><button className="fold">▸ 끝낸 것 12</button></div>
     </div>
   )
 }
@@ -186,6 +204,12 @@ function Dia() {
     <div>
       <div className="sec-title">다이어리<span style={{ float: 'right', fontWeight: 400, color: '#636363' }}>31일</span></div>
       <button className="diary-open">✎ 오늘 쓰기</button>
+      <nav className="month-jump" aria-label="달로 건너뛰기">
+        {[['09',31],['08',26],['07',19],['06',24],['05',12]].map(([m,n]) => (
+          <a key={m as string} href="#m">{m}월<i>{n}</i></a>
+        ))}
+      </nav>
+      <h3 className="month-rule"><span>2026년 9월</span><i>31편</i></h3>
       <div className="diary-list">
         {days.map(([d, m, w, mood, body]) => (
           <article key={d} className="diary-day">
@@ -306,10 +330,19 @@ function Money2() {
           </div>
         ))}
       </div>
-      <ul className="ledger-list">
-        <li data-income><span className="chip">월급</span><span className="what">9월 월급</span><b>+{won(800000)}</b><span className="when">25일</span><button className="x" aria-label="지우기">×</button></li>
-        <li><span className="chip">식비</span><span className="what">점심 김밥</span><b>−{won(4500)}</b><span className="when">19일</span><button className="x" aria-label="지우기">×</button></li>
-      </ul>
+      <div className="day-group">
+        <div className="day-rule"><span>25일</span><i>+{won(800000)}</i></div>
+        <ul className="ledger-list">
+          <li data-income><span className="chip">월급</span><span className="what">9월 월급</span><b>+{won(800000)}</b><span className="when">25일</span><button className="x" aria-label="지우기">×</button></li>
+        </ul>
+      </div>
+      <div className="day-group">
+        <div className="day-rule"><span>19일</span><i>−{won(9300)}</i></div>
+        <ul className="ledger-list">
+          <li><span className="chip">식비</span><span className="what">점심 김밥</span><b>−{won(4500)}</b><span className="when">19일</span><button className="x" aria-label="지우기">×</button></li>
+          <li><span className="chip">카페</span><span className="what">아메리카노</span><b>−{won(4800)}</b><span className="when">19일</span><button className="x" aria-label="지우기">×</button></li>
+        </ul>
+      </div>
     </div>
   )
 }
@@ -409,6 +442,12 @@ function Preview() {
                 <div className="left-links"><button>EDIT</button><button>일촌</button></div>
                 <div className="wave"><span>파도타기</span>
                   <button aria-label="파도타기">▲</button></div>
+                <dl className="room">
+                  <div><dt>쓴 날</dt><dd>142일</dd></div>
+                  <div><dt>남긴 것</dt><dd>1,284개</dd></div>
+                  <div><dt>일촌</dt><dd>3명</dd></div>
+                  <div><dt>집들이</dt><dd>25.9.20</dd></div>
+                </dl>
               </div>
             </aside>
 

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import * as api from '../lib/api'
 import { INCOME_CATEGORIES, LEDGER_CATEGORIES, type Section } from '../lib/types'
 import Editable from '../components/Editable'
+import type { Entry } from '../lib/types'
 
 const won = (n: number) => n.toLocaleString('ko-KR') + '원'
 type Stats = Awaited<ReturnType<typeof api.moneyStats>>
@@ -149,8 +150,14 @@ export default function Ledger({ section, isOwner, uid }: {
 
       {d.rows.length === 0
         ? <div className="empty-note">이번 달 기록이 없다.</div>
-        : <ul className="ledger-list">
-            {d.rows.filter(r => !r.is_planned).map(r => (
+        : byDay(d.rows.filter(r => !r.is_planned)).map(([day, items, sum]) => (
+          <div key={day} className="day-group">
+            <div className="day-rule">
+              <span>{day}일</span>
+              <i>{sum >= 0 ? '−' : '+'}{won(Math.abs(sum))}</i>
+            </div>
+            <ul className="ledger-list">
+            {items.map(r => (
               <li key={r.id} data-income={r.is_income}>
                 <span className="chip">{r.category}</span>
                 <Editable className="what" value={r.title} disabled={!isOwner}
@@ -166,7 +173,22 @@ export default function Ledger({ section, isOwner, uid }: {
                 )}
               </li>
             ))}
-          </ul>}
+            </ul>
+          </div>
+        ))}
     </div>
   )
+}
+
+/** 거래를 날짜별로 묶고 그날 쓴 합을 붙인다. 하루 단위가 사람이 기억하는 단위다. */
+function byDay(rows: Entry[]): [number, Entry[], number][] {
+  const m = new Map<number, Entry[]>()
+  for (const r of rows) {
+    const d = new Date(r.created_at).getDate()
+    const list = m.get(d); list ? list.push(r) : m.set(d, [r])
+  }
+  return [...m.entries()]
+    .sort((a, b) => b[0] - a[0])
+    .map(([d, items]) => [d, items,
+      items.reduce((s, r) => s + (r.is_income ? -(r.amount ?? 0) : (r.amount ?? 0)), 0)])
 }

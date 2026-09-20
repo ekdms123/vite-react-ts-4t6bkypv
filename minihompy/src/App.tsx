@@ -38,6 +38,7 @@ export default function App() {
   const [energy, setEnergy] = useState<EnergyKey>(
     () => (localStorage.getItem('energy') as EnergyKey) || 'mid')
   const [notFound, setNotFound] = useState(false)
+  const [stat, setStat] = useState<Awaited<ReturnType<typeof api.roomStat>> | null>(null)
 
   const wantedHandle = hash.startsWith('#/@') ? hash.slice(3).split('/')[0] : null
   const sheet = hash === '#/friends' ? 'friends'
@@ -55,6 +56,7 @@ export default function App() {
     if (!target) { setSections([]); return }
     setSections(await api.listSections(target.id))
     setVisits(await api.getVisitCounts(target.id))
+    setStat(await api.roomStat(target.id))
   }, [wantedHandle, me])
 
   useEffect(() => { void load() }, [load])
@@ -106,7 +108,7 @@ export default function App() {
       <div className="binder-wrap">
         <div className="binder">
           <div className="spread">
-            <aside aria-label="프로필"><LeftPage profile={viewing} isOwner={isOwner} visits={visits}
+            <aside aria-label="프로필"><LeftPage profile={viewing} isOwner={isOwner} visits={visits} stat={stat}
                       energy={energy} onEnergy={setEnergy}
                       onChanged={() => { void refreshMe(); void load() }}
                       onWave={wave} /></aside>

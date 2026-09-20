@@ -1037,3 +1037,69 @@ textarea { resize: vertical; line-height: 1.7; }
   content-visibility: auto;
   contain-intrinsic-size: auto 120px;
 }
+
+/* ── 할 일 묶음 ────────────────────────────────────── */
+.bucket { margin-bottom: 4px; }
+.bucket > summary {
+  display: flex; align-items: center; gap: 7px; cursor: pointer;
+  padding: 7px 4px; list-style: none; border-radius: 6px;
+}
+.bucket > summary::-webkit-details-marker { display: none; }
+.bucket > summary::before {
+  content: '▸'; font-size: 9px; color: #8c8c8c; transition: transform .12s;
+}
+.bucket[open] > summary::before { transform: rotate(90deg); }
+.bucket > summary:hover { background: #f4f9fb; }
+.b-label { font-size: 12px; font-weight: 700; color: var(--title); }
+.b-count {
+  font-size: 10px; background: #e8eef1; color: #4f4f4f;
+  border-radius: 9px; padding: 1px 7px;
+}
+.b-hint { font-size: 10px; color: #737373; margin-left: auto; }
+.bucket[data-tone="past"] .b-label { color: #b83e3e; }
+.bucket[data-tone="past"] .b-count { background: #fbe4e4; color: #b83e3e; }
+.bucket[data-tone="someday"] .b-label { color: #5f5f5f; }
+.crumb.pull-today { padding: 2px 8px; border-color: #e6c9a0; color: #8a6420; }
+.crumb.pull-today:hover { background: #fff6e5; }
+
+/* ── 달·날짜 구분선 ────────────────────────────────── */
+.month-jump {
+  display: flex; gap: 5px; overflow-x: auto; padding: 0 0 10px;
+  -webkit-overflow-scrolling: touch;
+}
+.month-jump::-webkit-scrollbar { display: none; }
+.month-jump a {
+  flex: 0 0 auto; font-size: 10px; border: 1px solid var(--line);
+  border-radius: 12px; padding: 3px 9px; color: var(--ink-soft);
+  display: flex; align-items: center; gap: 4px; text-decoration: none;
+}
+.month-jump a:hover { border-color: var(--tab); color: var(--title); }
+.month-jump a i { font-style: normal; font-size: 9px; color: #8c8c8c; }
+
+.month-block { scroll-margin-top: 12px; }
+.month-rule, .day-rule {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; color: var(--ink-soft); font-weight: 400;
+  margin: 14px 0 8px;
+}
+.month-rule span, .day-rule span { color: var(--title); font-weight: 700; }
+.month-rule::after, .day-rule::after {
+  content: ''; flex: 1; height: 1px; background: var(--line);
+}
+.month-rule i, .day-rule i { font-style: normal; font-size: 10px; order: 3; }
+.day-rule { margin: 12px 0 4px; }
+.day-group + .day-group { margin-top: 2px; }
+
+/* ── 좌측 면 아래, 이 집의 상태 ────────────────────── */
+.room {
+  margin: 10px 0 0; padding: 9px 10px 8px;
+  border-top: 1px dashed var(--line);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 5px 8px;
+}
+.room > div { display: flex; align-items: baseline; gap: 4px; min-width: 0; }
+.room dt { font-size: 10px; color: var(--ink-soft); white-space: nowrap; }
+.room dd {
+  margin: 0; font-size: 11px; font-weight: 700; color: var(--title);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+@media (max-width: 760px) { .room { display: none; } }

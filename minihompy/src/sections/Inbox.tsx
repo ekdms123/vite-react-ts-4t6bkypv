@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import * as api from '../lib/api'
 import { KIND_LABEL, type Entry, type Section } from '../lib/types'
 import Editable from '../components/Editable'
@@ -32,6 +32,19 @@ export default function Inbox({ section, sections, isOwner, uid }: {
 
   const targets = sections.filter(s => s.id !== section.id && s.kind !== 'guestbook')
 
+  /**
+   * 던져둔 쪽지는 비우라고 있는 것이지 모으라고 있는 게 아니다.
+   * 최근 것만 펼쳐두고 오래된 건 접어서, 벽이 아니라 처리할 더미로 보이게 한다.
+   */
+  const [recent, older] = useMemo(() => {
+    const cut = Date.now() - 7 * 86_400_000
+    return [
+      rows.filter(r => new Date(r.created_at).getTime() >= cut),
+      rows.filter(r => new Date(r.created_at).getTime() <  cut),
+    ]
+  }, [rows])
+  const [showOld, setShowOld] = useState(false)
+
   return (
     <div>
       <div className="sec-title">
@@ -51,7 +64,7 @@ export default function Inbox({ section, sections, isOwner, uid }: {
       {rows.length === 0
         ? <div className="empty-note">여기엔 아무거나 던져도 된다.<br />분류는 나중에.</div>
         : <div className="stickies">
-            {rows.map((r, i) => (
+            {(showOld ? rows : recent).map((r, i) => (
               <div key={r.id} className="sticky" data-hue={i % 4}>
                 <Editable className="sticky-text" value={r.body || r.title} multiline
                           disabled={!isOwner}
@@ -86,6 +99,13 @@ export default function Inbox({ section, sections, isOwner, uid }: {
               </div>
             ))}
           </div>}
+
+      {older.length > 0 && (
+        <button className="fold" style={{ marginTop: 12 }}
+                aria-expanded={showOld} onClick={() => setShowOld(v => !v)}>
+          {showOld ? '▾' : '▸'} 일주일 지난 쪽지 {older.length}장
+        </button>
+      )}
     </div>
   )
 }

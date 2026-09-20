@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import * as api from '../lib/api'
 import { MOODS, type Entry, type Section } from '../lib/types'
 import Editable from '../components/Editable'
+import { useMemo } from 'react'
 
 const MOOD_FACE: Record<string, string> = {
   행복: '🌷', 뿌듯: '🌟', 설렘: '🎀', 그냥그럼: '☁️', 피곤: '🫧',
@@ -22,6 +23,20 @@ export default function Diary({ section, isOwner, uid }: {
   const [busy, setBusy] = useState(false)
 
   async function reload() { setRows(await api.listEntries(section.id)) }
+
+  /**
+   * 삼백 편이 시간순으로만 흐르면 스크롤 어디쯤인지 알 수가 없다.
+   * 달로 끊어 위치를 만들고, 위에 달 목록을 놓아 건너뛸 수 있게 한다.
+   */
+  const months = useMemo(() => {
+    const m = new Map<string, Entry[]>()
+    for (const r of rows) {
+      const d = new Date(r.created_at)
+      const k = `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}`
+      const list = m.get(k); list ? list.push(r) : m.set(k, [r])
+    }
+    return [...m.entries()]
+  }, [rows])
   useEffect(() => { void reload() /* eslint-disable-next-line */ }, [section.id])
 
   async function save() {
@@ -78,10 +93,21 @@ export default function Diary({ section, isOwner, uid }: {
         </button>
       ))}
 
+      {months.length > 1 && (
+        <nav className="month-jump" aria-label="달로 건너뛰기">
+          {months.map(([k, list]) => (
+            <a key={k} href={`#m-${k}`}>{k.slice(5)}월<i>{list.length}</i></a>
+          ))}
+        </nav>
+      )}
+
       {rows.length === 0
         ? <div className="empty-note">아직 쓴 날이 없다.<br />한 줄이면 된다.</div>
-        : <div className="diary-list">
-            {rows.map(r => {
+        : months.map(([mk, list]) => (
+          <section key={mk} id={`m-${mk}`} className="month-block">
+            <h3 className="month-rule"><span>{mk.replace('.', '년 ')}월</span><i>{list.length}편</i></h3>
+            <div className="diary-list">
+            {list.map(r => {
               const d = new Date(r.created_at)
               return (
                 <article key={r.id} className="diary-day">
@@ -115,7 +141,9 @@ export default function Diary({ section, isOwner, uid }: {
                 </article>
               )
             })}
-          </div>}
+            </div>
+          </section>
+        ))}
     </div>
   )
 }

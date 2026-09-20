@@ -5,11 +5,38 @@ import Editable from '../components/Editable'
 
 const DAY = 86_400_000
 
+function daysUntil(due: string) {
+  return Math.floor((new Date(due).setHours(0, 0, 0, 0) - new Date().setHours(0, 0, 0, 0)) / DAY)
+}
+
 function dday(due: string) {
-  const d = Math.floor((new Date(due).setHours(0, 0, 0, 0) - new Date().setHours(0, 0, 0, 0)) / DAY)
+  const d = daysUntil(due)
   if (d === 0) return { text: '오늘', tone: 'now' as const }
   if (d < 0)   return { text: `${-d}일 지남`, tone: 'past' as const }
   return { text: `D-${d}`, tone: 'soon' as const }
+}
+
+/**
+ * 마흔 개가 한 줄로 늘어서 있으면 사람은 첫 줄도 시작하지 않는다.
+ * 무엇부터 할지 고르는 일까지 떠안기기 때문이다. 그래서 목록이 먼저
+ * 나눠 들고, 각 묶음은 지금 손댈 만한 크기로만 열려 있는다.
+ */
+const BUCKETS = [
+  { key: 'past',   label: '지났다',     open: true,  hint: '오늘로 당기거나 지워도 된다' },
+  { key: 'today',  label: '오늘',       open: true,  hint: '' },
+  { key: 'week',   label: '이번 주',    open: true,  hint: '' },
+  { key: 'later',  label: '나중에',     open: false, hint: '' },
+  { key: 'someday',label: '언젠가',     open: false, hint: '날짜를 안 정한 것들' },
+] as const
+type BucketKey = typeof BUCKETS[number]['key']
+
+function bucketOf(r: Entry): BucketKey {
+  if (!r.due_at) return 'someday'
+  const d = daysUntil(r.due_at)
+  if (d < 0) return 'past'
+  if (d === 0) return 'today'
+  if (d <= 7) return 'week'
+  return 'later'
 }
 
 /** 할 일 · 체크리스트 · 마감을 한 판에 둔다. 끝난 건 접어서 치운다. */
@@ -59,8 +86,19 @@ export default function Todo({ section, isOwner, uid }: {
     catch (e) { await reload(); throw e }
   }
 
+  /** 오늘로 당기기 — 지난 것을 지우지 않고 다시 살리는 한 번의 동작. */
+  async function pullToToday(row: Entry) {
+    const t = new Date(); t.setHours(23, 59, 0, 0)
+    setRows(rs => rs.map(r => (r.id === row.id ? { ...r, due_at: t.toISOString() } : r)))
+    try { await api.updateEntry(row.id, { due_at: t.toISOString() }) }
+    catch (e) { await reload(); throw e }
+  }
+
   const open = rows.filter(r => !r.done)
   const done = rows.filter(r => r.done)
+  const groups = BUCKETS.map(b => ({
+    ...b, items: open.filter(r => bucketOf(r) === b.key),
+  })).filter(g => g.items.length > 0)
 
   return (
     <div>
@@ -84,26 +122,40 @@ export default function Todo({ section, isOwner, uid }: {
 
       {open.length === 0
         ? <div className="empty-note">오늘은 비어 있다.<br />하나만 적어도 충분하다.</div>
-        : <ul className="checklist">
-            {open.map(r => {
-              const d = r.due_at ? dday(r.due_at) : null
-              return (
-                <li key={r.id}>
-                  <button className="tick" aria-label="다 했음으로 표시"
-                          onClick={() => flip(r, true)} disabled={!isOwner} />
-                  <Editable className="what" value={r.title} disabled={!isOwner}
-                            onSave={async next => {
-                              await api.updateEntry(r.id, { title: next }); await reload()
-                            }} />
-                  {d && <span className={`dday ${d.tone}`}>{d.text}</span>}
-                  {isOwner && (
-                    <button className="x" aria-label="지우기" title="지우기"
-                            onClick={() => drop(r)}>×</button>
-                  )}
-                </li>
-              )
-            })}
-          </ul>}
+        : groups.map(g => (
+            <details key={g.key} className="bucket" open={g.open} data-tone={g.key}>
+              <summary>
+                <span className="b-label">{g.label}</span>
+                <span className="b-count">{g.items.length}</span>
+                {g.hint && <span className="b-hint">{g.hint}</span>}
+              </summary>
+              <ul className="checklist">
+                {g.items.map(r => {
+                  const d = r.due_at ? dday(r.due_at) : null
+                  return (
+                    <li key={r.id}>
+                      <button className="tick" aria-label="다 했음으로 표시"
+                              onClick={() => flip(r, true)} disabled={!isOwner} />
+                      <Editable className="what" value={r.title} disabled={!isOwner}
+                                onSave={async next => {
+                                  await api.updateEntry(r.id, { title: next }); await reload()
+                                }} />
+                      {g.key === 'past' && isOwner && (
+                        <button className="crumb pull-today" onClick={() => pullToToday(r)}>
+                          오늘로
+                        </button>
+                      )}
+                      {d && <span className={`dday ${d.tone}`}>{d.text}</span>}
+                      {isOwner && (
+                        <button className="x" aria-label="지우기" title="지우기"
+                                onClick={() => drop(r)}>×</button>
+                      )}
+                    </li>
+                  )
+                })}
+              </ul>
+            </details>
+          ))}
 
       {done.length > 0 && (
         <div style={{ marginTop: 14 }}>
