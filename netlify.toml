@@ -1,0 +1,22 @@
+# Netlify는 이 저장소를 GitHub에서 직접 가져다 빌드한다.
+# 저장소 루트에 다른 것들이 있으므로 minihompy 로 들어가서 빌드하고,
+# 결과 폴더만 배포한다.
+
+[build]
+  command = "cd minihompy && npm ci --no-audit --no-fund && npm run build"
+  publish = "minihompy/dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+  # 이 두 값은 브라우저로 내려가는 공개 설정이다. publishable 키는 그러라고
+  # 있는 값이고, 실제 방어선은 데이터베이스의 RLS 정책이다 — 남의 비공개 글,
+  # 비밀 방명록, 남의 이름으로 쓰기는 전부 거기서 막힌다.
+  # 비밀로 다뤄야 하는 건 service_role 쪽이며 그건 여기 없다.
+  VITE_SUPABASE_URL = "https://waowrqqlbzdxtngsqocu.supabase.co"
+  VITE_SUPABASE_ANON_KEY = "sb_publishable_OMu1VLahpuXw1-V0cx0mEg_YAtCtEoi"
+
+# 해시 라우팅(#/@handle)이라 새로고침해도 index.html 이면 된다.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
