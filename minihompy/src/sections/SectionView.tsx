@@ -47,7 +47,7 @@ export default function SectionView({ section, sections, owner, isOwner, uid }: 
     <div>
       <div className="sec-title" style={{ display: 'flex', alignItems: 'center' }}>
         <span>{section.label}</span>
-        <span style={{ marginLeft: 'auto', color: '#b0b0b0', fontWeight: 400 }}>
+        <span style={{ marginLeft: 'auto', color: '#636363', fontWeight: 400 }}>
           {entries.length}
         </span>
         {isOwner && (
@@ -250,7 +250,7 @@ function Guestbook({ owner, uid, isOwner }: {
 
   return (
     <div>
-      <div className="sec-title">방명록 <span style={{ color: '#b0b0b0', fontWeight: 400 }}>{rows.length}</span></div>
+      <div className="sec-title">방명록 <span style={{ color: '#636363', fontWeight: 400 }}>{rows.length}</span></div>
 
       {uid ? (
         <div style={{ display: 'grid', gap: 6, marginBottom: 14 }}>

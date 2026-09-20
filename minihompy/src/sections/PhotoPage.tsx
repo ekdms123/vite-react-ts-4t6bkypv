@@ -97,7 +97,7 @@ export default function PhotoPage({ entry, isOwner, uid, onBack }: {
               <p>{c.body}</p>
             </div>
             {(uid === c.author || isOwner) && (
-              <button className="x" onClick={async () => {
+              <button className="x" aria-label="지우기" onClick={async () => {
                 await api.deleteComment(c.id); await reload()
               }}>×</button>
             )}

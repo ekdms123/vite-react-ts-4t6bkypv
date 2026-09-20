@@ -36,7 +36,7 @@ export default function Inbox({ section, sections, isOwner, uid }: {
     <div>
       <div className="sec-title">
         {section.label}
-        <span style={{ float: 'right', fontWeight: 400, color: '#b0b0b0' }}>{rows.length}장</span>
+        <span style={{ float: 'right', fontWeight: 400, color: '#636363' }}>{rows.length}장</span>
       </div>
 
       {isOwner && (
@@ -67,7 +67,7 @@ export default function Inbox({ section, sections, isOwner, uid }: {
                       { month: 'numeric', day: 'numeric' })}
                   </span>
                   {isOwner && targets.length > 0 && (
-                    <select defaultValue="" onChange={async e => {
+                    <select defaultValue="" aria-label="다른 탭으로 옮기기" onChange={async e => {
                       if (!e.target.value) return
                       await api.moveEntry(r.id, e.target.value); await reload()
                     }}>
@@ -78,7 +78,7 @@ export default function Inbox({ section, sections, isOwner, uid }: {
                     </select>
                   )}
                   {isOwner && (
-                    <button className="x" onClick={async () => {
+                    <button className="x" aria-label="지우기" onClick={async () => {
                       await api.deleteEntry(r.id); await reload()
                     }}>×</button>
                   )}

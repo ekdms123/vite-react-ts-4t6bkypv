@@ -104,10 +104,10 @@ export default function App() {
       <div className="binder-wrap">
         <div className="binder">
           <div className="spread">
-            <LeftPage profile={viewing} isOwner={isOwner} visits={visits}
+            <aside aria-label="프로필"><LeftPage profile={viewing} isOwner={isOwner} visits={visits}
                       energy={energy} onEnergy={setEnergy}
                       onChanged={() => { void refreshMe(); void load() }}
-                      onWave={wave} />
+                      onWave={wave} /></aside>
 
             {isDesktop && (
               <div className="rings" aria-hidden>
@@ -115,9 +115,10 @@ export default function App() {
               </div>
             )}
 
-            <div className="page-right">
+            <main className="page-right">
               <div className="right-head">
                 <h1>{viewing.title}</h1>
+                <span className="sr-only" aria-hidden="false">{viewing.title}</span>
                 <div className="acts">
                   {!isOwner && <button onClick={() => location.hash = '#/friends'}>+일촌맺기</button>}
                   {isOwner && <button onClick={() => location.hash = '#/find'}>찾기</button>}
@@ -136,7 +137,7 @@ export default function App() {
                                  isOwner={isOwner} uid={me.id} />
                     : <div className="empty-note">없는 탭이다.</div>}
               </div>
-            </div>
+            </main>
           </div>
 
           <TabRail sections={sections} current={tab} onPick={setTab}

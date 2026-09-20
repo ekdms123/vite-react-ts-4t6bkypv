@@ -64,9 +64,11 @@ export default function Calendar({ section, isOwner, uid }: {
   return (
     <div>
       <div className="sec-title cal-head">
-        <button className="nav" onClick={() => setCursor(c => new Date(c.getFullYear(), c.getMonth() - 1, 1))}>‹</button>
+        <button className="nav" aria-label="지난달"
+                onClick={() => setCursor(c => new Date(c.getFullYear(), c.getMonth() - 1, 1))}>‹</button>
         <span>{cursor.getFullYear()}년 {cursor.getMonth() + 1}월</span>
-        <button className="nav" onClick={() => setCursor(c => new Date(c.getFullYear(), c.getMonth() + 1, 1))}>›</button>
+        <button className="nav" aria-label="다음달"
+                onClick={() => setCursor(c => new Date(c.getFullYear(), c.getMonth() + 1, 1))}>›</button>
       </div>
 
       <div className="cal-grid">
@@ -77,6 +79,8 @@ export default function Calendar({ section, isOwner, uid }: {
           <button key={c.k} className="cal-day"
                   data-dim={!c.inMonth} data-today={c.k === todayKey} data-picked={c.k === picked}
                   data-drop={moving !== null}
+                  aria-label={`${c.d.getMonth() + 1}월 ${c.d.getDate()}일${
+                    byDay[c.k]?.length ? `, 일정 ${byDay[c.k].length}개` : ', 비어 있음'}`}
                   onClick={async () => {
                     if (moving) {
                       const old = new Date(moving.starts_at!)
@@ -120,7 +124,7 @@ export default function Calendar({ section, isOwner, uid }: {
                               onClick={() => setMoving(moving?.id === r.id ? null : r)}>
                         {moving?.id === r.id ? '취소' : '옮기기'}
                       </button>
-                      <button className="x"
+                      <button className="x" aria-label="지우기"
                               onClick={async () => { await api.deleteEntry(r.id); await reload() }}>×</button>
                     </>
                   )}
@@ -130,7 +134,8 @@ export default function Calendar({ section, isOwner, uid }: {
 
         {isOwner && (
           <div className="quick-add">
-            <input type="time" value={time} onChange={e => setTime(e.target.value)} style={{ width: 96 }} />
+            <input type="time" value={time} onChange={e => setTime(e.target.value)}
+                   aria-label="시간" style={{ width: 96 }} />
             <input type="text" placeholder="무슨 일" value={title}
                    onChange={e => setTitle(e.target.value)}
                    onKeyDown={e => { if (e.key === 'Enter') void add() }} />

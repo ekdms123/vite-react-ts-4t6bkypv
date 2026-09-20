@@ -45,13 +45,13 @@ export default function Diary({ section, isOwner, uid }: {
     <div>
       <div className="sec-title">
         {section.label}
-        <span style={{ float: 'right', fontWeight: 400, color: '#b0b0b0' }}>{rows.length}일</span>
+        <span style={{ float: 'right', fontWeight: 400, color: '#636363' }}>{rows.length}일</span>
       </div>
 
       {isOwner && (open ? (
         <div className="diary-write">
           <div className="dw-row">
-            <select value={mood} onChange={e => setMood(e.target.value)}>
+            <select value={mood} onChange={e => setMood(e.target.value)} aria-label="오늘 기분">
               {MOODS.map(m => <option key={m} value={m}>{m ? `${MOOD_FACE[m] ?? ''} ${m}` : '오늘 기분'}</option>)}
             </select>
             <div className="weather-pick">
@@ -95,7 +95,7 @@ export default function Diary({ section, isOwner, uid }: {
                       {r.mood && <span className="mood-tag">{MOOD_FACE[r.mood] ?? ''} {r.mood}</span>}
                       {r.weather && <span className="wx">{r.weather}</span>}
                       {isOwner && (
-                        <button className="x" style={{ marginLeft: 'auto' }}
+                        <button className="x" aria-label="지우기" style={{ marginLeft: 'auto' }}
                                 onClick={async () => {
                                   if (confirm('지울까?')) { await api.deleteEntry(r.id); await reload() }
                                 }}>×</button>

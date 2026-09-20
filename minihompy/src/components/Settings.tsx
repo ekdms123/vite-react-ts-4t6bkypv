@@ -94,7 +94,7 @@ export default function Settings({ me, sections, onChanged, onClose }: {
                      }
                    }} />
             <span className="chip">{KIND_LABEL[s.kind]}</span>
-            <select value={s.visibility}
+            <select value={s.visibility} aria-label={`${s.label} 공개 범위`}
                     onChange={async e => {
                       await api.updateSection(s.id, { visibility: e.target.value as Section['visibility'] })
                       onChanged()
@@ -103,9 +103,9 @@ export default function Settings({ me, sections, onChanged, onClose }: {
               <option value="friends">일촌만</option>
               <option value="private">나만</option>
             </select>
-            <button className="btn ghost" onClick={() => move(s, -1)}>↑</button>
-            <button className="btn ghost" onClick={() => move(s, 1)}>↓</button>
-            <button className="btn ghost" onClick={async () => {
+            <button className="btn ghost" aria-label={`${s.label} 위로`} onClick={() => move(s, -1)}>↑</button>
+            <button className="btn ghost" aria-label={`${s.label} 아래로`} onClick={() => move(s, 1)}>↓</button>
+            <button className="btn ghost" aria-label={`${s.label} 탭 지우기`} onClick={async () => {
               if (confirm(`"${s.label}" 탭과 그 안의 글을 전부 지울까?`)) {
                 await api.deleteSection(s.id); onChanged()
               }
@@ -117,7 +117,7 @@ export default function Settings({ me, sections, onChanged, onClose }: {
           <input type="text" placeholder="새 탭 이름" value={newLabel}
                  onChange={e => setNewLabel(e.target.value)} />
           <select value={newKind} onChange={e => setNewKind(e.target.value as SectionKind)}
-                  style={{ width: 104 }}>
+                  aria-label="새 탭 종류" style={{ width: 104 }}>
             {CREATABLE_KINDS.map(k => <option key={k} value={k}>{KIND_LABEL[k]}</option>)}
           </select>
           <button className="btn" onClick={addSection} disabled={!newLabel.trim()}>추가</button>

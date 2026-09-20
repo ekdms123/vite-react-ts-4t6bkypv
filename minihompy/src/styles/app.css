@@ -10,15 +10,18 @@
   --paper:          #ffffff;
   --paper-edge:     #d8d8d8;
   --ink:            #333333;
-  --ink-soft:       #888888;
-  --title:          #2b6ca3;
-  --tab:            #4d93ab;
-  --tab-dark:       #32748c;
+  /* 아래 세 값은 눈대중이 아니라 WCAG 대비 계산으로 정했다. 흰 종이 위
+     작은 글씨는 4.5:1 이 기준인데 예전 값은 2.0~3.5:1 이라 699곳이 미달이었다.
+     흐리게 보이는 게 멋이라고 생각했지만, 흐린 건 그냥 안 읽히는 것이다. */
+  --ink-soft:       #757575;   /* 4.61:1 */
+  --title:          #2b6ca3;   /* 5.56:1 */
+  --tab:            #427e93;   /* 흰 글씨 4.53:1 */
+  --tab-dark:       #2f6275;
   --tab-text:       #ffffff;
-  --today:          #e04b4b;
+  --today:          #d04646;   /* 4.52:1 */
   --ring:           #b0b0b0;
   --line:           #e2e2e2;
-  --accent:         #5aa7c4;
+  --accent:         #427b91;   /* 흰 글씨 4.69:1 */
 
   --page-w:         960px;
   --left-w:         232px;
@@ -28,8 +31,8 @@
 }
 
 /* 스킨 — data-skin 으로 갈아끼운다 */
-:root[data-skin="pink"]  { --skin-bg:#f3ccd9; --skin-bg-alt:#f8dde7; --title:#b3517a; --tab:#c9738f; --tab-dark:#a8546f; --accent:#d98aa6; }
-:root[data-skin="mint"]  { --skin-bg:#bfe3d4; --skin-bg-alt:#d2ece1; --title:#2e7d64; --tab:#57a487; --tab-dark:#3d8068; --accent:#6bb89a; }
+:root[data-skin="pink"]  { --skin-bg:#f3ccd9; --skin-bg-alt:#f8dde7; --title:#b3517a; --tab:#a8506c; --tab-dark:#8c3f57; --accent:#a8506c; }
+:root[data-skin="mint"]  { --skin-bg:#bfe3d4; --skin-bg-alt:#d2ece1; --title:#2e7d64; --tab:#3f7f66; --tab-dark:#2f6650; --accent:#3f7f66; }
 :root[data-skin="night"] { --skin-bg:#3a4258; --skin-bg-alt:#464f68; --paper:#f4f4f7; --title:#3d4a72; --tab:#5a6b93; --tab-dark:#414c6b; --accent:#6d7ba3; }
 
 * { box-sizing: border-box; }
@@ -153,7 +156,7 @@ button { font-family: inherit; cursor: pointer; }
   position: relative;
 }
 .minimi img { width: 100%; height: 100%; object-fit: cover; }
-.minimi .empty { color: #c8c8c8; font-size: 11px; text-align: center; line-height: 1.6; }
+.minimi .empty { color: #737373; font-size: 11px; text-align: center; line-height: 1.6; }
 .minimi .upload {
   position: absolute; inset: auto 0 0 0;
   background: rgba(0,0,0,.55); color: #fff; border: 0;
@@ -276,7 +279,7 @@ button { font-family: inherit; cursor: pointer; }
 .counts .k { color: var(--ink-soft); }
 .counts .v { color: var(--title); font-weight: 700; }
 
-.empty-note { color: #b5b5b5; font-size: 11px; text-align: center; padding: 34px 10px; line-height: 1.8; }
+.empty-note { color: #737373; font-size: 11px; text-align: center; padding: 34px 10px; line-height: 1.8; }
 
 .btn {
   border: 1px solid var(--tab); background: var(--tab); color: #fff;
@@ -347,7 +350,13 @@ textarea { resize: vertical; line-height: 1.7; }
   .page-right { padding: 0; }
   /* 홈피 이름은 위 프로필 카드에 이미 있다. 두 번 쓰면 좁은 화면만 먹는다. */
   .right-head { padding: 8px 14px 6px; flex-wrap: wrap; }
-  .right-head h1, .right-head .url { display: none; }
+  /* 눈으로는 위 카드에 이미 있으니 감추되, 문서에서 지우지는 않는다.
+     display:none 으로 지우면 페이지에 제목이 하나도 없는 문서가 된다. */
+  .right-head h1 {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+  .right-head .url { display: none; }
   .right-head .acts { margin-left: auto; gap: 14px; }
   .right-body {
     border: 0; background: var(--paper);
@@ -395,7 +404,7 @@ textarea { resize: vertical; line-height: 1.7; }
 .k { color: var(--ink-soft); font-size: 11px; }
 .k.soft { padding-top: 6px; display: block; }
 .what { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.when { font-size: 10px; color: #b5b5b5; white-space: nowrap; }
+.when { font-size: 10px; color: #636363; white-space: nowrap; }
 .tiny { font-size: 11px; color: var(--ink-soft); display: flex; align-items: center; gap: 3px; white-space: nowrap; }
 
 .block { margin-bottom: 18px; }
@@ -429,7 +438,7 @@ textarea { resize: vertical; line-height: 1.7; }
   display: flex; align-items: center; gap: 7px;
   padding: 7px 0; border-bottom: 1px solid var(--line);
 }
-.checklist.done .what { color: #b5b5b5; text-decoration: line-through; }
+.checklist.done .what { color: #737373; text-decoration: line-through; }
 .tick {
   flex: 0 0 15px; width: 15px; height: 15px; padding: 0;
   border: 1.5px solid var(--tab); border-radius: 4px; background: #fff;
@@ -440,7 +449,7 @@ textarea { resize: vertical; line-height: 1.7; }
 .tick:disabled { border-color: var(--line); cursor: default; }
 
 .x {
-  border: 0; background: none; color: #ccc; font-size: 14px;
+  border: 0; background: none; color: #737373; font-size: 14px;
   padding: 0 3px; line-height: 1;
 }
 .x:hover { color: #e04b4b; }
@@ -450,10 +459,10 @@ textarea { resize: vertical; line-height: 1.7; }
 
 .dday {
   font-size: 10px; padding: 1px 6px; border-radius: 9px; white-space: nowrap;
-  background: #eef3f5; color: var(--ink-soft);
+  background: #e8eef1; color: #4f4f4f;
 }
 .dday.now  { background: var(--tab);  color: #fff; font-weight: 700; }
-.dday.past { background: #fbe4e4;     color: var(--today); font-weight: 700; }
+.dday.past { background: #fbe4e4;     color: #b83e3e; font-weight: 700; }
 
 .due-list { list-style: none; margin: 0; padding: 0; }
 .due-list li {
@@ -555,16 +564,16 @@ textarea { resize: vertical; line-height: 1.7; }
 .field { display: block; margin-bottom: 9px; }
 .field > span { display: block; font-size: 11px; color: var(--ink-soft); padding-bottom: 3px; }
 .addr { display: flex; align-items: center; gap: 2px; }
-.addr em { font-style: normal; font-size: 11px; color: #b5b5b5; white-space: nowrap; }
+.addr em { font-style: normal; font-size: 11px; color: #737373; white-space: nowrap; }
 
 .skins { display: flex; gap: 6px; flex-wrap: wrap; }
 .skins button {
   border: 2px solid transparent; border-radius: 6px; padding: 7px 14px; font-size: 11px;
   background: var(--tab); color: #fff;
 }
-.skins button[data-skin="pink"]  { background: #c9738f; }
-.skins button[data-skin="mint"]  { background: #57a487; }
-.skins button[data-skin="night"] { background: #5a6b93; }
+.skins button[data-skin="pink"]  { background: #a8506c; }
+.skins button[data-skin="mint"]  { background: #3f7f66; }
+.skins button[data-skin="night"] { background: #4a5878; }
 .skins button[data-on="true"] { border-color: var(--ink); font-weight: 700; }
 
 .tab-row { display: flex; gap: 4px; align-items: center; padding: 4px 0; }
@@ -655,7 +664,7 @@ textarea { resize: vertical; line-height: 1.7; }
 }
 .tearoff b { font-size: 17px; color: var(--title); line-height: 1; margin-top: 11px; }
 .tearoff span { font-size: 9px; color: var(--ink-soft); }
-.tearoff em { font-style: normal; font-size: 9px; color: #bbb; }
+.tearoff em { font-style: normal; font-size: 9px; color: #737373; }
 
 .diary-body { flex: 1; min-width: 0; border-bottom: 1px solid var(--line); padding-bottom: 12px; }
 .diary-meta { display: flex; align-items: center; gap: 6px; padding-bottom: 5px; }
@@ -702,7 +711,7 @@ textarea { resize: vertical; line-height: 1.7; }
   border: 0; padding: 0; font-size: 10px; text-align: center; background: transparent;
 }
 .polaroids figcaption input:focus { border-bottom: 1px solid var(--line); outline: none; }
-.polaroids figcaption span { font-size: 10px; color: var(--ink-soft); display: block; text-align: center; }
+.polaroids figcaption span { font-size: 10px; color: #636363; display: block; text-align: center; }
 .polaroids .pull {
   position: absolute; top: -6px; right: -6px;
   width: 19px; height: 19px; border-radius: 50%; border: 0;
@@ -740,7 +749,7 @@ textarea { resize: vertical; line-height: 1.7; }
   padding: 7px 8px; border-bottom: 1px solid var(--line); border-radius: 5px;
 }
 .tracklist li[data-on="true"] { background: #f2f8fa; }
-.tracklist .no { font-size: 10px; color: #c0c0c0; width: 18px; }
+.tracklist .no { font-size: 10px; color: #6a6a6a; width: 18px; }
 .tracklist .what {
   flex: 1; min-width: 0; border: 0; background: none; text-align: left;
   font-family: inherit; font-size: 12px; color: var(--ink);
@@ -805,11 +814,11 @@ textarea { resize: vertical; line-height: 1.7; }
   transform: rotate(3deg);
 }
 .album-cover img { width: 100%; height: 100%; object-fit: cover; border-radius: 3px; }
-.album-cover span { font-size: 10px; color: #c2c2c2; }
+.album-cover span { font-size: 10px; color: #737373; }
 .album:hover .album-cover { transform: translateY(-2px); }
 .album-cover { transition: transform .12s; box-shadow: 0 2px 6px rgba(0,0,0,.14); }
 .album-name { font-size: 11px; color: var(--title); font-weight: 700; }
-.album-count { font-size: 10px; color: var(--ink-soft); }
+.album-count { font-size: 10px; color: #636363; }
 
 .crumbs { display: flex; align-items: center; gap: 8px; }
 .crumb {
@@ -824,7 +833,7 @@ textarea { resize: vertical; line-height: 1.7; }
 .photopage { margin: -12px; padding: 12px; border-radius: 8px; min-height: 100%; }
 .photopage[data-dark="true"] { color: #ecedf2; }
 .photopage[data-dark="true"] .news-title,
-.photopage[data-dark="true"] .pp-c-body b { color: #cbd4e6; }
+.photopage[data-dark="true"] .pp-c-body b { color: #dfe4ef; }
 .pp-bar { display: flex; gap: 8px; align-items: center; padding-bottom: 10px; }
 .pp-bar .crumb:last-child { margin-left: auto; }
 
@@ -854,7 +863,7 @@ textarea { resize: vertical; line-height: 1.7; }
   background: #17171a; padding: 14px 8px;
   border-top: 9px dashed #3a3a40; border-bottom: 9px dashed #3a3a40;
 }
-.frame-film figcaption { color: #9aa0ad; }
+.frame-film figcaption { color: #c3c8d2; }
 .frame-plain img { border-radius: 6px; }
 .frame-lace {
   background: #fff; padding: 12px;
@@ -886,7 +895,7 @@ textarea { resize: vertical; line-height: 1.7; }
 }
 .mcell b { font-size: 14px; color: var(--title); white-space: nowrap;
            overflow: hidden; text-overflow: ellipsis; }
-.mcell.in b { color: #2f8f63; }
+.mcell.in b { color: #2c855c; }
 .mcell.net b[data-neg="true"] { color: var(--today); }
 .mcell em { font-style: normal; font-size: 9px; color: var(--ink-soft); }
 .mcell em[data-up="true"] { color: var(--today); }
@@ -912,12 +921,12 @@ textarea { resize: vertical; line-height: 1.7; }
 .io button[data-on="true"] { background: var(--tab); border-color: var(--tab); color: #fff; font-weight: 700; }
 
 .biggest {
-  font-size: 11px; color: var(--ink-soft); padding: 7px 9px; margin-bottom: 10px;
+  font-size: 11px; color: #5f5f5f; padding: 7px 9px; margin-bottom: 10px;
   background: #f7fafb; border-radius: 6px;
 }
 .biggest b { color: var(--title); }
-.pctl { font-style: normal; font-size: 9px; color: #b8b8b8; width: 26px; text-align: right; }
-.ledger-list li[data-income="true"] b { color: #2f8f63; }
+.pctl { font-style: normal; font-size: 9px; color: #737373; width: 26px; text-align: right; }
+.ledger-list li[data-income="true"] b { color: #2c855c; }
 
 /* ── 일정 옮기기 ───────────────────────────────────── */
 .move-hint {
@@ -961,7 +970,7 @@ textarea { resize: vertical; line-height: 1.7; }
   cursor: text; max-width: 100%;
 }
 .editable:hover { background: #f1f6f8; box-shadow: inset 0 -1px 0 var(--line); }
-.editable .ph { color: #c2c2c2; }
+.editable .ph { color: #737373; }
 .editing {
   font: inherit; color: inherit; width: 100%;
   border: 1px solid var(--tab); border-radius: 5px; padding: 3px 6px;
@@ -1000,3 +1009,22 @@ textarea { resize: vertical; line-height: 1.7; }
 .fs-row b { color: var(--title); white-space: nowrap; }
 .fs-row span { color: var(--ink-soft); min-width: 0;
                overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* 키보드로 다닐 때 지금 어디인지 보여야 한다. 기본 외곽선을 지우고
+   대신 없애지는 않는다 — 없애면 마우스 없는 사람은 길을 잃는다. */
+:focus-visible {
+  outline: 2px solid var(--title);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* 눈에는 안 보이지만 화면 낭독기에는 읽히는 글 */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* 사진 페이지는 배경을 골라 바꾸므로, 제일 밝은 배경에서도 읽히는 값으로
+   제목 색을 고정한다. 변수는 흰 종이를 전제로 맞춰둔 값이라 여기선 어긋난다. */
+.photopage .news-title { color: #37697c; }
+.photopage[data-dark="true"] .news-title { color: #dfe4ef; }

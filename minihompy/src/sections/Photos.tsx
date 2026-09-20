@@ -65,7 +65,7 @@ export default function Photos({ section, isOwner, uid }: {
       <div>
         <div className="sec-title">
           {section.label}
-          <span style={{ float: 'right', fontWeight: 400, color: '#b0b0b0' }}>
+          <span style={{ float: 'right', fontWeight: 400, color: '#636363' }}>
             앨범 {albums.length}
           </span>
         </div>

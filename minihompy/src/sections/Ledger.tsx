@@ -56,9 +56,9 @@ export default function Ledger({ section, isOwner, uid }: {
   return (
     <div>
       <div className="sec-title cal-head">
-        <button className="nav" onClick={() => shift(-1)}>‹</button>
+        <button className="nav" aria-label="지난달" onClick={() => shift(-1)}>‹</button>
         <span>{month.getFullYear()}년 {month.getMonth() + 1}월</span>
-        <button className="nav" onClick={() => shift(1)}>›</button>
+        <button className="nav" aria-label="다음달" onClick={() => shift(1)}>›</button>
       </div>
 
       {/* 세 숫자를 한 줄에. 쓴 돈만 있으면 많고 적음을 알 수 없다. */}
@@ -111,7 +111,8 @@ export default function Ledger({ section, isOwner, uid }: {
           <input type="text" inputMode="numeric" placeholder="금액" value={amount}
                  onChange={e => setAmount(e.target.value)}
                  onKeyDown={e => { if (e.key === 'Enter') void add() }} style={{ width: 88 }} />
-          <select value={cat} onChange={e => setCat(e.target.value)} style={{ width: 84 }}>
+          <select value={cat} onChange={e => setCat(e.target.value)}
+                  aria-label="분류" style={{ width: 84 }}>
             {(income ? INCOME_CATEGORIES : LEDGER_CATEGORIES).map(c => <option key={c}>{c}</option>)}
           </select>
           <input type="text" placeholder="뭐에 썼나 (생략 가능)" value={title}
@@ -159,7 +160,7 @@ export default function Ledger({ section, isOwner, uid }: {
                 <b>{r.is_income ? '+' : '−'}{won(r.amount ?? 0)}</b>
                 <span className="when">{new Date(r.created_at).getDate()}일</span>
                 {isOwner && (
-                  <button className="x" onClick={async () => {
+                  <button className="x" aria-label="지우기" onClick={async () => {
                     await api.deleteEntry(r.id); await reload()
                   }}>×</button>
                 )}

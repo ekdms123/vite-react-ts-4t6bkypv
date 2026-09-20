@@ -52,7 +52,7 @@ export default function Jukebox({ section, isOwner, uid }: {
     <div>
       <div className="sec-title">
         {section.label}
-        <span style={{ float: 'right', fontWeight: 400, color: '#b0b0b0' }}>{rows.length}곡</span>
+        <span style={{ float: 'right', fontWeight: 400, color: '#636363' }}>{rows.length}곡</span>
       </div>
 
       {playing && src && (
@@ -89,7 +89,7 @@ export default function Jukebox({ section, isOwner, uid }: {
                 <button className="what" onClick={() => play(r)}>{r.title}</button>
                 {playing?.id === r.id && <span className="eq"><i /><i /><i /></span>}
                 {isOwner && (
-                  <button className="x" onClick={async () => {
+                  <button className="x" aria-label="지우기" onClick={async () => {
                     await api.deleteEntry(r.id)
                     if (playing?.id === r.id) setPlaying(null)
                     await reload()

@@ -66,7 +66,7 @@ export default function Todo({ section, isOwner, uid }: {
     <div>
       <div className="sec-title">
         {section.label}
-        <span style={{ float: 'right', fontWeight: 400, color: '#b0b0b0' }}>
+        <span style={{ float: 'right', fontWeight: 400, color: '#636363' }}>
           {open.length}개 남음
         </span>
       </div>
@@ -77,7 +77,7 @@ export default function Todo({ section, isOwner, uid }: {
                  onChange={e => setText(e.target.value)}
                  onKeyDown={e => { if (e.key === 'Enter') void add() }} />
           <input type="date" value={due} onChange={e => setDue(e.target.value)}
-                 title="마감 (없어도 됨)" style={{ width: 126 }} />
+                 aria-label="마감 날짜 (없어도 됨)" style={{ width: 126 }} />
           <button className="btn" onClick={add} disabled={busy || !text.trim()}>담기</button>
         </div>
       )}
@@ -89,7 +89,7 @@ export default function Todo({ section, isOwner, uid }: {
               const d = r.due_at ? dday(r.due_at) : null
               return (
                 <li key={r.id}>
-                  <button className="tick" aria-label="완료"
+                  <button className="tick" aria-label="다 했음으로 표시"
                           onClick={() => flip(r, true)} disabled={!isOwner} />
                   <Editable className="what" value={r.title} disabled={!isOwner}
                             onSave={async next => {
@@ -97,7 +97,7 @@ export default function Todo({ section, isOwner, uid }: {
                             }} />
                   {d && <span className={`dday ${d.tone}`}>{d.text}</span>}
                   {isOwner && (
-                    <button className="x" title="지우기"
+                    <button className="x" aria-label="지우기" title="지우기"
                             onClick={() => drop(r)}>×</button>
                   )}
                 </li>
@@ -107,18 +107,18 @@ export default function Todo({ section, isOwner, uid }: {
 
       {done.length > 0 && (
         <div style={{ marginTop: 14 }}>
-          <button className="fold" onClick={() => setShowDone(v => !v)}>
+          <button className="fold" aria-expanded={showDone} onClick={() => setShowDone(v => !v)}>
             {showDone ? '▾' : '▸'} 끝낸 것 {done.length}
           </button>
           {showDone && (
             <ul className="checklist done">
               {done.map(r => (
                 <li key={r.id}>
-                  <button className="tick on" aria-label="되돌리기"
+                  <button className="tick on" aria-label="아직 안 한 것으로 되돌리기"
                           onClick={() => flip(r, false)} disabled={!isOwner} />
                   <span className="what">{r.title}</span>
                   {isOwner && (
-                    <button className="x"
+                    <button className="x" aria-label="지우기"
                             onClick={() => drop(r)}>×</button>
                   )}
                 </li>

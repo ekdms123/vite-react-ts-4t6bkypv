@@ -25,9 +25,9 @@ function Home() {
       <section className="block">
         <div className="news-title">오늘</div>
         <ul className="checklist">
-          <li><button className="tick" /><span className="what">과제 개요 1장 쓰기</span><span className="dday now">오늘</span></li>
-          <li><button className="tick" /><span className="what">병원 예약 전화</span><span className="dday past">2일 지남</span></li>
-          <li><button className="tick" /><span className="what">빨래 돌리기</span></li>
+          <li><button className="tick" aria-label="다 했음으로 표시" /><span className="what">과제 개요 1장 쓰기</span><span className="dday now">오늘</span></li>
+          <li><button className="tick" aria-label="다 했음으로 표시" /><span className="what">병원 예약 전화</span><span className="dday past">2일 지남</span></li>
+          <li><button className="tick" aria-label="다 했음으로 표시" /><span className="what">빨래 돌리기</span></li>
         </ul>
         <div className="k soft">4개는 접어뒀다.</div>
       </section>
@@ -60,18 +60,18 @@ function Home() {
 function Todo() {
   return (
     <div>
-      <div className="sec-title">오늘<span style={{ float: 'right', fontWeight: 400, color: '#b0b0b0' }}>7개 남음</span></div>
+      <div className="sec-title">오늘<span style={{ float: 'right', fontWeight: 400, color: '#636363' }}>7개 남음</span></div>
       <div className="quick-add">
         <input type="text" placeholder="할 일 한 줄" />
-        <input type="date" style={{ width: 126 }} />
+        <input type="date" style={{ width: 126 }} aria-label="마감 날짜" />
         <button className="btn">담기</button>
       </div>
       <ul className="checklist">
-        <li><button className="tick" /><span className="what">교양 레포트 제출</span><span className="dday now">오늘</span><button className="x">×</button></li>
-        <li><button className="tick" /><span className="what">병원 예약 전화</span><span className="dday past">2일 지남</span><button className="x">×</button></li>
-        <li><button className="tick" /><span className="what">동아리 회비 보내기</span><span className="dday soon">D-3</span><button className="x">×</button></li>
-        <li><button className="tick" /><span className="what">빨래 돌리기</span><button className="x">×</button></li>
-        <li><button className="tick" /><span className="what">책 반납</span><span className="dday soon">D-5</span><button className="x">×</button></li>
+        <li><button className="tick" aria-label="다 했음으로 표시" /><span className="what">교양 레포트 제출</span><span className="dday now">오늘</span><button className="x" aria-label="지우기">×</button></li>
+        <li><button className="tick" aria-label="다 했음으로 표시" /><span className="what">병원 예약 전화</span><span className="dday past">2일 지남</span><button className="x" aria-label="지우기">×</button></li>
+        <li><button className="tick" aria-label="다 했음으로 표시" /><span className="what">동아리 회비 보내기</span><span className="dday soon">D-3</span><button className="x" aria-label="지우기">×</button></li>
+        <li><button className="tick" aria-label="다 했음으로 표시" /><span className="what">빨래 돌리기</span><button className="x" aria-label="지우기">×</button></li>
+        <li><button className="tick" aria-label="다 했음으로 표시" /><span className="what">책 반납</span><span className="dday soon">D-5</span><button className="x" aria-label="지우기">×</button></li>
       </ul>
       <div style={{ marginTop: 14 }}>
         <button className="fold">▸ 끝낸 것 12</button>
@@ -86,7 +86,7 @@ function Cal() {
   return (
     <div>
       <div className="sec-title cal-head">
-        <button className="nav">‹</button><span>2026년 9월</span><button className="nav">›</button>
+        <button className="nav" aria-label="지난달">‹</button><span>2026년 9월</span><button className="nav" aria-label="다음달">›</button>
       </div>
       <div className="cal-grid">
         {WEEK.map((w, i) => <div key={w} className="cal-wd" data-sun={i === 0} data-sat={i === 6}>{w}</div>)}
@@ -95,6 +95,7 @@ function Cal() {
           const inMonth = day >= 1 && day <= 30
           return (
             <button key={i} className="cal-day" data-dim={!inMonth}
+                    aria-label={inMonth ? `9월 ${day}일` : '이번 달 아님'}
                     data-today={day === 20} data-picked={day === 20}>
               <span>{inMonth ? day : ''}</span>
               {inMonth && marks[day] ? <i className="dot" data-n={marks[day]} /> : null}
@@ -105,11 +106,11 @@ function Cal() {
       <div className="cal-day-panel">
         <div className="k">2026.09.20</div>
         <ul className="day-list">
-          <li><time>10:00</time><span className="what">팀플 회의</span><button className="x">×</button></li>
-          <li><time>19:30</time><span className="what">엄마 생신 저녁</span><button className="x">×</button></li>
+          <li><time>10:00</time><span className="what">팀플 회의</span><button className="x" aria-label="지우기">×</button></li>
+          <li><time>19:30</time><span className="what">엄마 생신 저녁</span><button className="x" aria-label="지우기">×</button></li>
         </ul>
         <div className="quick-add">
-          <input type="time" style={{ width: 96 }} /><input type="text" placeholder="무슨 일" />
+          <input type="time" style={{ width: 96 }} aria-label="시간" /><input type="text" placeholder="무슨 일" />
           <button className="btn">담기</button>
         </div>
       </div>
@@ -148,7 +149,7 @@ function Ch() {
 function Guest() {
   return (
     <div>
-      <div className="sec-title">방명록 <span style={{ color: '#b0b0b0', fontWeight: 400 }}>3</span></div>
+      <div className="sec-title">방명록 <span style={{ color: '#636363', fontWeight: 400 }}>3</span></div>
       <div style={{ display: 'grid', gap: 6, marginBottom: 14 }}>
         <textarea rows={3} placeholder="한마디 남기고 가기" />
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -183,7 +184,7 @@ function Dia() {
   ]
   return (
     <div>
-      <div className="sec-title">다이어리<span style={{ float: 'right', fontWeight: 400, color: '#b0b0b0' }}>31일</span></div>
+      <div className="sec-title">다이어리<span style={{ float: 'right', fontWeight: 400, color: '#636363' }}>31일</span></div>
       <button className="diary-open">✎ 오늘 쓰기</button>
       <div className="diary-list">
         {days.map(([d, m, w, mood, body]) => (
@@ -213,7 +214,7 @@ function Juke() {
   const songs = ['좋은 날', 'Through the Night', '밤편지', '너의 의미', 'Spring Day']
   return (
     <div>
-      <div className="sec-title">쥬크박스<span style={{ float: 'right', fontWeight: 400, color: '#b0b0b0' }}>5곡</span></div>
+      <div className="sec-title">쥬크박스<span style={{ float: 'right', fontWeight: 400, color: '#636363' }}>5곡</span></div>
       <div className="deck">
         <div className="deck-screen"><div style={{ width: '100%', aspectRatio: '16/9', background: '#111' }} /></div>
         <div className="deck-label"><span className="reel" /> <b>좋은 날</b> <span className="reel" /></div>
@@ -229,7 +230,7 @@ function Juke() {
             <span className="no">{String(i + 1).padStart(2, '0')}</span>
             <button className="what">{s}</button>
             {i === 0 && <span className="eq"><i /><i /><i /></span>}
-            <button className="x">×</button>
+            <button className="x" aria-label="지우기">×</button>
           </li>
         ))}
       </ol>
@@ -243,7 +244,7 @@ function Box() {
     '치과 예약 — 오른쪽 어금니', '읽다 만 책 3권 정리']
   return (
     <div>
-      <div className="sec-title">보관함<span style={{ float: 'right', fontWeight: 400, color: '#b0b0b0' }}>5장</span></div>
+      <div className="sec-title">보관함<span style={{ float: 'right', fontWeight: 400, color: '#636363' }}>5장</span></div>
       <div className="quick-add">
         <input type="text" placeholder="아무거나 던져두기" />
         <button className="btn">붙이기</button>
@@ -254,8 +255,8 @@ function Box() {
             <p>{n}</p>
             <div className="sticky-foot">
               <span className="when">9/{20 - i}</span>
-              <select defaultValue=""><option value="">어디로 →</option></select>
-              <button className="x">×</button>
+              <select defaultValue="" aria-label="다른 탭으로 옮기기"><option value="">어디로 →</option></select>
+              <button className="x" aria-label="지우기">×</button>
             </div>
           </div>
         ))}
@@ -273,7 +274,7 @@ function Money2() {
   const pct = Math.round((spent/planned)*100)
   return (
     <div>
-      <div className="sec-title cal-head"><button className="nav">‹</button><span>2026년 9월</span><button className="nav">›</button></div>
+      <div className="sec-title cal-head"><button className="nav" aria-label="지난달">‹</button><span>2026년 9월</span><button className="nav" aria-label="다음달">›</button></div>
       <div className="money-grid">
         <div className="mcell out"><span className="k">썼다</span><b>{won(spent)}</b>
           <em data-up={false}>지난달보다 {won(prev-spent)} 덜</em></div>
@@ -290,9 +291,9 @@ function Money2() {
       <div className="quick-add money">
         <div className="io"><button data-on>지출</button><button>수입</button></div>
         <input type="text" placeholder="금액" style={{width:88}} />
-        <select style={{width:84}}><option>식비</option></select>
+        <select style={{width:84}} aria-label="분류"><option>식비</option></select>
         <input type="text" placeholder="뭐에 썼나 (생략 가능)" />
-        <label className="tiny"><input type="checkbox" style={{width:'auto'}} />예산</label>
+        <label className="tiny"><input type="checkbox" style={{width:'auto'}} aria-label="예산으로 담기" />예산</label>
         <button className="btn">담기</button>
       </div>
       <div className="biggest">이번 달 제일 큰 지출 — <b>겨울 코트</b> {won(61000)}</div>
@@ -306,8 +307,8 @@ function Money2() {
         ))}
       </div>
       <ul className="ledger-list">
-        <li data-income><span className="chip">월급</span><span className="what">9월 월급</span><b>+{won(800000)}</b><span className="when">25일</span><button className="x">×</button></li>
-        <li><span className="chip">식비</span><span className="what">점심 김밥</span><b>−{won(4500)}</b><span className="when">19일</span><button className="x">×</button></li>
+        <li data-income><span className="chip">월급</span><span className="what">9월 월급</span><b>+{won(800000)}</b><span className="when">25일</span><button className="x" aria-label="지우기">×</button></li>
+        <li><span className="chip">식비</span><span className="what">점심 김밥</span><b>−{won(4500)}</b><span className="when">19일</span><button className="x" aria-label="지우기">×</button></li>
       </ul>
     </div>
   )
@@ -317,7 +318,7 @@ function Albums() {
   const al: [string,string,number][] = [['#f3c9d4','여행',24],['#cfe0f5','일상',61],['#d9eede','카페',13],['#e0d6f2','우리 고양이',88]]
   return (
     <div>
-      <div className="sec-title">사진첩<span style={{float:'right',fontWeight:400,color:'#b0b0b0'}}>앨범 4</span></div>
+      <div className="sec-title">사진첩<span style={{float:'right',fontWeight:400,color:'#636363'}}>앨범 4</span></div>
       <button className="photo-drop">＋ 새 앨범</button>
       <div className="albums">
         {al.map(([c,n,k]) => (
@@ -338,7 +339,7 @@ function PhotoOne() {
       <div className="pp-tools">
         <div className="pp-row"><span>배경</span>
           {['#ffffff','#fff6e5','#ffeef2','#eaf4f8','#eef7ee','#f3eefa','#2b2b30'].map(c =>
-            <button key={c} className="swatch" style={{background:c}} data-on={c==='#fff6e5'} />)}
+            <button key={c} className="swatch" style={{background:c}} data-on={c==='#fff6e5'} aria-label={`배경 ${c}`} />)}
         </div>
         <div className="pp-row"><span>테두리</span>
           {['폴라로이드','필름','그냥','레이스'].map((f,i) =>
@@ -355,7 +356,7 @@ function PhotoOne() {
         {[['동생','나도 데려가지ㅠㅠ'],['수연','사진 진짜 잘 찍었다']].map(([w,b]) => (
           <div key={w} className="pp-c">
             <div className="ava" /><div className="pp-c-body"><b>{w}</b><span className="when">9/19</span><p>{b}</p></div>
-            <button className="x">×</button>
+            <button className="x" aria-label="지우기">×</button>
           </div>
         ))}
         <div className="quick-add" style={{marginTop:10}}>
@@ -391,7 +392,7 @@ function Preview() {
 
         <div className="binder">
           <div className="spread">
-            <div className="page-left">
+            <aside aria-label="프로필" className="page-left">
               <div className="counter">TODAY <b>12</b> | TOTAL <span className="total">3,481</span></div>
               <div className="left-card">
                 <div className="minimi"><span className="empty">프사<br />없음</span>
@@ -400,26 +401,27 @@ function Preview() {
                   <div className="home-name">다은님의 미니홈피</div>
                   <div className="home-tagline">오늘도 어떻게든</div>
                   <div className="mood-row"><span className="label">TODAY IS..</span>
-                    <select defaultValue="그냥그럼"><option>그냥그럼</option></select></div>
+                    <select defaultValue="그냥그럼" aria-label="오늘 기분"><option>그냥그럼</option></select></div>
                   <div className="energy">
                     <button>낮음</button><button data-on>보통</button><button>하이퍼</button>
                   </div>
                 </div>
                 <div className="left-links"><button>EDIT</button><button>일촌</button></div>
-                <div className="wave"><span>파도타기</span><button>▲</button></div>
+                <div className="wave"><span>파도타기</span>
+                  <button aria-label="파도타기">▲</button></div>
               </div>
-            </div>
+            </aside>
 
             <div className="rings">{[0,1,2,3].map(i => <span key={i} className="ring" />)}</div>
 
-            <div className="page-right">
+            <main className="page-right">
               <div className="right-head">
                 <h1>다은님의 미니홈피</h1>
                 <div className="acts"><button>꾸미기</button><button>로그아웃</button></div>
                 <span className="url">/#/@daeun</span>
               </div>
               <div className="right-body"><Pane /></div>
-            </div>
+            </main>
           </div>
 
           <nav className="tabs">

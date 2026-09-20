@@ -50,7 +50,7 @@ export default function LeftPage({
 
           <div className="mood-row">
             <span className="label">TODAY IS..</span>
-            <select value={profile.mood} disabled={!isOwner}
+            <select value={profile.mood} disabled={!isOwner} aria-label="오늘 기분"
                     onChange={async e => {
                       await api.updateProfile(profile.id, { mood: e.target.value }); onChanged()
                     }}>
@@ -76,7 +76,7 @@ export default function LeftPage({
 
         <div className="wave">
           <span>파도타기</span>
-          <button onClick={onWave} title="아무 집이나 가기">▲</button>
+          <button onClick={onWave} aria-label="파도타기 — 일촌 집에 가기">▲</button>
         </div>
       </div>
     </div>
