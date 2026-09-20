@@ -7,7 +7,7 @@ import './styles/app.css'
  * Supabase를 붙이기 전에 모양을 확정하려고 둔다.
  */
 
-const TABS = ['홈', '오늘', '달력', '다이어리', '사진첩', '가계부', '챌린지', '쥬크박스', '보관함', '방명록']
+const TABS = ['홈', '오늘', '달력', '다이어리', '사진첩', '사진한장', '가계부', '챌린지', '쥬크박스', '보관함', '방명록']
 const won = (n: number) => n.toLocaleString('ko-KR') + '원'
 
 function Home() {
@@ -117,43 +117,6 @@ function Cal() {
   )
 }
 
-function Money() {
-  const cats: [string, number][] = [['식비', 182000], ['카페', 63000], ['교통', 44000], ['쇼핑', 39000], ['구독', 21500]]
-  const spent = 349500, planned = 450000
-  const pct = Math.round((spent / planned) * 100)
-  return (
-    <div>
-      <div className="sec-title">가계부<span style={{ float: 'right', fontWeight: 400, color: '#b0b0b0' }}>9월</span></div>
-      <div className="money-head">
-        <div className="big"><span className="k">썼다</span><b>{won(spent)}</b></div>
-        <div className="bar"><i style={{ width: `${pct}%` }} /></div>
-        <div className="k">예산 {won(planned)} 중 {pct}% · {won(planned - spent)} 남음</div>
-      </div>
-      <div className="quick-add money">
-        <input type="text" placeholder="금액" style={{ width: 92 }} />
-        <select style={{ width: 88 }}><option>식비</option></select>
-        <input type="text" placeholder="뭐에 썼나 (생략 가능)" />
-        <label className="tiny"><input type="checkbox" style={{ width: 'auto' }} />예산</label>
-        <button className="btn">담기</button>
-      </div>
-      <div className="cat-rows">
-        {cats.map(([k, v]) => (
-          <div key={k} className="cat-row">
-            <span className="chip">{k}</span>
-            <i style={{ width: `${Math.round((v / spent) * 100)}%` }} />
-            <b>{won(v)}</b>
-          </div>
-        ))}
-      </div>
-      <ul className="ledger-list">
-        <li><span className="chip">식비</span><span className="what">점심 김밥</span><b>{won(4500)}</b><span className="when">19일</span><button className="x">×</button></li>
-        <li><span className="chip">카페</span><span className="what">아메리카노</span><b>{won(4800)}</b><span className="when">19일</span><button className="x">×</button></li>
-        <li><span className="chip">교통</span><span className="what">지하철</span><b>{won(2800)}</b><span className="when">18일</span><button className="x">×</button></li>
-      </ul>
-    </div>
-  )
-}
-
 function Ch() {
   const mk = (on: number[]) => Array.from({ length: 35 }, (_, i) => on.includes(i))
   const rows: [string, number, number, boolean[]][] = [
@@ -212,12 +175,6 @@ function Guest() {
   )
 }
 
-
-const PHOTOS = [
-  ['#f3c9d4','한강 노을'], ['#cfe0f5','고양이'], ['#d9eede','카페'],
-  ['#f6e3c5','생일'], ['#e0d6f2','비 오는 날'], ['#f9d7c9','바다'],
-]
-
 function Dia() {
   const days: [number, string, string, string, string][] = [
     [20, '9월', '금', '🌷 행복', '오늘 과제 겨우 냈다. 끝나고 먹은 아이스크림이 제일 맛있었음.\n내일은 좀 쉬어야지.'],
@@ -246,24 +203,6 @@ function Dia() {
               )}
             </div>
           </article>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function Pics() {
-  return (
-    <div>
-      <div className="sec-title">사진첩<span style={{ float: 'right', fontWeight: 400, color: '#b0b0b0' }}>64장</span></div>
-      <button className="photo-drop">＋ 사진 올리기</button>
-      <div className="polaroids">
-        {PHOTOS.map(([c, cap], i) => (
-          <figure key={cap} style={{ '--tilt': `${(i % 5) - 2}deg` } as React.CSSProperties}>
-            <div style={{ width: '100%', aspectRatio: '1/1', background: c }} />
-            <figcaption><span>{cap}</span></figcaption>
-            <button className="pull">×</button>
-          </figure>
         ))}
       </div>
     </div>
@@ -325,9 +264,112 @@ function Box() {
   )
 }
 
+
+function Money2() {
+  const cats: [string, number][] = [['식비',182000],['카페',63000],['교통',44000],['쇼핑',39000],['구독',21500]]
+  const spent = 349500, prev = 412000, income = 800000, planned = 450000
+  const daily = [0,12000,0,0,38000,4500,0,22000,9800,0,0,61000,3200,0,0,18000,0,7400,9300,44000,0,0,0,0,0,0,0,0,0,0]
+  const peak = Math.max(...daily)
+  const pct = Math.round((spent/planned)*100)
+  return (
+    <div>
+      <div className="sec-title cal-head"><button className="nav">‹</button><span>2026년 9월</span><button className="nav">›</button></div>
+      <div className="money-grid">
+        <div className="mcell out"><span className="k">썼다</span><b>{won(spent)}</b>
+          <em data-up={false}>지난달보다 {won(prev-spent)} 덜</em></div>
+        <div className="mcell in"><span className="k">들어왔다</span><b>{won(income)}</b></div>
+        <div className="mcell net"><span className="k">남았다</span><b>{won(income-spent)}</b></div>
+      </div>
+      <div className="budget">
+        <div className="bar"><i style={{width:`${pct}%`}} /></div>
+        <div className="k">예산 {won(planned)} 중 {pct}% · {won(planned-spent)} 남음</div>
+      </div>
+      <div className="spark">
+        {daily.map((v,i) => <i key={i} style={{height:`${Math.max(2,(v/peak)*100)}%`}} data-has={v>0} />)}
+      </div>
+      <div className="quick-add money">
+        <div className="io"><button data-on>지출</button><button>수입</button></div>
+        <input type="text" placeholder="금액" style={{width:88}} />
+        <select style={{width:84}}><option>식비</option></select>
+        <input type="text" placeholder="뭐에 썼나 (생략 가능)" />
+        <label className="tiny"><input type="checkbox" style={{width:'auto'}} />예산</label>
+        <button className="btn">담기</button>
+      </div>
+      <div className="biggest">이번 달 제일 큰 지출 — <b>겨울 코트</b> {won(61000)}</div>
+      <div className="cat-rows">
+        {cats.map(([k,v]) => (
+          <div key={k} className="cat-row">
+            <span className="chip">{k}</span>
+            <i style={{width:`${Math.round((v/spent)*100)}%`}} />
+            <b>{won(v)}</b><em className="pctl">{Math.round((v/spent)*100)}%</em>
+          </div>
+        ))}
+      </div>
+      <ul className="ledger-list">
+        <li data-income><span className="chip">월급</span><span className="what">9월 월급</span><b>+{won(800000)}</b><span className="when">25일</span><button className="x">×</button></li>
+        <li><span className="chip">식비</span><span className="what">점심 김밥</span><b>−{won(4500)}</b><span className="when">19일</span><button className="x">×</button></li>
+      </ul>
+    </div>
+  )
+}
+
+function Albums() {
+  const al: [string,string,number][] = [['#f3c9d4','여행',24],['#cfe0f5','일상',61],['#d9eede','카페',13],['#e0d6f2','우리 고양이',88]]
+  return (
+    <div>
+      <div className="sec-title">사진첩<span style={{float:'right',fontWeight:400,color:'#b0b0b0'}}>앨범 4</span></div>
+      <button className="photo-drop">＋ 새 앨범</button>
+      <div className="albums">
+        {al.map(([c,n,k]) => (
+          <button key={n} className="album">
+            <div className="album-cover"><div style={{width:'100%',height:'100%',background:c,borderRadius:3}} /><i className="album-back" /></div>
+            <div className="album-name">{n}</div><div className="album-count">{k}장</div>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function PhotoOne() {
+  return (
+    <div className="photopage" style={{background:'#fff6e5'}}>
+      <div className="pp-bar"><button className="crumb">‹ 앨범으로</button><button className="crumb">꾸미기</button></div>
+      <div className="pp-tools">
+        <div className="pp-row"><span>배경</span>
+          {['#ffffff','#fff6e5','#ffeef2','#eaf4f8','#eef7ee','#f3eefa','#2b2b30'].map(c =>
+            <button key={c} className="swatch" style={{background:c}} data-on={c==='#fff6e5'} />)}
+        </div>
+        <div className="pp-row"><span>테두리</span>
+          {['폴라로이드','필름','그냥','레이스'].map((f,i) =>
+            <button key={f} className="pill" data-on={i===0}>{f}</button>)}
+        </div>
+      </div>
+      <figure className="pp-photo frame-polaroid">
+        <div style={{width:'100%',aspectRatio:'4/3',background:'#f3c9d4'}} />
+        <figcaption>한강 노을</figcaption>
+      </figure>
+      <p className="pp-note">이날 바람이 진짜 좋았다.{'\n'}또 가고 싶다.</p>
+      <div className="pp-comments">
+        <div className="news-title">댓글 2</div>
+        {[['동생','나도 데려가지ㅠㅠ'],['수연','사진 진짜 잘 찍었다']].map(([w,b]) => (
+          <div key={w} className="pp-c">
+            <div className="ava" /><div className="pp-c-body"><b>{w}</b><span className="when">9/19</span><p>{b}</p></div>
+            <button className="x">×</button>
+          </div>
+        ))}
+        <div className="quick-add" style={{marginTop:10}}>
+          <input type="text" placeholder="한마디" /><button className="btn">달기</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 const PANES: Record<string, () => JSX.Element> = {
-  홈: Home, 오늘: Todo, 달력: Cal, 가계부: Money, 챌린지: Ch, 방명록: Guest,
-  다이어리: Dia, 사진첩: Pics, 쥬크박스: Juke, 보관함: Box,
+  홈: Home, 오늘: Todo, 달력: Cal, 챌린지: Ch, 방명록: Guest,
+  다이어리: Dia, 사진첩: Albums, 쥬크박스: Juke, 보관함: Box,
+  가계부: Money2, 사진한장: PhotoOne,
 }
 
 function Preview() {

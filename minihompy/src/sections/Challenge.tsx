@@ -73,7 +73,7 @@ export default function Challenge({ section, isOwner, uid }: {
             // 지난 5주. 빈 칸도 그대로 둔다 — 비어 있는 게 실패는 아니다.
             const cells = Array.from({ length: 35 }, (_, i) => {
               const d = new Date(Date.now() - (34 - i) * DAY)
-              return { k: key(d), on: days.has(key(d)) }
+              return { k: key(d), on: days.has(key(d)), today: key(d) === today }
             })
             return (
               <div key={label} className="challenge">
@@ -88,7 +88,9 @@ export default function Challenge({ section, isOwner, uid }: {
                   )}
                 </div>
                 <div className="grass">
-                  {cells.map(c => <i key={c.k} data-on={c.on} title={c.k} />)}
+                  {cells.map(c => (
+                    <i key={c.k} data-on={c.on} data-today={c.today} title={c.k} />
+                  ))}
                 </div>
                 {streak === 0 && total > 0 && (
                   <div className="k soft">끊겼어도 {total}일은 그대로 남아 있다.</div>

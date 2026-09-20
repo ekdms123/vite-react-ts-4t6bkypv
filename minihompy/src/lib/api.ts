@@ -1,5 +1,5 @@
 import { supabase } from './supabase'
-import type { Entry, Friendship, GuestbookEntry, Profile, Section, SectionKind } from './types'
+import type { Comment, Entry, Friendship, GuestbookEntry, Profile, Section, SectionKind } from './types'
 
 /* ── 프로필 ─────────────────────────────────────────── */
 
@@ -334,5 +334,122 @@ export async function captureTo(owner: string, sections: Section[], text: string
 export async function moveEntry(id: string, sectionId: string) {
   const { error } = await supabase.from('entries')
     .update({ section_id: sectionId }).eq('id', id)
+  if (error) throw error
+}
+
+/* ── 사진 댓글 ──────────────────────────────────────── */
+
+export async function listComments(entryId: string) {
+  const { data, error } = await supabase
+    .from('comments')
+    .select('*, author_profile:profiles!comments_author_fkey(handle, title, avatar_url)')
+    .eq('entry_id', entryId).order('created_at')
+  if (error) throw error
+  return (data ?? []) as Comment[]
+}
+
+export async function addComment(entryId: string, author: string, body: string) {
+  const { error } = await supabase
+    .from('comments').insert({ entry_id: entryId, author, body })
+  if (error) throw error
+}
+
+export async function deleteComment(id: string) {
+  const { error } = await supabase.from('comments').delete().eq('id', id)
+  if (error) throw error
+}
+
+/** 목록 화면에서 사진마다 댓글 수를 보여주려면 한 번에 세어야 한다. */
+export async function commentCounts(entryIds: string[]) {
+  if (!entryIds.length) return {}
+  const { data, error } = await supabase
+    .from('comments').select('entry_id').in('entry_id', entryIds)
+  if (error) throw error
+  const out: Record<string, number> = {}
+  for (const r of data ?? []) out[r.entry_id] = (out[r.entry_id] ?? 0) + 1
+  return out
+}
+
+/* ── 앨범 ───────────────────────────────────────────── */
+
+/** 앨범은 category 칸을 쓴다. 비어 있으면 '기본'으로 모은다. */
+export async function listAlbums(sectionId: string) {
+  const { data, error } = await supabase
+    .from('entries').select('category, images, created_at')
+    .eq('section_id', sectionId).order('created_at', { ascending: false })
+  if (error) throw error
+  const m = new Map<string, { name: string; count: number; cover: string | null }>()
+  for (const r of (data ?? []) as Pick<Entry, 'category' | 'images' | 'created_at'>[]) {
+    const name = r.category || '기본'
+    const cur = m.get(name) ?? { name, count: 0, cover: null }
+    cur.count += r.images.length || 1
+    if (!cur.cover && r.images[0]) cur.cover = r.images[0]
+    m.set(name, cur)
+  }
+  return [...m.values()]
+}
+
+export async function listInAlbum(sectionId: string, album: string) {
+  let q = supabase.from('entries').select('*').eq('section_id', sectionId)
+  q = album === '기본' ? q.or('category.is.null,category.eq.기본') : q.eq('category', album)
+  const { data, error } = await q.order('created_at', { ascending: false })
+  if (error) throw error
+  return (data ?? []) as Entry[]
+}
+
+export async function renameAlbum(sectionId: string, from: string, to: string) {
+  const { error } = await supabase.from('entries')
+    .update({ category: to }).eq('section_id', sectionId).eq('category', from)
+  if (error) throw error
+}
+
+/* ── 가계부 통계 ────────────────────────────────────── */
+
+/** 이번 달과 지난달을 같이 돌려준다. 혼자 있는 숫자는 크고 작음을 말해주지 못한다. */
+export async function moneyStats(sectionId: string, month: Date) {
+  const start = new Date(month.getFullYear(), month.getMonth() - 1, 1)
+  const end   = new Date(month.getFullYear(), month.getMonth() + 1, 1)
+  const { data, error } = await supabase
+    .from('entries').select('*').eq('section_id', sectionId)
+    .gte('created_at', start.toISOString()).lt('created_at', end.toISOString())
+  if (error) throw error
+  const rows = (data ?? []) as Entry[]
+  const inMonth = (r: Entry, offset: number) => {
+    const d = new Date(r.created_at)
+    return d.getFullYear() === month.getFullYear() &&
+           d.getMonth() === month.getMonth() + offset
+  }
+  const sum = (rs: Entry[]) => rs.reduce((s, r) => s + (r.amount ?? 0), 0)
+
+  const now  = rows.filter(r => inMonth(r, 0))
+  const prev = rows.filter(r => inMonth(r, -1))
+  const spend = (rs: Entry[]) => rs.filter(r => !r.is_planned && !r.is_income)
+
+  const byCategory: Record<string, number> = {}
+  for (const r of spend(now)) {
+    const k = r.category || '기타'
+    byCategory[k] = (byCategory[k] ?? 0) + (r.amount ?? 0)
+  }
+  // 일별 추이 — 어느 날 몰아 썼는지가 카테고리 합계보다 자주 답이 된다.
+  const days = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate()
+  const daily = Array.from({ length: days }, () => 0)
+  for (const r of spend(now)) daily[new Date(r.created_at).getDate() - 1] += r.amount ?? 0
+
+  return {
+    rows: now,
+    spent:   sum(spend(now)),
+    prev:    sum(spend(prev)),
+    income:  sum(now.filter(r => r.is_income)),
+    planned: sum(now.filter(r => r.is_planned && !r.is_income)),
+    byCategory, daily,
+    biggest: spend(now).sort((a, b) => (b.amount ?? 0) - (a.amount ?? 0))[0] ?? null,
+  }
+}
+
+/* ── 일정 옮기기 ────────────────────────────────────── */
+
+export async function moveEvent(id: string, when: Date) {
+  const { error } = await supabase.from('entries')
+    .update({ starts_at: when.toISOString() }).eq('id', id)
   if (error) throw error
 }

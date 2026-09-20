@@ -17,6 +17,9 @@ export default function Jukebox({ section, isOwner, uid }: {
   const [title, setTitle] = useState('')
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState('')
+  // 브라우저는 소리 있는 자동재생을 사람이 한 번 누르기 전에는 막는다.
+  // 그래서 첫 곡은 가만히 두고, 사람이 곡을 고른 순간부터 이어서 튼다.
+  const [auto, setAuto] = useState(false)
 
   async function reload() {
     const r = await api.listEntries(section.id)
@@ -39,6 +42,11 @@ export default function Jukebox({ section, isOwner, uid }: {
   }
 
   const nowId = playing ? youtubeId(String(playing.meta?.url ?? '')) : null
+  const src = nowId
+    ? `https://www.youtube.com/embed/${nowId}?autoplay=${auto ? 1 : 0}&rel=0&playsinline=1`
+    : null
+
+  function play(r: Entry) { setPlaying(r); setAuto(true) }
 
   return (
     <div>
@@ -47,10 +55,10 @@ export default function Jukebox({ section, isOwner, uid }: {
         <span style={{ float: 'right', fontWeight: 400, color: '#b0b0b0' }}>{rows.length}곡</span>
       </div>
 
-      {playing && nowId && (
+      {playing && src && (
         <div className="deck">
           <div className="deck-screen">
-            <iframe src={`https://www.youtube.com/embed/${nowId}`} title={playing.title}
+            <iframe key={playing.id} src={src!} title={playing.title}
                     allow="accelerometer; autoplay; encrypted-media; picture-in-picture"
                     allowFullScreen />
           </div>
@@ -78,7 +86,7 @@ export default function Jukebox({ section, isOwner, uid }: {
             {rows.map((r, i) => (
               <li key={r.id} data-on={playing?.id === r.id}>
                 <span className="no">{String(i + 1).padStart(2, '0')}</span>
-                <button className="what" onClick={() => setPlaying(r)}>{r.title}</button>
+                <button className="what" onClick={() => play(r)}>{r.title}</button>
                 {playing?.id === r.id && <span className="eq"><i /><i /><i /></span>}
                 {isOwner && (
                   <button className="x" onClick={async () => {

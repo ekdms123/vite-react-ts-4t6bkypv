@@ -45,6 +45,8 @@ export interface Entry {
   amount: number | null
   category: string | null
   is_planned: boolean
+  is_income: boolean
+  decor: Record<string, unknown>
   meta: Record<string, unknown>
   visibility: Visibility
   created_at: string
@@ -118,6 +120,33 @@ export type EnergyKey = typeof ENERGY[number]['key']
 
 export const LEDGER_CATEGORIES = [
   '식비', '카페', '교통', '쇼핑', '구독', '취미', '건강', '공부', '경조사', '기타',
+]
+
+export const INCOME_CATEGORIES = ['월급', '용돈', '환급', '부수입', '기타']
+
+export interface Comment {
+  id: string
+  entry_id: string
+  author: string
+  body: string
+  created_at: string
+  author_profile?: { handle: string; title: string; avatar_url: string | null }
+}
+
+/** 사진 한 장을 한 페이지로 꾸밀 때 쓰는 값들. */
+export interface Decor extends Record<string, unknown> {
+  bg?: string        // 배경색
+  note?: string      // 사진 아래 적는 글
+  frame?: string     // 테두리 모양
+}
+export const FRAMES = [
+  { key: 'polaroid', label: '폴라로이드' },
+  { key: 'film',     label: '필름' },
+  { key: 'plain',    label: '그냥' },
+  { key: 'lace',     label: '레이스' },
+]
+export const DECOR_BG = [
+  '#ffffff', '#fff6e5', '#ffeef2', '#eaf4f8', '#eef7ee', '#f3eefa', '#2b2b30',
 ]
 
 export const SKINS = [

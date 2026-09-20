@@ -15,6 +15,9 @@ export default function Calendar({ section, isOwner, uid }: {
   const [title, setTitle] = useState('')
   const [time, setTime] = useState('')
   const [busy, setBusy] = useState(false)
+  // 옮길 일정을 하나 집어두면, 다음에 누른 날짜가 목적지가 된다.
+  // 폰에서 끌어다 놓기는 잘 안 되므로 집고-놓기 두 번 누르기로 한다.
+  const [moving, setMoving] = useState<Entry | null>(null)
 
   async function reload() { setRows(await api.listEntries(section.id)) }
   useEffect(() => { void reload() /* eslint-disable-next-line */ }, [section.id])
@@ -71,12 +74,30 @@ export default function Calendar({ section, isOwner, uid }: {
         {cells.map(c => (
           <button key={c.k} className="cal-day"
                   data-dim={!c.inMonth} data-today={c.k === todayKey} data-picked={c.k === picked}
-                  onClick={() => setPicked(c.k)}>
+                  data-drop={moving !== null}
+                  onClick={async () => {
+                    if (moving) {
+                      const old = new Date(moving.starts_at!)
+                      const to = new Date(`${c.k}T00:00`)
+                      to.setHours(old.getHours(), old.getMinutes())
+                      await api.moveEvent(moving.id, to)
+                      setMoving(null); setPicked(c.k); await reload()
+                      return
+                    }
+                    setPicked(c.k)
+                  }}>
             <span>{c.d.getDate()}</span>
             {byDay[c.k]?.length ? <i className="dot" data-n={Math.min(3, byDay[c.k].length)} /> : null}
           </button>
         ))}
       </div>
+
+      {moving && (
+        <div className="move-hint">
+          <b>{moving.title}</b> — 옮길 날짜를 누르세요
+          <button className="crumb" onClick={() => setMoving(null)}>취소</button>
+        </div>
+      )}
 
       <div className="cal-day-panel">
         <div className="k">{picked.replace(/-/g, '.')}</div>
@@ -84,13 +105,19 @@ export default function Calendar({ section, isOwner, uid }: {
           ? <div className="empty-note" style={{ padding: '14px 8px' }}>비어 있는 날.</div>
           : <ul className="day-list">
               {dayRows.map(r => (
-                <li key={r.id}>
+                <li key={r.id} data-moving={moving?.id === r.id}>
                   <time>{new Date(r.starts_at!).toLocaleTimeString('ko-KR',
                     { hour: '2-digit', minute: '2-digit' })}</time>
                   <span className="what">{r.title}</span>
                   {isOwner && (
-                    <button className="x"
-                            onClick={async () => { await api.deleteEntry(r.id); await reload() }}>×</button>
+                    <>
+                      <button className="crumb move"
+                              onClick={() => setMoving(moving?.id === r.id ? null : r)}>
+                        {moving?.id === r.id ? '취소' : '옮기기'}
+                      </button>
+                      <button className="x"
+                              onClick={async () => { await api.deleteEntry(r.id); await reload() }}>×</button>
+                    </>
                   )}
                 </li>
               ))}
