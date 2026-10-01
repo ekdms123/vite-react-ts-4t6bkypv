@@ -1,0 +1,42 @@
+{
+  "id": "DIALOGUE_AS_RELATIONAL_ACTION",
+  "version": 1,
+  "purpose": "Let dialogue alter information, status, distance, consent, avoidance, control, or obligation when relevant.",
+  "trigger": {
+    "any": [
+      "dialogue_conflict",
+      "dialogue_status_shift",
+      "dialogue_consent",
+      "relationship_pivot"
+    ]
+  },
+  "preconditions": [],
+  "owns_dimensions": [
+    "dialogue_function",
+    "relational_timing"
+  ],
+  "forbidden_dimensions": [
+    "paragraph_topology",
+    "canon_truth",
+    "source_authority",
+    "speaker_knowledge",
+    "narrator_register"
+  ],
+  "context_requirements": {
+    "required": [],
+    "optional": [
+      "relationship_state",
+      "narrative_state.knowledge"
+    ]
+  },
+  "writer_payload": {
+    "max_items": 3,
+    "form": "decision_guidance"
+  },
+  "suppress_when": [
+    "no_material_dialogue"
+  ],
+  "verifier_checks": [
+    "KNOWLEDGE_LEAK"
+  ]
+}

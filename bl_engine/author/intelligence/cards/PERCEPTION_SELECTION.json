@@ -1,0 +1,38 @@
+{
+  "id": "PERCEPTION_SELECTION",
+  "version": 1,
+  "purpose": "Select details through the focal mind rather than a neutral inventory.",
+  "trigger": {
+    "any": [
+      "focal_attention_shift",
+      "practical_constraint",
+      "salient_environment"
+    ]
+  },
+  "preconditions": [],
+  "owns_dimensions": [
+    "attention_selection",
+    "detail_selection"
+  ],
+  "forbidden_dimensions": [
+    "paragraph_topology",
+    "canon_truth",
+    "source_authority"
+  ],
+  "context_requirements": {
+    "required": [
+      "voice_state.attention_habits"
+    ],
+    "optional": [
+      "narrative_state.current_constraints"
+    ]
+  },
+  "writer_payload": {
+    "max_items": 3,
+    "form": "decision_guidance"
+  },
+  "suppress_when": [],
+  "verifier_checks": [
+    "CHARACTER_GENERICITY"
+  ]
+}

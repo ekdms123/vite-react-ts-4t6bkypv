@@ -1,0 +1,14 @@
+{
+  "schema_version":"2.0",
+  "integrity":"PARTIAL",
+  "reason":"Some source ranges were already inspected during earlier analysis in this conversation; therefore this is a regression holdout, not a pristine blind scientific holdout.",
+  "reserved_ranges":[
+    {"source":"Mad Summer 上","pages":"70-74"},
+    {"source":"Mad Summer 中","pages":"68-72"},
+    {"source":"Mad Summer 下","pages":"90-94"},
+    {"source":"First Bottle","slice":"final 8% excluding terminal metadata"},
+    {"source":"King Of Darkness","slice":"one contiguous late-middle 5% range"},
+    {"source":"Lover Of Flame","slice":"one contiguous late-middle 5% range"}
+  ],
+  "claim_limit":"May support regression consistency checks only. Does not prove blind literary superiority."
+}

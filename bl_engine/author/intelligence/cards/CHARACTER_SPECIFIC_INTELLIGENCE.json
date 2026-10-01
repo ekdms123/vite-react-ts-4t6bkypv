@@ -1,0 +1,48 @@
+{
+  "id": "CHARACTER_SPECIFIC_INTELLIGENCE",
+  "version": 1,
+  "purpose": "Preserve character-owned evidence interpretation and problem solving.",
+  "trigger": {
+    "any": [
+      "consequential_decision",
+      "competing_character_models",
+      "competence_display"
+    ]
+  },
+  "preconditions": [],
+  "owns_dimensions": [
+    "attention_selection",
+    "evidence_interpretation",
+    "decision_bias",
+    "problem_solving_mode"
+  ],
+  "forbidden_dimensions": [
+    "paragraph_topology",
+    "canon_truth",
+    "source_authority",
+    "narrator_register",
+    "story_outcome_without_state_support"
+  ],
+  "context_requirements": {
+    "required": [
+      "voice_state.attention_habits",
+      "voice_state.judgment_logic"
+    ],
+    "optional": [
+      "narrative_state.knowledge",
+      "narrative_state.beliefs",
+      "relationship_state"
+    ]
+  },
+  "writer_payload": {
+    "max_items": 3,
+    "form": "decision_guidance"
+  },
+  "suppress_when": [
+    "no_consequential_character_choice"
+  ],
+  "verifier_checks": [
+    "CHARACTER_GENERICITY",
+    "KNOWLEDGE_LEAK"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"Voice Continuity State v3",
+  "type":"object",
+  "required":["attention_habits","judgment_logic","reality_anchors","emotional_evasion","humor_mechanisms"],
+  "properties":{
+    "attention_habits":{"type":"array","items":{"type":"string"},"uniqueItems":true},
+    "judgment_logic":{"type":"array","items":{"type":"string"},"uniqueItems":true},
+    "reality_anchors":{"type":"array","items":{"type":"string"},"uniqueItems":true},
+    "emotional_evasion":{"type":"array","items":{"type":"string"},"uniqueItems":true},
+    "humor_mechanisms":{"type":"array","items":{"type":"string"},"uniqueItems":true},
+    "abstraction_band":{"type":["string","null"]},
+    "lyric_return_path":{"type":["string","null"]}
+  },
+  "additionalProperties":false
+}

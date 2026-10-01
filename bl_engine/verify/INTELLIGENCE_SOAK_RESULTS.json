@@ -1,0 +1,54 @@
+{
+  "sequence": [
+    {
+      "ordinary_domestic": true
+    },
+    {
+      "relationship_pivot": true
+    },
+    {
+      "mystery_evidence_conflict": true
+    },
+    {
+      "flashback": true
+    },
+    {
+      "high_pressure": true
+    },
+    {
+      "major_reveal": true
+    },
+    {
+      "emotional_pressure": true
+    },
+    {
+      "ordinary_domestic": true
+    }
+  ],
+  "activations": [
+    [],
+    [
+      "DIALOGUE_AS_RELATIONAL_ACTION",
+      "RELATIONSHIP_EVIDENCE"
+    ],
+    [
+      "INFORMATION_MODE_SELECTION",
+      "MYSTERY_FAIRNESS"
+    ],
+    [
+      "MEMORY_PRESENT_RELEVANCE"
+    ],
+    [
+      "EMBODIMENT_AND_REALITY",
+      "PRESSURE_RESPONSE"
+    ],
+    [
+      "REVEAL_CAUSAL_ACCOUNTING"
+    ],
+    [
+      "EMOTIONAL_AVOIDANCE"
+    ],
+    []
+  ],
+  "failures": []
+}

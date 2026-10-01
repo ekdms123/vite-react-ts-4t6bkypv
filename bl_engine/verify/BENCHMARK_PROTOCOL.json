@@ -1,0 +1,11 @@
+{
+  "schema_version": "0.2",
+  "status": "NOT_RUN",
+  "comparison_conditions": ["BASE_MODEL", "STRONG_PROMPT_BASELINE", "PREVIOUS_RUNTIME", "V0_2_RUNTIME"],
+  "must_match": ["foundation_model_id", "model_configuration_hash", "seed_set", "task_set", "canon_source_input", "output_budget"],
+  "blind_judge_input": ["task", "output"],
+  "axes": ["reader_pull", "character_ownership", "explanation_pressure", "lived_presence", "paragraph_naturalness", "creative_surprise", "relationship_earnedness", "voice_individuality"],
+  "stable_frontier": ["mean", "median", "p10", "p05", "variance", "catastrophic_failure", "model_prior_reversion", "character_convergence", "canon_failure", "repair_success_rate"],
+  "universal_score": null,
+  "literary_superiority": "ASSURANCE_NOT_MET"
+}

@@ -1,0 +1,362 @@
+{
+  "entries": [
+    {
+      "claim_boundary": "PASS requires executed required checks.",
+      "concept_id": "MANDATORY_VERIFICATION",
+      "criticality": "RELEASE_BLOCKING",
+      "downstream_consumers": [],
+      "entrypoint": "verify_proposal",
+      "epistemic_class": "DJAR_DERIVED",
+      "implementation_status": "HARD_GATE",
+      "module": "stateful_author.runtime",
+      "runtime_callers": [
+        "stateful_author.verifier:execute_required_verifiers"
+      ],
+      "schema_refs": [],
+      "spec_section": "45-47",
+      "test_refs": [
+        "tests/test_v02_integrity_gate.py"
+      ]
+    },
+    {
+      "claim_boundary": "Missing required checks produce ASSURANCE_NOT_MET.",
+      "concept_id": "PASS_SET_LOGIC",
+      "criticality": "RELEASE_BLOCKING",
+      "downstream_consumers": [],
+      "entrypoint": "execute_required_verifiers",
+      "epistemic_class": "DJAR_DERIVED",
+      "implementation_status": "VERIFIER_EXECUTABLE",
+      "module": "stateful_author.verifier",
+      "runtime_callers": [],
+      "schema_refs": [],
+      "spec_section": "47",
+      "test_refs": [
+        "tests/test_v02_integrity_gate.py"
+      ]
+    },
+    {
+      "claim_boundary": "Writer receives positive-constructed partial state only.",
+      "concept_id": "NO_ORACLE_PROJECTION",
+      "criticality": "RELEASE_BLOCKING",
+      "downstream_consumers": [],
+      "entrypoint": "build_realization_packet",
+      "epistemic_class": "USER_AUTHORITATIVE",
+      "implementation_status": "HARD_GATE",
+      "module": "stateful_author.projection",
+      "runtime_callers": [
+        "stateful_author.packet:build_writer_packet"
+      ],
+      "schema_refs": [
+        "runtime/WRITER_PACKET_SCHEMA.json"
+      ],
+      "spec_section": "28-29",
+      "test_refs": [
+        "tests/test_v02_projection.py"
+      ]
+    },
+    {
+      "claim_boundary": "Focal id and narrator mode survive exactly.",
+      "concept_id": "NARRATOR_FOCAL_PRESERVATION",
+      "criticality": "RELEASE_BLOCKING",
+      "downstream_consumers": [],
+      "entrypoint": "build_writer_packet",
+      "epistemic_class": "USER_AUTHORITATIVE",
+      "implementation_status": "HARD_GATE",
+      "module": "stateful_author.packet",
+      "runtime_callers": [],
+      "schema_refs": [
+        "runtime/WRITER_PACKET_SCHEMA.json"
+      ],
+      "spec_section": "29",
+      "test_refs": [
+        "tests/test_v02_projection.py"
+      ]
+    },
+    {
+      "claim_boundary": "Semantic hash excludes ephemeral/version metadata but detects durable mutation.",
+      "concept_id": "SEMANTIC_STATE_HASH",
+      "criticality": "RELEASE_BLOCKING",
+      "downstream_consumers": [],
+      "entrypoint": "state_hash",
+      "epistemic_class": "DJAR_DERIVED",
+      "implementation_status": "HARD_GATE",
+      "module": "stateful_author.runtime",
+      "runtime_callers": [],
+      "schema_refs": [],
+      "spec_section": "53-54",
+      "test_refs": [
+        "tests/test_v02_integrity_gate.py"
+      ]
+    },
+    {
+      "claim_boundary": "Closed namespaces only.",
+      "concept_id": "TYPED_STATE_DELTA",
+      "criticality": "RELEASE_BLOCKING",
+      "downstream_consumers": [],
+      "entrypoint": "StateDelta",
+      "epistemic_class": "DJAR_DERIVED",
+      "implementation_status": "RUNTIME_PRIMITIVE",
+      "module": "stateful_author.contracts",
+      "runtime_callers": [],
+      "schema_refs": [],
+      "spec_section": "52",
+      "test_refs": [
+        "tests/test_v02_integrity_gate.py"
+      ]
+    },
+    {
+      "claim_boundary": "PASS + version + semantic hash + authority/provenance required.",
+      "concept_id": "TRANSACTIONAL_COMMIT",
+      "criticality": "RELEASE_BLOCKING",
+      "downstream_consumers": [],
+      "entrypoint": "commit_verified",
+      "epistemic_class": "DJAR_DERIVED",
+      "implementation_status": "HARD_GATE",
+      "module": "stateful_author.runtime",
+      "runtime_callers": [],
+      "schema_refs": [],
+      "spec_section": "53",
+      "test_refs": [
+        "tests/test_v02_integrity_gate.py",
+        "tests/test_v02_executability.py"
+      ]
+    },
+    {
+      "claim_boundary": "Mutation-family topology checks; no fixed length recipe.",
+      "concept_id": "PARAGRAPH_TOPOLOGY",
+      "criticality": "RELEASE_BLOCKING",
+      "downstream_consumers": [],
+      "entrypoint": "evaluate_paragraph_topology",
+      "epistemic_class": "USER_AUTHORITATIVE",
+      "implementation_status": "VERIFIER_EXECUTABLE",
+      "module": "stateful_author.surface",
+      "runtime_callers": [],
+      "schema_refs": [],
+      "spec_section": "34",
+      "test_refs": [
+        "tests/test_v02_model_prior.py"
+      ]
+    },
+    {
+      "claim_boundary": "Affected receipts are invalidated after repair.",
+      "concept_id": "REPAIR_INVALIDATION",
+      "criticality": "RELEASE_BLOCKING",
+      "downstream_consumers": [],
+      "entrypoint": "invalidate_check_receipts",
+      "epistemic_class": "DJAR_DERIVED",
+      "implementation_status": "HARD_GATE",
+      "module": "stateful_author.repair",
+      "runtime_callers": [],
+      "schema_refs": [],
+      "spec_section": "51",
+      "test_refs": [
+        "tests/test_v02_model_prior.py"
+      ]
+    },
+    {
+      "claim_boundary": "Generated scene authority cannot update durable voice identity.",
+      "concept_id": "SELF_CONTAMINATION_FIREWALL",
+      "criticality": "RELEASE_BLOCKING",
+      "downstream_consumers": [],
+      "entrypoint": "commit_verified",
+      "epistemic_class": "USER_AUTHORITATIVE",
+      "implementation_status": "HARD_GATE",
+      "module": "stateful_author.runtime",
+      "runtime_callers": [],
+      "schema_refs": [],
+      "spec_section": "55",
+      "test_refs": [
+        "tests/test_v02_executability.py"
+      ]
+    },
+    {
+      "claim_boundary": "Executable claims map to reachable code/schema/tests.",
+      "concept_id": "EXECUTION_LEDGER",
+      "criticality": "RELEASE_BLOCKING",
+      "downstream_consumers": [],
+      "entrypoint": "validate_execution_entries",
+      "epistemic_class": "DJAR_DERIVED",
+      "implementation_status": "HARD_GATE",
+      "module": "stateful_author.executability",
+      "runtime_callers": [],
+      "schema_refs": [],
+      "spec_section": "56-58",
+      "test_refs": [
+        "tests/test_v02_executability.py"
+      ]
+    },
+    {
+      "claim_boundary": "Critical and noncritical coverage reported separately.",
+      "concept_id": "CONTRACT_COVERAGE",
+      "criticality": "RELEASE_BLOCKING",
+      "downstream_consumers": [],
+      "entrypoint": "contract_coverage",
+      "epistemic_class": "DJAR_DERIVED",
+      "implementation_status": "HARD_GATE",
+      "module": "stateful_author.executability",
+      "runtime_callers": [],
+      "schema_refs": [],
+      "spec_section": "58",
+      "test_refs": [
+        "tests/test_v02_executability.py"
+      ]
+    },
+    {
+      "claim_boundary": "Verification evidence binds code/schema/ledger/version hashes.",
+      "concept_id": "VERIFICATION_FRESHNESS",
+      "criticality": "RELEASE_BLOCKING",
+      "downstream_consumers": [],
+      "entrypoint": "validate_verification_freshness",
+      "epistemic_class": "DJAR_DERIVED",
+      "implementation_status": "HARD_GATE",
+      "module": "stateful_author.executability",
+      "runtime_callers": [],
+      "schema_refs": [],
+      "spec_section": "60",
+      "test_refs": [
+        "tests/test_v02_executability.py"
+      ]
+    },
+    {
+      "claim_boundary": "Supported claims require declared evidence.",
+      "concept_id": "CLAIM_LEDGER",
+      "criticality": "RELEASE_BLOCKING",
+      "downstream_consumers": [],
+      "entrypoint": "validate_claim_records",
+      "epistemic_class": "DJAR_DERIVED",
+      "implementation_status": "HARD_GATE",
+      "module": "stateful_author.executability",
+      "runtime_callers": [],
+      "schema_refs": [],
+      "spec_section": "59",
+      "test_refs": [
+        "tests/test_v02_executability.py"
+      ]
+    },
+    {
+      "claim_boundary": "Scoped lexical/rhetorical/affective/discourse heuristics; suspicion is not universal ban.",
+      "concept_id": "MODEL_PRIOR_FIREWALL",
+      "criticality": "REQUIRED",
+      "downstream_consumers": [],
+      "entrypoint": "audit_model_prior_detailed",
+      "epistemic_class": "USER_AUTHORITATIVE",
+      "implementation_status": "VERIFIER_EXECUTABLE",
+      "module": "stateful_author.model_prior",
+      "runtime_callers": [],
+      "schema_refs": [],
+      "spec_section": "35-44",
+      "test_refs": [
+        "tests/test_v02_model_prior.py"
+      ]
+    },
+    {
+      "claim_boundary": "Search depth and structural genealogy are executable; candidate ideation still requires an external model adapter.",
+      "concept_id": "CREATIVE_SEARCH_CONTROLLER",
+      "criticality": "REQUIRED",
+      "downstream_consumers": [],
+      "entrypoint": "decide_search",
+      "epistemic_class": "DJAR_DERIVED",
+      "implementation_status": "SPECIALIST_EXECUTABLE",
+      "module": "stateful_author.creative",
+      "runtime_callers": [],
+      "schema_refs": [],
+      "spec_section": "14-20",
+      "test_refs": [
+        "tests/test_v02_creative_search.py"
+      ]
+    },
+    {
+      "claim_boundary": "Stored and active knowledge remain distinct.",
+      "concept_id": "PARTIAL_COGNITIVE_WORLD",
+      "criticality": "REQUIRED",
+      "downstream_consumers": [],
+      "entrypoint": "build_active_cognitive_set",
+      "epistemic_class": "RESEARCH_SUPPORTED",
+      "implementation_status": "RUNTIME_PRIMITIVE",
+      "module": "stateful_author.epistemic",
+      "runtime_callers": [],
+      "schema_refs": [],
+      "spec_section": "8-10",
+      "test_refs": [
+        "tests/test_v02_partial_worlds.py"
+      ]
+    },
+    {
+      "claim_boundary": "Reader activation/retrieval/tractability primitives.",
+      "concept_id": "READER_VIEW",
+      "criticality": "REQUIRED",
+      "downstream_consumers": [],
+      "entrypoint": "build_reader_view",
+      "epistemic_class": "RESEARCH_SUPPORTED",
+      "implementation_status": "RUNTIME_PRIMITIVE",
+      "module": "stateful_author.reader",
+      "runtime_callers": [],
+      "schema_refs": [],
+      "spec_section": "26",
+      "test_refs": [
+        "tests/test_v02_partial_worlds.py"
+      ]
+    },
+    {
+      "claim_boundary": "Frame change confirms only after grounded generated uptake.",
+      "concept_id": "EMERGENT_INTERACTION",
+      "criticality": "REQUIRED",
+      "downstream_consumers": [],
+      "entrypoint": "confirm_interaction_frame",
+      "epistemic_class": "RESEARCH_SUPPORTED",
+      "implementation_status": "SPECIALIST_EXECUTABLE",
+      "module": "stateful_author.interaction",
+      "runtime_callers": [],
+      "schema_refs": [],
+      "spec_section": "24-25",
+      "test_refs": [
+        "tests/test_v02_partial_worlds.py"
+      ]
+    },
+    {
+      "claim_boundary": "Distribution reporting only; no universal literary score.",
+      "concept_id": "STABLE_FRONTIER_SUMMARY",
+      "criticality": "OPTIONAL",
+      "downstream_consumers": [],
+      "entrypoint": "stable_frontier_summary",
+      "epistemic_class": "DJAR_DERIVED",
+      "implementation_status": "EVALUATION_ONLY",
+      "module": "stateful_author.evaluation",
+      "runtime_callers": [],
+      "schema_refs": [],
+      "spec_section": "66",
+      "test_refs": [
+        "tests/test_v02_executability.py"
+      ]
+    },
+    {
+      "claim_boundary": "Not claimed implemented in this release.",
+      "concept_id": "SOCIAL_ROLE_PRIOR_AUDIT",
+      "criticality": "EXPERIMENTAL",
+      "downstream_consumers": [],
+      "entrypoint": "",
+      "epistemic_class": "RESEARCH_SUPPORTED",
+      "implementation_status": "EXPERIMENTAL",
+      "module": "",
+      "runtime_callers": [],
+      "schema_refs": [],
+      "spec_section": "49",
+      "test_refs": []
+    },
+    {
+      "claim_boundary": "Requires controlled live generation and blind human evaluation.",
+      "concept_id": "BLIND_LITERARY_SUPERIORITY",
+      "criticality": "EXPERIMENTAL",
+      "downstream_consumers": [],
+      "entrypoint": "",
+      "epistemic_class": "EXPERIMENTAL",
+      "implementation_status": "EXPERIMENTAL",
+      "module": "",
+      "runtime_callers": [],
+      "schema_refs": [],
+      "spec_section": "65-68",
+      "test_refs": []
+    }
+  ],
+  "schema_version": "0.2"
+}

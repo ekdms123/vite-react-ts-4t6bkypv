@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Proof-Bound Scene Receipt v0.2",
+  "type": "object",
+  "required": [
+    "scene_id",
+    "qualification_status",
+    "parent_state_version",
+    "candidate_delta",
+    "committed_delta",
+    "voice_candidate_delta"
+  ],
+  "properties": {
+    "scene_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "qualification_status": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "ASSURANCE_NOT_MET"
+      ]
+    },
+    "parent_state_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "candidate_delta": {
+      "type": "object"
+    },
+    "committed_delta": {
+      "type": "object"
+    },
+    "voice_candidate_delta": {
+      "type": "object"
+    },
+    "intelligence_cards_used": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "intelligence_effects_verified": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "intelligence_effects_rejected": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "verification_evidence_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "resulting_state_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "parent_state_hash": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "resulting_state_hash": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "proposal_hash": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "prepared_scene_hash": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "qualification_status": {
+            "const": "PASS"
+          }
+        },
+        "required": [
+          "qualification_status"
+        ]
+      },
+      "then": {
+        "required": [
+          "parent_state_hash",
+          "resulting_state_hash",
+          "proposal_hash",
+          "prepared_scene_hash"
+        ]
+      }
+    }
+  ]
+}

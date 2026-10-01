@@ -1,0 +1,39 @@
+{
+  "id": "MYSTERY_FAIRNESS",
+  "version": 1,
+  "purpose": "Keep incomplete models plausible without making immediate causality illegible.",
+  "trigger": {
+    "any": [
+      "mystery_evidence_conflict",
+      "active_misdirection"
+    ]
+  },
+  "preconditions": [],
+  "owns_dimensions": [
+    "evidence_distribution",
+    "model_plausibility"
+  ],
+  "forbidden_dimensions": [
+    "paragraph_topology",
+    "canon_truth",
+    "source_authority",
+    "narrator_register"
+  ],
+  "context_requirements": {
+    "required": [],
+    "optional": [
+      "narrative_state.knowledge",
+      "narrative_state.beliefs"
+    ]
+  },
+  "writer_payload": {
+    "max_items": 3,
+    "form": "decision_guidance"
+  },
+  "suppress_when": [
+    "no_structural_mystery_value"
+  ],
+  "verifier_checks": [
+    "MISDIRECTION_WITHOUT_VALUE"
+  ]
+}

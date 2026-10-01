@@ -1,0 +1,70 @@
+{
+  "adversarial": {
+    "CLOSURE_STACK_ATTACK": [
+      "CLOSURE_STACKING"
+    ],
+    "GENERIC_PRIOR_ATTACK": [
+      "MODEL_PRIOR_REVERSION"
+    ],
+    "MEMORY_BIOGRAPHY_ATTACK": [
+      "NARRATIVE_MODE_DRIFT"
+    ],
+    "SERIAL_CLIFFHANGER_ATTACK": [
+      "SERIAL_STAGNATION",
+      "FALSE_PROGRESS"
+    ],
+    "SOURCE_RESIDUE_ATTACK": [
+      "SOURCE_RESIDUE"
+    ],
+    "STAIR_STEP_ATTACK": [
+      "PARAGRAPH_FRAGMENTATION"
+    ],
+    "STORY_PROSE_LEAK_ATTACK": [
+      "SOURCE_BOUNDARY_LEAK:paragraph_topology"
+    ]
+  },
+  "commercial_bad": {
+    "failures": [
+      "SERIAL_STAGNATION",
+      "FALSE_PROGRESS"
+    ],
+    "vector": {
+      "causal_compounding": 0.0,
+      "episode_delta_coverage": 0.0,
+      "pressure_diversity": 0.125,
+      "question_transformation": 0.0,
+      "relationship_productivity": 0.0
+    }
+  },
+  "commercial_good": {
+    "failures": [],
+    "vector": {
+      "causal_compounding": 0.6,
+      "episode_delta_coverage": 1.0,
+      "pressure_diversity": 0.875,
+      "question_transformation": 1.0,
+      "relationship_productivity": 0.4
+    }
+  },
+  "long_horizon_bad": {
+    "failures": [
+      "LATE_VOICE_REVERSION",
+      "LONG_HORIZON_SURFACE_DRIFT"
+    ],
+    "vector": {
+      "mode_continuity": 1.0,
+      "reality_anchor_continuity": 0.75,
+      "surface_continuity": 0.0,
+      "voice_continuity": 0.75
+    }
+  },
+  "long_horizon_good": {
+    "failures": [],
+    "vector": {
+      "mode_continuity": 1.0,
+      "reality_anchor_continuity": 1.0,
+      "surface_continuity": 1.0,
+      "voice_continuity": 1.0
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "id": "INFORMATION_MODE_SELECTION",
+  "version": 1,
+  "purpose": "Distinguish natural limitation, emotional opacity, and deliberate misdirection.",
+  "trigger": {
+    "any": [
+      "mystery_evidence_conflict",
+      "information_asymmetry",
+      "possible_misdirection"
+    ]
+  },
+  "preconditions": [],
+  "owns_dimensions": [
+    "information_mode",
+    "evidence_visibility"
+  ],
+  "forbidden_dimensions": [
+    "paragraph_topology",
+    "canon_truth",
+    "source_authority",
+    "narrator_register"
+  ],
+  "context_requirements": {
+    "required": [],
+    "optional": [
+      "narrative_state.knowledge",
+      "narrative_state.beliefs"
+    ]
+  },
+  "writer_payload": {
+    "max_items": 3,
+    "form": "decision_guidance"
+  },
+  "suppress_when": [
+    "no_information_design_value"
+  ],
+  "verifier_checks": [
+    "MISDIRECTION_WITHOUT_VALUE",
+    "KNOWLEDGE_LEAK"
+  ]
+}

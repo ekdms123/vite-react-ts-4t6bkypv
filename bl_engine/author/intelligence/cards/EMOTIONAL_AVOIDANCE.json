@@ -1,0 +1,39 @@
+{
+  "id": "EMOTIONAL_AVOIDANCE",
+  "version": 1,
+  "purpose": "Express unresolved emotion through established character-owned avoidance behavior.",
+  "trigger": {
+    "any": [
+      "unresolved_emotion",
+      "indirect_emotion",
+      "emotional_pressure"
+    ]
+  },
+  "preconditions": [],
+  "owns_dimensions": [
+    "emotional_interpretation",
+    "avoidance_behavior"
+  ],
+  "forbidden_dimensions": [
+    "paragraph_topology",
+    "canon_truth",
+    "source_authority",
+    "canon_emotion"
+  ],
+  "context_requirements": {
+    "required": [
+      "voice_state.emotional_evasion"
+    ],
+    "optional": [
+      "voice_state.judgment_logic"
+    ]
+  },
+  "writer_payload": {
+    "max_items": 3,
+    "form": "decision_guidance"
+  },
+  "suppress_when": [],
+  "verifier_checks": [
+    "CHARACTER_GENERICITY"
+  ]
+}

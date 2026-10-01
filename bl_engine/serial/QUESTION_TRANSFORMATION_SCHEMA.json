@@ -1,0 +1,10 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"Question Transformation",
+  "type":"object",
+  "required":["old_question","partial_answer","reinterpretation","new_question","causal_link","recoded_prior_evidence"],
+  "properties":{
+    "old_question":{"type":"string"},"partial_answer":{"type":"string"},"reinterpretation":{"type":"string"},"new_question":{"type":"string"},
+    "causal_link":{"type":"boolean"},"recoded_prior_evidence":{"type":"boolean"}
+  }
+}

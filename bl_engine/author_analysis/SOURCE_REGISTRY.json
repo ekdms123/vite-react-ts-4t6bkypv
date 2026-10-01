@@ -1,0 +1,61 @@
+{
+  "schema_version": "2.0",
+  "sources": [
+    {
+      "id": "SOURCE-BASE-1",
+      "label": "Mad Summer",
+      "role": "BASE_PROSE",
+      "files": [
+        {
+          "name": "TalkFile_미친 여름 上.pdf",
+          "sha256": "b9224b4d55f062b4c98396bc9586e96df87eea82edf2a12a6523089cd8ecf921"
+        },
+        {
+          "name": "TalkFile_미친 여름 中.pdf",
+          "sha256": "60ceb2b2b7c83672763576230bcb2b14e0b65bc6f094d72cf026adc27a0ab19d"
+        },
+        {
+          "name": "TalkFile_미친 여름 下.pdf",
+          "sha256": "2e0436567cb13f82575fcecf809fe96b04717085f6331cfdc72d6b11f18bae61"
+        }
+      ]
+    },
+    {
+      "id": "SOURCE-HUMOR-1",
+      "label": "First Bottle",
+      "role": "HUMOR_COGNITION",
+      "files": [
+        {
+          "name": "세디백 첫병.txt",
+          "sha256": "0bb98da3a753d58b28a3646df3395c2147e3523ca4ae762374511c6855ccb75f"
+        }
+      ]
+    },
+    {
+      "id": "SOURCE-STORY-1",
+      "label": "King Of Darkness",
+      "role": "STORY_ARCHITECTURE",
+      "files": [
+        {
+          "name": "[유수]마왕.txt",
+          "sha256": "e164247ff8bd6c30129e6f8fa82ab935258529e0e01037c9ef8ee0a9abf27a5d"
+        }
+      ]
+    },
+    {
+      "id": "SOURCE-STORY-2",
+      "label": "Lover Of Flame",
+      "role": "STORY_ARCHITECTURE",
+      "files": [
+        {
+          "name": "[유수]홍염의연인.txt",
+          "sha256": "f576ededc277d18691030af1a24d9858fe8736541760a4928b55041e737c349c"
+        }
+      ]
+    }
+  ],
+  "baseline_packages": {
+    "writing_input_sha256": "9a51edc8de5cfe3e31e1e67c0a67b63dd7f8ddcdcf98fd015b5702af65788d38",
+    "djar_v2_1_sha256": "66d124d7d0e831fb96b3f48f6f66de357a4ed350ac1ee969f2111ec56be280cd"
+  }
+}

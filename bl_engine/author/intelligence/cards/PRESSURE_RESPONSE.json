@@ -1,0 +1,44 @@
+{
+  "id": "PRESSURE_RESPONSE",
+  "version": 1,
+  "purpose": "Compress optional surface features under pressure without erasing character identity.",
+  "trigger": {
+    "any": [
+      "high_pressure",
+      "threshold_pressure"
+    ]
+  },
+  "preconditions": [],
+  "owns_dimensions": [
+    "syntax_pressure_response",
+    "attention_preservation",
+    "reality_grounding"
+  ],
+  "forbidden_dimensions": [
+    "paragraph_topology",
+    "canon_truth",
+    "source_authority",
+    "character_identity",
+    "knowledge_boundary"
+  ],
+  "context_requirements": {
+    "required": [
+      "voice_state.attention_habits",
+      "voice_state.judgment_logic"
+    ],
+    "optional": [
+      "voice_state.reality_anchors",
+      "voice_state.emotional_evasion",
+      "voice_state.humor_mechanisms"
+    ]
+  },
+  "writer_payload": {
+    "max_items": 3,
+    "form": "decision_guidance"
+  },
+  "suppress_when": [],
+  "verifier_checks": [
+    "VOICE_DRIFT",
+    "REALITY_ANCHOR_LOSS"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "id": "RELATIONSHIP_EVIDENCE",
+  "version": 1,
+  "purpose": "Ground relational change in accumulated behavior, access, cost, or boundary change.",
+  "trigger": {
+    "any": [
+      "relationship_pivot",
+      "relationship_pressure",
+      "care_or_boundary_change"
+    ]
+  },
+  "preconditions": [],
+  "owns_dimensions": [
+    "relationship_interpretation",
+    "relational_evidence_selection"
+  ],
+  "forbidden_dimensions": [
+    "paragraph_topology",
+    "canon_truth",
+    "source_authority",
+    "speaker_knowledge"
+  ],
+  "context_requirements": {
+    "required": [],
+    "optional": [
+      "relationship_state",
+      "narrative_state.knowledge"
+    ]
+  },
+  "writer_payload": {
+    "max_items": 3,
+    "form": "decision_guidance"
+  },
+  "suppress_when": [
+    "no_relationship_material"
+  ],
+  "verifier_checks": [
+    "KNOWLEDGE_LEAK"
+  ]
+}

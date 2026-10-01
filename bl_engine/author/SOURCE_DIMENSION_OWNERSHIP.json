@@ -1,0 +1,15 @@
+{
+  "BASE_PROSE": {
+    "owns":["paragraph_topology","pov_distance","narrator_voice","abstraction_band","reality_anchor_behavior","pressure_surface_response","focal_attention_realization"],
+    "forbidden_to_modify":[]
+  },
+  "HUMOR_COGNITION": {
+    "owns":["humor_mechanism","comparison_provenance","register_drop_timing","character_frame_transfer"],
+    "forbidden_to_modify":["paragraph_topology","pov_distance","story_causality","canon_truth"]
+  },
+  "STORY_ARCHITECTURE": {
+    "owns":["plot_pressure","information_design","question_transformation","reveal_accounting","causal_horizon","reader_hypothesis_management","strategic_option_design"],
+    "forbidden_to_modify":["paragraph_topology","lexical_register","narrator_voice","abstraction_band","pov_distance","canon_truth"]
+  },
+  "rule":"A layer may propose only within owned dimensions. Cross-layer conflicts resolve by user/canon authority, runtime truth/provenance, actor-reachable evidence, local causality/affordance, relationship permissions, then owned dimension. Never average incompatible traits."
+}

@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stateful-synthetic-author-runtime"
+version = "4.0.0"
+requires-python = ">=3.11"
+
+[project.optional-dependencies]
+# 판별기 실행·검사기는 표준 라이브러리만 쓴다. 아래는 재학습·평가·품사 참고용.
+train = ["numpy", "scikit-learn"]
+pos = ["kiwipiepy"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

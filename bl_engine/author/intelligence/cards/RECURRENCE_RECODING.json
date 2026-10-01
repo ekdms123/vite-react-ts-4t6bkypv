@@ -1,0 +1,38 @@
+{
+  "id": "RECURRENCE_RECODING",
+  "version": 1,
+  "purpose": "Emphasize returns only when function or meaning has materially changed.",
+  "trigger": {
+    "any": [
+      "recurrence_return",
+      "meaningful_return"
+    ]
+  },
+  "preconditions": [],
+  "owns_dimensions": [
+    "recurrence_interpretation",
+    "payoff_emphasis"
+  ],
+  "forbidden_dimensions": [
+    "paragraph_topology",
+    "canon_truth",
+    "source_authority",
+    "narrator_register"
+  ],
+  "context_requirements": {
+    "required": [],
+    "optional": [
+      "relevant_recurrences"
+    ]
+  },
+  "writer_payload": {
+    "max_items": 3,
+    "form": "decision_guidance"
+  },
+  "suppress_when": [
+    "recurrence_unchanged"
+  ],
+  "verifier_checks": [
+    "RECURRENCE_WITHOUT_RECODING"
+  ]
+}

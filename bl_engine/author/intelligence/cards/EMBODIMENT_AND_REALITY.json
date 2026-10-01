@@ -1,0 +1,39 @@
+{
+  "id": "EMBODIMENT_AND_REALITY",
+  "version": 1,
+  "purpose": "Use body, objects, costs, tools, and environment when they alter action, constraint, competence, danger, relationship, or grounding.",
+  "trigger": {
+    "any": [
+      "body_signal",
+      "practical_constraint",
+      "reality_anchor_needed",
+      "high_pressure"
+    ]
+  },
+  "preconditions": [],
+  "owns_dimensions": [
+    "detail_selection",
+    "reality_grounding"
+  ],
+  "forbidden_dimensions": [
+    "paragraph_topology",
+    "canon_truth",
+    "source_authority",
+    "plot_outcome"
+  ],
+  "context_requirements": {
+    "required": [],
+    "optional": [
+      "voice_state.reality_anchors",
+      "narrative_state.current_constraints"
+    ]
+  },
+  "writer_payload": {
+    "max_items": 3,
+    "form": "decision_guidance"
+  },
+  "suppress_when": [],
+  "verifier_checks": [
+    "MODEL_PRIOR_REVERSION_AUDIT"
+  ]
+}

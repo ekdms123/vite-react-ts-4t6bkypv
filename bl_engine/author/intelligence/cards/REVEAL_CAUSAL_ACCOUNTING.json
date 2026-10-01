@@ -1,0 +1,42 @@
+{
+  "id": "REVEAL_CAUSAL_ACCOUNTING",
+  "version": 1,
+  "purpose": "Make consequential reveals preserve prior plausibility while adding causal and retrospective gain.",
+  "trigger": {
+    "any": [
+      "major_reveal",
+      "reveal"
+    ]
+  },
+  "preconditions": [],
+  "owns_dimensions": [
+    "information_sequencing",
+    "causal_explanation",
+    "retrospective_reframe"
+  ],
+  "forbidden_dimensions": [
+    "paragraph_topology",
+    "canon_truth",
+    "source_authority",
+    "narrator_register",
+    "abstraction_band"
+  ],
+  "context_requirements": {
+    "required": [],
+    "optional": [
+      "narrative_state.beliefs",
+      "open_loops",
+      "relevant_recurrences"
+    ]
+  },
+  "writer_payload": {
+    "max_items": 3,
+    "form": "decision_guidance"
+  },
+  "suppress_when": [
+    "minor_reveal_without_accounting_need"
+  ],
+  "verifier_checks": [
+    "INTELLIGENCE_DIMENSION_LEAK"
+  ]
+}

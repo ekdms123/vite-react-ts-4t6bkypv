@@ -1,0 +1,43 @@
+{
+  "id": "HUMOR_COGNITION",
+  "version": 1,
+  "purpose": "Allow character-owned cognitive humor when it performs real scene or relationship work.",
+  "trigger": {
+    "any": [
+      "humor_opportunity",
+      "defensive_humor",
+      "banal_collision"
+    ]
+  },
+  "preconditions": [],
+  "owns_dimensions": [
+    "comparison_choice",
+    "interpretive_timing",
+    "register_drop"
+  ],
+  "forbidden_dimensions": [
+    "paragraph_topology",
+    "canon_truth",
+    "source_authority",
+    "story_causality",
+    "pov_distance"
+  ],
+  "context_requirements": {
+    "required": [],
+    "optional": [
+      "voice_state.humor_mechanisms",
+      "relationship_state"
+    ]
+  },
+  "writer_payload": {
+    "max_items": 3,
+    "form": "decision_guidance"
+  },
+  "suppress_when": [
+    "humor_would_break_pressure",
+    "no_character_owned_humor"
+  ],
+  "verifier_checks": [
+    "INTELLIGENCE_DIMENSION_LEAK"
+  ]
+}

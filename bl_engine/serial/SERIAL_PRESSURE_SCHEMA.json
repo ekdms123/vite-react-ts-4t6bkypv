@@ -1,0 +1,16 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"Serial Pressure Vector",
+  "type":"object",
+  "properties":{
+    "causal":{"type":"integer","minimum":0,"maximum":3},
+    "information":{"type":"integer","minimum":0,"maximum":3},
+    "relationship":{"type":"integer","minimum":0,"maximum":3},
+    "desire":{"type":"integer","minimum":0,"maximum":3},
+    "plan":{"type":"integer","minimum":0,"maximum":3},
+    "identity":{"type":"integer","minimum":0,"maximum":3},
+    "world":{"type":"integer","minimum":0,"maximum":3},
+    "emotional_afterpressure":{"type":"integer","minimum":0,"maximum":3}
+  },
+  "additionalProperties":false
+}

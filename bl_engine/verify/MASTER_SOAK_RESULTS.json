@@ -1,0 +1,52 @@
+{
+  "contract_coverage": {
+    "coverage": 0.9091,
+    "critical_coverage": 1.0,
+    "critical_executable": 14,
+    "critical_total": 14,
+    "documentation_only": 0,
+    "errors": [],
+    "executable": 20,
+    "experimental": 2,
+    "required_coverage": 1.0,
+    "required_executable": 5,
+    "required_total": 5,
+    "total": 22
+  },
+  "executed_checks": [
+    "AUTHORITY_CONTRACT",
+    "PARAGRAPH_TOPOLOGY",
+    "MODEL_PRIOR",
+    "KNOWLEDGE_REACHABILITY",
+    "HARD_USER_BANS"
+  ],
+  "high_assurance_without_candidates": "ASSURANCE_NOT_MET",
+  "literary_validation": "ASSURANCE_NOT_MET",
+  "low_confidence_or_ungrounded_fact_selected": {},
+  "narrator_mode": "FOCAL_CLOSE",
+  "nontransformative_failures": [],
+  "oracle_leak_absent": true,
+  "ordinary_qualification": "PASS",
+  "paragraph_mutations": {
+    "regularized": [
+      "PARAGRAPH_REGULARIZATION"
+    ],
+    "rolling": [
+      "PARAGRAPH_FRAGMENTATION"
+    ],
+    "single_newline": [
+      "PARAGRAPH_FRAGMENTATION"
+    ]
+  },
+  "required_checks": [
+    "AUTHORITY_CONTRACT",
+    "PARAGRAPH_TOPOLOGY",
+    "MODEL_PRIOR",
+    "KNOWLEDGE_REACHABILITY",
+    "HARD_USER_BANS"
+  ],
+  "rhetorical_mutation_findings": [
+    "FORMULAIC_RHETORIC"
+  ],
+  "schema_version": "0.2"
+}

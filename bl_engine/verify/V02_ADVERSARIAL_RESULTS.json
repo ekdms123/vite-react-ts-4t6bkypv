@@ -1,0 +1,48 @@
+{
+  "all_pass": true,
+  "details": {
+    "AUTHORITY_ESCAPE": {
+      "hard_user_ban": true,
+      "prohibited_event_grounded": true,
+      "required_event_missing": true
+    },
+    "CREATIVE_COLLAPSE": {
+      "same_genealogy": true
+    },
+    "MODEL_PRIOR_EVASION": {
+      "rhetorical_mutation": true,
+      "staircase_mutation": true
+    },
+    "ORACLE_LEAK": {
+      "inactive_focal_knowledge": true,
+      "packet_projection": true,
+      "proposal_hidden_literal": true
+    },
+    "REPAIR_ESCAPE": {
+      "receipt_invalidation": true
+    },
+    "SELF_CONTAMINATION": {
+      "generated_voice_commit": true
+    },
+    "STATE_MUTATION": {
+      "proposal_mismatch": true,
+      "stale_parent": true
+    },
+    "VERIFICATION_FORGERY": {
+      "missing_check": true,
+      "prepared_tamper": true,
+      "receipt_tamper": true
+    }
+  },
+  "families": {
+    "AUTHORITY_ESCAPE": true,
+    "CREATIVE_COLLAPSE": true,
+    "MODEL_PRIOR_EVASION": true,
+    "ORACLE_LEAK": true,
+    "REPAIR_ESCAPE": true,
+    "SELF_CONTAMINATION": true,
+    "STATE_MUTATION": true,
+    "VERIFICATION_FORGERY": true
+  },
+  "schema_version": "0.2"
+}

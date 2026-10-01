@@ -1,0 +1,12 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"Character Behavioral Promise",
+  "type":"object",
+  "required":["stable_core","predictable_tendency","contradiction","violation_triggers"],
+  "properties":{
+    "stable_core":{"type":"array","items":{"type":"string"}},
+    "predictable_tendency":{"type":"array","items":{"type":"string"}},
+    "contradiction":{"type":"array","items":{"type":"string"}},
+    "violation_triggers":{"type":"array","items":{"type":"string"}}
+  }
+}

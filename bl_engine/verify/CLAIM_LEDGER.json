@@ -1,0 +1,93 @@
+{
+ "claims": [
+  {
+   "claim_id": "STRUCTURAL_GATES",
+   "claim_text": "Release-blocking integrity gates are executable and regression-tested",
+   "current_evidence_refs": [
+    "verify/EXECUTION_LEDGER.json",
+    "tests/test_v02_integrity_gate.py",
+    "tests/test_v02_projection.py"
+   ],
+   "expiration_condition": "",
+   "required_evidence": [
+    "verify/EXECUTION_LEDGER.json",
+    "tests/test_v02_integrity_gate.py",
+    "tests/test_v02_projection.py"
+   ],
+   "status": "SUPPORTED"
+  },
+  {
+   "claim_id": "MODEL_PRIOR_MUTATION_COVERAGE",
+   "claim_text": "Paragraph/model-prior regression suite covers multiple surface mutation families",
+   "current_evidence_refs": [
+    "tests/test_v02_model_prior.py"
+   ],
+   "expiration_condition": "",
+   "required_evidence": [
+    "tests/test_v02_model_prior.py"
+   ],
+   "status": "SUPPORTED"
+  },
+  {
+   "claim_id": "LITERARY_SUPERIORITY",
+   "claim_text": "v0.2 is blindly preferred or universally more literary",
+   "current_evidence_refs": [],
+   "expiration_condition": "",
+   "required_evidence": [
+    "external:controlled-generation",
+    "external:blind-human-evaluation"
+   ],
+   "status": "ASSURANCE_NOT_MET"
+  },
+  {
+   "claim_id": "COMMERCIAL_LIFT",
+   "claim_text": "v0.2 improves sales or retention",
+   "current_evidence_refs": [],
+   "expiration_condition": "",
+   "required_evidence": [
+    "external:commercial-outcome-study"
+   ],
+   "status": "ASSURANCE_NOT_MET"
+  },
+  {
+   "claim_id": "MAD_SUMMER_EXACT_STYLOMETRY",
+   "claim_text": "Exact Korean prose manifold from image-only source PDFs",
+   "current_evidence_refs": [],
+   "expiration_condition": "",
+   "required_evidence": [
+    "source:text-extraction-or-grounded-corpus"
+   ],
+   "status": "ASSURANCE_NOT_MET"
+  },
+  {
+   "claim_id": "V5_CHECKER_CALIBRATED_ON_HELD_OUT_BL",
+   "claim_text": "v5 voicecheck passes 92% of held-out human BL chunks (4 works) and 0% of 21 AI chunks under leave-one-group-out; the score no longer depends on optional packages",
+   "current_evidence_refs": [
+    "verify/V5_CALIBRATION_REPORT.md",
+    "verify/V5_EVAL_SUMMARY.json",
+    "tests/test_v5_voice.py",
+    "tools/eval_checker.py"
+   ],
+   "expiration_condition": "AI sample grows or new human source added without re-running tools/eval_checker.py",
+   "required_evidence": [
+    "verify/V5_CALIBRATION_REPORT.md",
+    "verify/V5_EVAL_SUMMARY.json",
+    "tests/test_v5_voice.py",
+    "tools/eval_checker.py"
+   ],
+   "status": "SUPPORTED"
+  },
+  {
+   "claim_id": "V5_HUMAN_INDISTINGUISHABLE",
+   "claim_text": "Engine v5 prose is indistinguishable from human BL prose to blind judges",
+   "current_evidence_refs": [],
+   "expiration_condition": "",
+   "required_evidence": [
+    "verify/BL_BLIND_TEST_RESULTS.json#round4",
+    "verify/BLIND_JUDGE_PROTOCOL.md"
+   ],
+   "status": "ASSURANCE_NOT_MET"
+  }
+ ],
+ "schema_version": "0.2"
+}

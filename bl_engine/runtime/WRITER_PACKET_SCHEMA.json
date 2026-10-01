@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "v0.2 Positive-Constructed Realization Packet",
+  "type": "object",
+  "required": ["scene","authority","focal_now","relationship_now","world_now","conception","cognition_artifacts","realization_prior","continuity"],
+  "additionalProperties": false,
+  "properties": {
+    "scene": {
+      "type":"object","additionalProperties":false,
+      "required":["scene_id","focal_id","narrator_mode","requested_action"],
+      "properties": {
+        "scene_id":{"type":"string","minLength":1},"focal_id":{"type":"string","minLength":1},
+        "narrator_mode":{"type":"string","minLength":1},"requested_action":{"type":"string","minLength":1}
+      }
+    },
+    "authority": {
+      "type":"object","additionalProperties":false,
+      "required":["required_events","prohibited_events","locked_canon_refs","creative_freedom"],
+      "properties": {
+        "required_events":{"type":"array","maxItems":32,"items":{"type":"string"}},
+        "prohibited_events":{"type":"array","maxItems":64,"items":{"type":"string"}},
+        "locked_canon_refs":{"type":"array","maxItems":64,"items":{"type":"string"}},
+        "creative_freedom":{"enum":["TIGHT","NORMAL","OPEN"]}
+      }
+    },
+    "focal_now":{"type":"object","additionalProperties":true},
+    "relationship_now":{"type":"object","additionalProperties":true},
+    "world_now":{"type":"object","additionalProperties":true},
+    "conception":{"type":"object","additionalProperties":true},
+    "cognition_artifacts":{"type":"array","maxItems":8,"items":{"type":"object","additionalProperties":false,"required":["specialist_id","version","artifact"],"properties":{"specialist_id":{"type":"string"},"version":{"type":"integer"},"artifact":{"type":"object"}}}},
+    "realization_prior":{"type":"object","additionalProperties":true},
+    "continuity":{"type":"object","additionalProperties":true}
+  }
+}

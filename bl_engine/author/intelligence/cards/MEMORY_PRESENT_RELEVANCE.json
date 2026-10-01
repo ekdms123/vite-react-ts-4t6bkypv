@@ -1,0 +1,39 @@
+{
+  "id": "MEMORY_PRESENT_RELEVANCE",
+  "version": 1,
+  "purpose": "Expand memory only when the past is producing present reaction, belief, choice, or consequence.",
+  "trigger": {
+    "any": [
+      "flashback",
+      "memory_expansion"
+    ]
+  },
+  "preconditions": [],
+  "owns_dimensions": [
+    "memory_selection",
+    "temporal_relevance"
+  ],
+  "forbidden_dimensions": [
+    "paragraph_topology",
+    "canon_truth",
+    "source_authority",
+    "narrator_register"
+  ],
+  "context_requirements": {
+    "required": [],
+    "optional": [
+      "narrative_state.present_consequence",
+      "open_loops"
+    ]
+  },
+  "writer_payload": {
+    "max_items": 3,
+    "form": "decision_guidance"
+  },
+  "suppress_when": [
+    "no_present_consequence"
+  ],
+  "verifier_checks": [
+    "NARRATIVE_MODE_DRIFT"
+  ]
+}

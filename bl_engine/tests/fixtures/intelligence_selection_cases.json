@@ -1,0 +1,12 @@
+[
+  {
+    "name": "relationship pivot",
+    "signals": {"relationship_pivot": true},
+    "expected_cards": ["RELATIONSHIP_EVIDENCE", "DIALOGUE_AS_RELATIONAL_ACTION"]
+  },
+  {
+    "name": "major reveal",
+    "signals": {"major_reveal": true},
+    "expected_cards": ["REVEAL_CAUSAL_ACCOUNTING"]
+  }
+]

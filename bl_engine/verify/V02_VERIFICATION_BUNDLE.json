@@ -1,0 +1,96 @@
+{
+  "adversarial_families": [
+    "AUTHORITY_ESCAPE",
+    "ORACLE_LEAK",
+    "VERIFICATION_FORGERY",
+    "STATE_MUTATION",
+    "MODEL_PRIOR_EVASION",
+    "CREATIVE_COLLAPSE",
+    "REPAIR_ESCAPE",
+    "SELF_CONTAMINATION"
+  ],
+  "adversarial_summary": {
+    "all_pass": true,
+    "details": {
+      "AUTHORITY_ESCAPE": {
+        "hard_user_ban": true,
+        "prohibited_event_grounded": true,
+        "required_event_missing": true
+      },
+      "CREATIVE_COLLAPSE": {
+        "same_genealogy": true
+      },
+      "MODEL_PRIOR_EVASION": {
+        "rhetorical_mutation": true,
+        "staircase_mutation": true
+      },
+      "ORACLE_LEAK": {
+        "inactive_focal_knowledge": true,
+        "packet_projection": true,
+        "proposal_hidden_literal": true
+      },
+      "REPAIR_ESCAPE": {
+        "receipt_invalidation": true
+      },
+      "SELF_CONTAMINATION": {
+        "generated_voice_commit": true
+      },
+      "STATE_MUTATION": {
+        "proposal_mismatch": true,
+        "stale_parent": true
+      },
+      "VERIFICATION_FORGERY": {
+        "missing_check": true,
+        "prepared_tamper": true,
+        "receipt_tamper": true
+      }
+    },
+    "families": {
+      "AUTHORITY_ESCAPE": true,
+      "CREATIVE_COLLAPSE": true,
+      "MODEL_PRIOR_EVASION": true,
+      "ORACLE_LEAK": true,
+      "REPAIR_ESCAPE": true,
+      "SELF_CONTAMINATION": true,
+      "STATE_MUTATION": true,
+      "VERIFICATION_FORGERY": true
+    },
+    "schema_version": "0.2"
+  },
+  "claim_errors": [],
+  "contract_coverage": {
+    "coverage": 0.9091,
+    "critical_coverage": 1.0,
+    "critical_executable": 14,
+    "critical_total": 14,
+    "documentation_only": 0,
+    "errors": [],
+    "executable": 20,
+    "experimental": 2,
+    "required_coverage": 1.0,
+    "required_executable": 5,
+    "required_total": 5,
+    "total": 22
+  },
+  "fingerprint": {
+    "claim_ledger_hash": "e19d8282823eecf98c26383d984a4b61263fa8a62233499c22eaf15811cdeb26",
+    "code_hash": "91468edaa30fcf45a2890d7d098d1fdd79209491aa7de4d29912e215d7ac3b14",
+    "execution_ledger_hash": "0b258c17c15aa208f06e24afdbcc697e0e0747a00e4fc30bf90044c9c3cdab7a",
+    "schema_hash": "4500134cb385f3579e55d47fb45c9ea470dc8ae1e1adfc4353ea0d4139d85234",
+    "version_hash": "e1d49c569ae09b2ede16e2d83820a3809b35eb6c44c13ba9b5330598d6b8f43c"
+  },
+  "ledger_errors": [],
+  "literary_validation": "ASSURANCE_NOT_MET",
+  "schema_version": "0.2",
+  "structural_status": "STRUCTURALLY_VERIFIED",
+  "test_summary": {
+    "compileall": "PASS",
+    "full_pytest": {
+      "failed": 0,
+      "passed": 205
+    },
+    "schema_meta_validation": {
+      "valid": 8
+    }
+  }
+}

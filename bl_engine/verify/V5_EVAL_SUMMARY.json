@@ -1,0 +1,78 @@
+{
+ "date": "2026-10-01",
+ "method": "leave-one-group-out; judge model retrained without the held-out work/file each time",
+ "summary": {
+  "human": {
+   "n": 320,
+   "v5_pass_rate": 0.919,
+   "pattern_only_pass_rate": 0.941
+  },
+  "ai": {
+   "n": 21,
+   "v5_pass_rate": 0.0,
+   "pattern_only_pass_rate": 0.429
+  },
+  "by_group": {
+   "A:V1_엔진출력_AI0.0.md": {
+    "n": 2,
+    "v5_pass_rate": 0.0,
+    "p_human_mean": 0.017
+   },
+   "A:V2_엔진출력_AI4.0.md": {
+    "n": 2,
+    "v5_pass_rate": 0.0,
+    "p_human_mean": 0.087
+   },
+   "A:V3_엔진출력_AI4.0.md": {
+    "n": 2,
+    "v5_pass_rate": 0.0,
+    "p_human_mean": 0.468
+   },
+   "A:default_a.txt": {
+    "n": 4,
+    "v5_pass_rate": 0.0,
+    "p_human_mean": 0.03
+   },
+   "A:default_b.txt": {
+    "n": 3,
+    "v5_pass_rate": 0.0,
+    "p_human_mean": 0.187
+   },
+   "A:default_c.txt": {
+    "n": 4,
+    "v5_pass_rate": 0.0,
+    "p_human_mean": 0.014
+   },
+   "A:engine_a.txt": {
+    "n": 2,
+    "v5_pass_rate": 0.0,
+    "p_human_mean": 0.003
+   },
+   "A:engine_b.txt": {
+    "n": 2,
+    "v5_pass_rate": 0.0,
+    "p_human_mean": 0.037
+   },
+   "H:[유수]마왕.txt": {
+    "n": 80,
+    "v5_pass_rate": 0.963,
+    "p_human_mean": 0.989
+   },
+   "H:[유수]홍염의연인.txt": {
+    "n": 80,
+    "v5_pass_rate": 0.938,
+    "p_human_mean": 0.989
+   },
+   "H:세디백 첫병.txt": {
+    "n": 80,
+    "v5_pass_rate": 0.8,
+    "p_human_mean": 0.847
+   },
+   "H:우리철수.txt": {
+    "n": 80,
+    "v5_pass_rate": 0.975,
+    "p_human_mean": 0.957
+   }
+  }
+ }
+}

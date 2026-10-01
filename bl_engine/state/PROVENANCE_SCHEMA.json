@@ -1,0 +1,14 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"Narrative Provenance v3",
+  "type":"object",
+  "required":["value","provenance","confidence"],
+  "properties":{
+    "value":{},
+    "provenance":{"enum":["USER_CANON","TEXT_OBSERVED","DERIVED_HIGH_CONFIDENCE","WORKING_HYPOTHESIS","UNKNOWN"]},
+    "confidence":{"type":"number","minimum":0,"maximum":1},
+    "evidence_refs":{"type":"array","items":{"type":"string"},"uniqueItems":true},
+    "depends_on":{"type":"array","items":{"type":"string"},"uniqueItems":true}
+  },
+  "additionalProperties":false
+}
