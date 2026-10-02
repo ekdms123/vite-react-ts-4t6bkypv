@@ -1,0 +1,88 @@
+{
+ "date": "2026-10-02",
+ "method": "leave-one-group-out; judge model retrained without the held-out work/file each time",
+ "summary": {
+  "human": {
+   "n": 320,
+   "v5_pass_rate": 0.912,
+   "pattern_only_pass_rate": 0.938
+  },
+  "ai": {
+   "n": 23,
+   "v5_pass_rate": 0.087,
+   "pattern_only_pass_rate": 0.478
+  },
+  "by_group": {
+   "A:V1_엔진출력_AI0.0.md": {
+    "n": 2,
+    "v5_pass_rate": 0.0,
+    "p_human_mean": 0.019
+   },
+   "A:V2_엔진출력_AI4.0.md": {
+    "n": 2,
+    "v5_pass_rate": 0.0,
+    "p_human_mean": 0.071
+   },
+   "A:V3_엔진출력_AI4.0.md": {
+    "n": 2,
+    "v5_pass_rate": 0.0,
+    "p_human_mean": 0.255
+   },
+   "A:V5_시험장면1_코미디.md": {
+    "n": 1,
+    "v5_pass_rate": 1.0,
+    "p_human_mean": 0.907
+   },
+   "A:V5_시험장면2_긴장.md": {
+    "n": 1,
+    "v5_pass_rate": 1.0,
+    "p_human_mean": 0.892
+   },
+   "A:default_a.txt": {
+    "n": 4,
+    "v5_pass_rate": 0.0,
+    "p_human_mean": 0.068
+   },
+   "A:default_b.txt": {
+    "n": 3,
+    "v5_pass_rate": 0.0,
+    "p_human_mean": 0.19
+   },
+   "A:default_c.txt": {
+    "n": 4,
+    "v5_pass_rate": 0.0,
+    "p_human_mean": 0.006
+   },
+   "A:engine_a.txt": {
+    "n": 2,
+    "v5_pass_rate": 0.0,
+    "p_human_mean": 0.001
+   },
+   "A:engine_b.txt": {
+    "n": 2,
+    "v5_pass_rate": 0.0,
+    "p_human_mean": 0.092
+   },
+   "H:[유수]마왕.txt": {
+    "n": 80,
+    "v5_pass_rate": 0.963,
+    "p_human_mean": 0.976
+   },
+   "H:[유수]홍염의연인.txt": {
+    "n": 80,
+    "v5_pass_rate": 0.938,
+    "p_human_mean": 0.99
+   },
+   "H:세디백 첫병.txt": {
+    "n": 80,
+    "v5_pass_rate": 0.787,
+    "p_human_mean": 0.804
+   },
+   "H:우리철수.txt": {
+    "n": 80,
+    "v5_pass_rate": 0.963,
+    "p_human_mean": 0.935
+   }
+  }
+ }
+}

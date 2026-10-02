@@ -28,12 +28,14 @@ def test_score_does_not_depend_on_kiwipiepy():
     assert a[2] == b[2] and a[3] == b[3]
 
 
-def test_old_engine_samples_rewrite_and_v5_samples_pass():
+def test_old_engine_samples_rewrite_and_v5_samples_are_hard_negatives():
     for p in SAMPLES.glob('V[123]_*.md'):
         assert vc.score(p.read_text(encoding='utf-8'))[3].startswith('REWRITE'), p.name
+    # v7: v5 시험 장면은 판별기를 통과했던 글이라 적대적 재학습에서 AI 쪽 학습 데이터로 들어갔다
+    m = json.loads((ROOT / 'voice/discriminator_model.json').read_text(encoding='utf-8'))
+    assert any('V5_' in g for g in m['eval']['per_group_mean_p_human'])
     for p in SAMPLES.glob('V5_*.md'):
-        f, _, s, v = vc.score(p.read_text(encoding='utf-8'))
-        assert v.startswith('PASS'), (p.name, s, f['_disc']['p_human_min'])
+        assert vc.score(p.read_text(encoding='utf-8'))[3].startswith('REWRITE'), p.name
 
 
 def test_html_comment_header_is_not_scored():

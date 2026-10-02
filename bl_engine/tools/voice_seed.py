@@ -68,6 +68,7 @@ def card(title: str) -> str:
     seed = int(hashlib.sha256(title.encode('utf-8')).hexdigest()[:12], 16)
     r = random.Random(seed)
     dev = device_plan(r)
+    rhythm_src = sorted(r.sample(['MW', 'HY', 'SD', 'CS'], r.choice([1, 2])))
     on_adv = any(n == '고풍 부사' and s == '켬' for n, s, _ in dev)
     adv = r.sample(ADVERBS, 2 if on_adv else 0)
     state = {n: st for n, st, _ in dev}
@@ -97,6 +98,7 @@ def card(title: str) -> str:
 | 줄거리와 무관한 구체 | {nf[0]} | {nf[1]} |
 | 느낌표 | {excl} | |
 | 장치 없는 문단 비율 | 서술 문단의 {plain}% 이상 | 비유·농담·딴소리 없이 사건만 전하는 평범한 문단 |
+| 리듬 원천 (v7) | {', '.join(rhythm_src)} | 이 작품의 리듬 악보는 이 원작에서만 뽑는다: `python tools/rhythm_score.py pick --preset 프리셋 --src {','.join(rhythm_src)}` |
 
 ## 장치 지문 (v5: 켠 장치만 이 작품의 것이다)
 

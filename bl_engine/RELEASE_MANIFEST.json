@@ -1,5 +1,5 @@
 {
-  "claim_ledger_sha256": "d423ce64b5663c0665a0dab20e532c3230fad68b8eceedfcc64c058108afed21",
+  "claim_ledger_sha256": "fd286dbc56f4795160f967b595107c87fbd45148530eb1076e6764bf6f0d52c7",
   "execution_ledger_sha256": "0b258c17c15aa208f06e24afdbcc697e0e0747a00e4fc30bf90044c9c3cdab7a",
   "files": {
     "KERNEL_CONTRACT.md": {
@@ -7,12 +7,12 @@
       "sha256": "d52540af2619d2f884c4139c91f522b39d88dea0607a319985bf23669a8218d0"
     },
     "README.md": {
-      "bytes": 11122,
-      "sha256": "79f7042b0952e5debf94e19cbd43a490884ad93e43b36c6bc2a1c69dbe6e8297"
+      "bytes": 12715,
+      "sha256": "d5298bc171c6f94cfa68a9835f615c328fb2d89f8981cf7d6e2f9edccf541eb7"
     },
     "START_HERE.md": {
-      "bytes": 9559,
-      "sha256": "8ab18b66d9ff711cd9ba8c907c65e2803b234ce7a5417a910feba6d60b11b2b3"
+      "bytes": 11152,
+      "sha256": "2346cd5569b0b24f4a772d9fa1862011c5c68e8af6f64744fff9f2556230ed09"
     },
     "VERIFICATION_REPORT.md": {
       "bytes": 9960,
@@ -20,7 +20,7 @@
     },
     "VERSION": {
       "bytes": 6,
-      "sha256": "1cc3d76ac7c21a664e79848fd481e9791016451b244e7de5feeeb9bea5fd2184"
+      "sha256": "54ef76332b31df830699e9d4138396885ab72bae260a034a81ff02bf32d8e90a"
     },
     "author/CANONICAL_SYNTHETIC_AUTHOR.md": {
       "bytes": 3316,
@@ -176,11 +176,11 @@
     },
     "pyproject.toml": {
       "bytes": 453,
-      "sha256": "8682a5b28dcc8700dfdaab0990b04d2a5ae17e58fb2e528989a5dc7c2a3a9439"
+      "sha256": "df961cfd8f4c3fc91aa004cdb570eca26ae7aacf57d0c851b455e70cdd24f1c6"
     },
     "runtime/BL_WRITER_RUNTIME.md": {
-      "bytes": 15083,
-      "sha256": "a8a5d4d268b48383173f2e4020d5abf62643f75d8694a1b9dca8e488caf8033e"
+      "bytes": 16609,
+      "sha256": "c7434e35e93fe41b08640c6a54a56006afdd629364bff033e8ff1e95e7e0f1ad"
     },
     "runtime/CONTEXT_PULL_POLICY.md": {
       "bytes": 996,
@@ -443,12 +443,16 @@
       "sha256": "0b531d138facd107b82c54526d9efe033cd1166a1eb3678cdd5f820eabc3a942"
     },
     "tests/test_v5_voice.py": {
-      "bytes": 5159,
-      "sha256": "db48d9a64c1d2e69b860835f8c83f9726a9f334c647249cabbb046de3f795b3e"
+      "bytes": 5418,
+      "sha256": "bb697022a7ca9edaac82c2676740a9884538b23e4418e617d1605e0587614138"
     },
     "tests/test_v6_human_draft.py": {
       "bytes": 4240,
       "sha256": "3e12935bccd3f65329d8d6e50c81a5f511abc043316532d4b974f7b31c9eca33"
+    },
+    "tests/test_v7_rhythm.py": {
+      "bytes": 2927,
+      "sha256": "412a0a9a9d6f969ea9f17d3282231e09ccaf3996f09f04a69c1a10631667c6bd"
     },
     "tests/test_verifier_behavior.py": {
       "bytes": 1847,
@@ -461,6 +465,10 @@
     "tools/eval_checker.py": {
       "bytes": 3288,
       "sha256": "4ab82aee91199430bfdeaf8d4d3f19f1f397282cf6515660bb3d6ca0213d19f1"
+    },
+    "tools/rhythm_score.py": {
+      "bytes": 10886,
+      "sha256": "b6a3e1185dc46e3648ab84201caf447d16cdb485c3cf858e58869ed4b49e1c12"
     },
     "tools/run_master_soak.py": {
       "bytes": 3920,
@@ -495,12 +503,12 @@
       "sha256": "0fcea540022fe30ac297ca3dc7885253aa35a845693cecb707fd4ca02963176d"
     },
     "tools/voice_seed.py": {
-      "bytes": 7941,
-      "sha256": "d6534d6f3bdcd04be7f66a21fcbb14b80e5a42c321fec8ff37535b2544a0d6f8"
+      "bytes": 8216,
+      "sha256": "05694941dcc8751528f7141af3ade0786ec9163aa4182a9727dbc16756f92831"
     },
     "tools/voicecheck.py": {
-      "bytes": 30326,
-      "sha256": "1e8d3a3c55158252a4c127bd6ec238aec26288e7f5c607779807be3544972b37"
+      "bytes": 31206,
+      "sha256": "53b68a49b169720a83fb2d188ab9837d9700f56d6342941f6f532350428b8615"
     },
     "vendor/UPSTREAM_COMMITS.md": {
       "bytes": 405,
@@ -647,8 +655,8 @@
       "sha256": "e83e3e544e9010dfbd100bf32bd36506202b5b300764a46769f260a82c305e76"
     },
     "verify/CLAIM_LEDGER.json": {
-      "bytes": 3438,
-      "sha256": "d423ce64b5663c0665a0dab20e532c3230fad68b8eceedfcc64c058108afed21"
+      "bytes": 4083,
+      "sha256": "fd286dbc56f4795160f967b595107c87fbd45148530eb1076e6764bf6f0d52c7"
     },
     "verify/COMMERCIAL_ARC_VERIFIER.md": {
       "bytes": 450,
@@ -680,7 +688,7 @@
     },
     "verify/V02_VERIFICATION_BUNDLE.json": {
       "bytes": 2622,
-      "sha256": "6d6d4bceb52690ae7bda2019e4cd1f48237783241d4b292381e5098649065b58"
+      "sha256": "e6b6a2345ca9f78879a599b7cd3730409cb69321c7e6ee1056ed0880356e1cec"
     },
     "verify/V5_CALIBRATION_REPORT.md": {
       "bytes": 6574,
@@ -689,6 +697,14 @@
     "verify/V5_EVAL_SUMMARY.json": {
       "bytes": 1610,
       "sha256": "4cc2f094614e99f5751332e34dd37ce70e04b555ffc0b131b878de6e804a692f"
+    },
+    "verify/V7_EVAL_SUMMARY.json": {
+      "bytes": 1828,
+      "sha256": "7780bed40e3a626a5022c148465ccdecf35a25073308ef7b5271a3a0b1f18b6e"
+    },
+    "verify/V7_RHYTHM_REPORT.md": {
+      "bytes": 4199,
+      "sha256": "10a8099b82ad026fb36864460a176b85a07764122ed60c5e8d1714518ff47559"
     },
     "verify/VERIFICATION_GATE.json": {
       "bytes": 1662,
@@ -713,6 +729,14 @@
     "verify/bl_samples/V5_시험장면2_긴장.md": {
       "bytes": 3498,
       "sha256": "d22f0fa8b861f7c414eb3b3e064e5da3a9bd249b6475508497c6c9ad9b879791"
+    },
+    "verify/bl_samples/V7_악보장면1_긴장.md": {
+      "bytes": 4169,
+      "sha256": "cfee2dd838b3fcf7f3305d51d1075bdf29cc200e6b436b793b491b439e66a7b5"
+    },
+    "verify/bl_samples/V7_악보장면2_고백.md": {
+      "bytes": 4777,
+      "sha256": "1dab735302b22ec95f972005822dc750dd9c8e3ab832652501b396de529090fc"
     },
     "voice/AI_HUMAN_CONTRAST.md": {
       "bytes": 34014,
@@ -739,8 +763,8 @@
       "sha256": "d4437ce08723eeba26f1b21eb7726fb277efdfe01820ab30cb98b826788170a8"
     },
     "voice/VOICE_BIBLE.md": {
-      "bytes": 18784,
-      "sha256": "207c926420ad5eecdecd9d4dd2bf7c06eac101120195d9548f668b405701081a"
+      "bytes": 19303,
+      "sha256": "6fe8d0f10b8d72625d75a72905d6a701989b994efec742c2f2473ca836ad065b"
     },
     "voice/banlist.json": {
       "bytes": 18361,
@@ -751,15 +775,19 @@
       "sha256": "7b233fa8134c5d20e9eebd82ac5b8a881122a54a5b51204d2e250cccad5495cb"
     },
     "voice/discriminator_model.json": {
-      "bytes": 12428,
-      "sha256": "1c25d5a229525bb46859c2fa20947cd5f27aa05559bfaabefb34afacb8686e03"
+      "bytes": 12516,
+      "sha256": "add0751df6b35773086e09b45204cd462a90f137dab418e2bff090809d3d8e02"
+    },
+    "voice/rhythm_scores.json": {
+      "bytes": 755839,
+      "sha256": "c90d0788474fd4d8406aefc326cfd12a9d26f9c5618f75eb70e3dcf71047887d"
     },
     "voice/style_targets.json": {
       "bytes": 9266,
       "sha256": "206482e497546e29fdf299e8132c79c92b7585a9a15de06028492d26f64c93a2"
     }
   },
-  "release": "5.0.0",
+  "release": "6.0.0",
   "schema_version": "4.0",
-  "verification_bundle_sha256": "6d6d4bceb52690ae7bda2019e4cd1f48237783241d4b292381e5098649065b58"
+  "verification_bundle_sha256": "e6b6a2345ca9f78879a599b7cd3730409cb69321c7e6ee1056ed0880356e1cec"
 }

@@ -103,6 +103,24 @@
     "tests/test_v6_human_draft.py"
    ],
    "status": "SUPPORTED"
+  },
+  {
+   "claim_id": "V7_RHYTHM_SCORES_WORDLESS_AND_ENFORCED",
+   "claim_text": "Rhythm scores carry no source words, and the checker can require a draft to follow a chosen human score (fit >= calibrated threshold)",
+   "current_evidence_refs": [
+    "voice/rhythm_scores.json",
+    "tools/rhythm_score.py",
+    "tests/test_v7_rhythm.py",
+    "verify/V7_RHYTHM_REPORT.md"
+   ],
+   "expiration_condition": "rhythm_scores.json rebuilt without re-running tests",
+   "required_evidence": [
+    "voice/rhythm_scores.json",
+    "tools/rhythm_score.py",
+    "tests/test_v7_rhythm.py",
+    "verify/V7_RHYTHM_REPORT.md"
+   ],
+   "status": "SUPPORTED"
   }
  ],
  "schema_version": "0.2"

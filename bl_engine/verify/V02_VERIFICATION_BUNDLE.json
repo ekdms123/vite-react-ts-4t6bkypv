@@ -73,11 +73,11 @@
     "total": 22
   },
   "fingerprint": {
-    "claim_ledger_hash": "d423ce64b5663c0665a0dab20e532c3230fad68b8eceedfcc64c058108afed21",
-    "code_hash": "b6b3925bf33d70072a38166483c0aa16602a97e2b2d4a62231e12a8d3a75f3a3",
+    "claim_ledger_hash": "fd286dbc56f4795160f967b595107c87fbd45148530eb1076e6764bf6f0d52c7",
+    "code_hash": "5b5e60abebea3e93fa68fa3158e0696b76fefd550786b63583f25b648696d306",
     "execution_ledger_hash": "0b258c17c15aa208f06e24afdbcc697e0e0747a00e4fc30bf90044c9c3cdab7a",
-    "schema_hash": "4500134cb385f3579e55d47fb45c9ea470dc8ae1e1adfc4353ea0d4139d85234",
-    "version_hash": "1cc3d76ac7c21a664e79848fd481e9791016451b244e7de5feeeb9bea5fd2184"
+    "schema_hash": "31eb743461e07451a42dafc354a5e3b10f4c0ad0bb1d8fa86c084aeb133bd597",
+    "version_hash": "54ef76332b31df830699e9d4138396885ab72bae260a034a81ff02bf32d8e90a"
   },
   "ledger_errors": [],
   "literary_validation": "ASSURANCE_NOT_MET",
@@ -87,7 +87,7 @@
     "compileall": "PASS",
     "full_pytest": {
       "failed": 0,
-      "passed": 213
+      "passed": 219
     },
     "schema_meta_validation": {
       "valid": 8

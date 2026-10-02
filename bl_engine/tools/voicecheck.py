@@ -17,6 +17,7 @@
   python tools/voicecheck.py 1화.txt 2화.txt 3화.txt --series  # 화를 가로지르는 반복 버릇
   python tools/voicecheck.py 원고.txt --card PROJECT_VOICE_CARD.md  # 손버릇 카드 적용(카드 밖 부사 금지)
   python tools/voicecheck.py 원고.txt --vocab  # BL 단어장 참고 리포트(점수 무관)
+  python tools/voicecheck.py 원고.md --score HY-0128  # (v7) 리듬 악보 위에 쓴 원고: 프리셋 믹스 대신 악보 맞춤을 본다
   python tools/voicecheck.py 블로그.md --blog  # 블로그·에세이: 판별기는 참고만, 설계 티(S07~S09)는 그대로 검사
 """
 from __future__ import annotations
@@ -166,8 +167,11 @@ def check_example_copy(text: str):
     return []
 
 
+SCORE_ID = None  # (v7) 리듬 악보 ID. 악보를 따라 쓴 원고는 엔진 프리셋 믹스 대신 사람 악보를 기준으로 삼는다
+
+
 def check_preset(f: dict):
-    if not PRESET:
+    if not PRESET or SCORE_ID:
         return []
     p = TARGETS['presets'][PRESET]; out = []; tol = TARGETS['mix_tolerance']
     for key, want in zip(TARGETS['mix_keys'], p['mix']):
@@ -383,7 +387,12 @@ def score(text: str):
     p_ok = disc is None or BLOG_MODE or disc['p_human_min'] >= TARGETS.get('p_human_threshold', 0.5)
     if disc is not None:
         disc['outside_max'] = max(len(c['outside_human_range']) for c in disc['chunks'])  # 안내용(합격 조건 아님)
-    verdict = 'PASS' if ai_score <= TARGETS['pass_threshold'] and p_ok else 'REWRITE'
+    r_ok = True
+    if SCORE_ID:
+        import rhythm_score as _rs
+        f['_rhythm'] = _rs.fit_text(text, SCORE_ID)
+        r_ok = f['_rhythm']['pass']
+    verdict = 'PASS' if ai_score <= TARGETS['pass_threshold'] and p_ok and r_ok else 'REWRITE'
     if disc is None:
         verdict += ' (판별기 모델 없음: 패턴 검사만)'
     if f['chars'] < 1500:
@@ -523,6 +532,10 @@ def report(path: str, as_json=False):
                 print(f'        {w}')
         else:
             print(f"[장면] {it['id']} {it['name']} → {it['fix']}")
+    if SCORE_ID:
+        r = f['_rhythm']
+        print(f"[악보] {SCORE_ID} 맞춤 {r['fit']} (기준 {r['threshold']}) → {'PASS' if r['pass'] else 'REWRITE'}  "
+              f"문단 순서 {r['type_seq']} · 종결 순서 {r['endings']} · 문장 길이 {r['lengths']} · 장치 위치 {r['devices']}")
     if '--vocab' in sys.argv:
         vocab_report(text)
     return s
@@ -535,6 +548,8 @@ if __name__ == '__main__':
         m = re.search(r'\| 고풍 부사 \| ([^|]+) \|', open(cp, encoding='utf-8').read())
         if m:
             CARD_ADVERBS[:] = [w.strip() for w in m.group(1).split(',') if w.strip()]
+    if '--score' in argv:
+        i = argv.index('--score'); SCORE_ID = argv[i + 1]; del argv[i:i + 2]
     if '--preset' in argv:
         i = argv.index('--preset'); PRESET = argv[i + 1]; del argv[i:i + 2]
         if PRESET not in TARGETS['presets']:
