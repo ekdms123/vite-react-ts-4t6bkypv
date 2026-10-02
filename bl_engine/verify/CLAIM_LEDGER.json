@@ -87,6 +87,22 @@
     "verify/BLIND_JUDGE_PROTOCOL.md"
    ],
    "status": "ASSURANCE_NOT_MET"
+  },
+  {
+   "claim_id": "V6_SUBTRACT_ONLY_REVISION_ENFORCED",
+   "claim_text": "The v6 writing protocol's subtract-only revision rule is mechanically checked: added words, added polish words, and title words not present in the raw draft are reported",
+   "current_evidence_refs": [
+    "runtime/HUMAN_DRAFT_PROTOCOL.md",
+    "tools/subtract_check.py",
+    "tests/test_v6_human_draft.py"
+   ],
+   "expiration_condition": "",
+   "required_evidence": [
+    "runtime/HUMAN_DRAFT_PROTOCOL.md",
+    "tools/subtract_check.py",
+    "tests/test_v6_human_draft.py"
+   ],
+   "status": "SUPPORTED"
   }
  ],
  "schema_version": "0.2"

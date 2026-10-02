@@ -1,5 +1,7 @@
 # BL WRITER RUNTIME — 문체가 무너지지 않는 집필 순서
 
+> **v6(패키지 5.0.0): 쓰는 순서는 `runtime/HUMAN_DRAFT_PROTOCOL.md`가 이 문서보다 우선한다.** 후보는 '잘 쓴 문장'이 아니라 장면을 말로 쏟은 초고로 만들고, 퇴고는 빼기만 한다(`python tools/subtract_check.py 초고.md 완성.md`). 블로그·에세이는 `voicecheck --blog`.
+
 이 파일이 BL 원고를 쓸 때의 실행 순서다. 원래 엔진의 `runtime/WRITER_RUNTIME.md`(무엇을 알고 무엇을 모르는지, 장면 권한)는 그대로 지키고, 그 위에 **목소리 층**을 얹는다.
 
 ## v5 실행 순서 (2026-10-01, 이 절이 아래 §2·§2-1·§3과 부딪치면 이 절이 이긴다)

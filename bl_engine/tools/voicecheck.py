@@ -17,6 +17,7 @@
   python tools/voicecheck.py 1화.txt 2화.txt 3화.txt --series  # 화를 가로지르는 반복 버릇
   python tools/voicecheck.py 원고.txt --card PROJECT_VOICE_CARD.md  # 손버릇 카드 적용(카드 밖 부사 금지)
   python tools/voicecheck.py 원고.txt --vocab  # BL 단어장 참고 리포트(점수 무관)
+  python tools/voicecheck.py 블로그.md --blog  # 블로그·에세이: 판별기는 참고만, 설계 티(S07~S09)는 그대로 검사
 """
 from __future__ import annotations
 import json, re, sys, os, signal, statistics as st
@@ -27,6 +28,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 TARGETS = json.load(open(os.path.join(ROOT, 'voice', 'style_targets.json'), encoding='utf-8'))
 SERIES_MODE = False
+BLOG_MODE = '--blog' in sys.argv  # 블로그·에세이: 판별기는 BL 소설 기준이라 참고로만 쓰고, B01~B03을 더 본다
 try:
     sys.path.insert(0, HERE)
     import discriminator as _DISC
@@ -272,16 +274,99 @@ def check_scene(f: dict):
     if rep:
         out.append({'kind': 'scene', 'id': 'S06', 'name': '같은 문장 골격 3회 이상: ' + ', '.join(rep[:3]), 'weight': 2,
                     'fix': '같은 마무리 어절을 반복하지 않는다.'})
+    out += check_design(f)
     if f.get('max_same_ending_run', 0) >= TARGETS.get('same_ending_run_max', 8):
         out.append({'kind': 'scene', 'id': 'S04', 'name': f"같은 종결 유형 {f['max_same_ending_run']}연속", 'weight': 2,
                     'fix': '현재형 판정, 명사 종결, 의문, 구어 종결을 끼워 리듬을 깬다.'})
     return out
 
 
+# (v6) 설계 티: 단어가 아니라 문단 설계에서 나는 AI 냄새. BL 원작 4종 덩어리에서 S07·S08은 0.2%, S09(공유 소재 11개 이상)는 1% 미만.
+APHORISM_HEAD = re.compile(r'^(사람은|사람들은|사람이란|글은|글이란|남이 [가-힣 ]{1,12}(은|는)|누구나|인생은|사랑은|세상은|([가-힣]+ ){0,2}[가-힣]+(은|는) 원래)')
+APHORISM_END = re.compile(r'(는다|ㄴ다|한다|이다|있다|없다|된다|만든다|시킨다|법이다|마련이다|재밌다|좋다)[.!]?$')
+FIRST_PERSON = re.compile(r'(나는|나도|내가|내 |저는|제가)')
+CALLBACK = re.compile(r'(다 쓰고 보니|쓰고 보니|알고 보니|돌이켜 보면|결국 (같은|다|하나|그)[^.]{0,20}(얘기|이야기|였다|이었다))')
+_DESIGN_STOP = set('그리고 그런데 그래서 하지만 그냥 정말 진짜 너무 조금 다시 이미 아직 오늘 그게 이게 그것 이것 하나 사람 거다 것이 것을 것은 있었다 없었다 했다 하는 있는 같은'.split())
+
+
+def _stems(p):
+    from stylofeat import TAILS
+    out = set()
+    for w in p.split():
+        w = re.sub(r'[^가-힣]', '', w)
+        for t in TAILS:
+            if w.endswith(t) and len(w) - len(t) >= 2:
+                w = w[:-len(t)]; break
+        if len(w) >= 2 and w not in _DESIGN_STOP:
+            out.add(w)
+    return out
+
+
+def check_design(f: dict):
+    out = []
+    nar = f['_nar']
+    sents = [x for p in nar for x in split_sents(p)]
+    aph = [x for x in sents if APHORISM_HEAD.search(x) and APHORISM_END.search(x) and not FIRST_PERSON.search(x)]
+    if aph:
+        out.append({'kind': 'scene', 'id': 'S07', 'name': '교훈 문장(일반 주어로 세상 이치를 정리): ' + aph[0][:30], 'weight': 3,
+                    'fix': '내 얘기를 세상 이치로 바꾸지 않는다. 지우거나 "나는 ~했다"로 되돌린다.'})
+    if CALLBACK.search('\n'.join(nar)):
+        out.append({'kind': 'scene', 'id': 'S08', 'name': "회수 요약('다 쓰고 보니/결국 같은 얘기')", 'weight': 3,
+                    'fix': '앞에 깔아 둔 것을 끝에서 다시 묶어 보여 주지 않는다. 묶는 문장을 지운다.'})
+    ps = [p for p in nar if len(split_sents(p)) >= 3]
+    best = 0
+    for i in range(len(ps)):
+        for j in range(i + 1, min(len(ps), i + 3)):
+            best = max(best, len(_stems(ps[i]) & _stems(ps[j])))
+    if best >= TARGETS.get('mirror_shared_max', 11):
+        out.append({'kind': 'scene', 'id': 'S09', 'name': f'거울 구조(가까운 두 문단이 같은 소재 {best}개를 되받음)', 'weight': 3,
+                    'fix': '대구로 맞춘 두 문단 중 하나를 다른 소재로 다시 쓰거나, 길이를 확 다르게 한다.'})
+    return out
+
+
+# (v6) 블로그·에세이 모드 전용 검사. 블로그 원문 말뭉치로 잰 값이 아니라 사용자 피드백에서 나온 잠정 규칙이다.
+WRITTEN_END = re.compile(r'(것이다|법이다|마련이다|곤 했다|터였다|셈이었다|뿐이다|따름이다)[.!]?$')
+SEO_INSERT = re.compile(r'(검색(하면|해 보면|해보면|창에|해 봤|해봤)|검색어|키워드)')
+SEASON_CLICHE = ['낙엽', '은행잎', '단풍잎', '하늘이 높', '높은 하늘', '선선한 바람', '옷깃', '트렌치', '바바리', '캔커피',
+                 '코스모스', '갈대', '독서의 계절', '천고마비', '니트', '쓸쓸한 바람']
+
+
+def check_blog(f: dict):
+    out = []
+    sents = [x for p in f['_nar'] for x in split_sents(p)]
+    we = [x for x in sents if WRITTEN_END.search(x)]
+    if len(we) >= 2:
+        out.append({'kind': 'scene', 'id': 'B01', 'name': f"문어체 종결 {len(we)}회(~것이다/~법이다/~곤 했다)", 'weight': 2,
+                    'fix': '블로그는 말하듯 끝낸다. ~했다/~함/~임/~거다로.'})
+    seo = [x for x in sents if SEO_INSERT.search(x)]
+    if seo:
+        out.append({'kind': 'scene', 'id': 'B02', 'name': '검색어를 넣으려고 만든 문장: ' + seo[0][:30], 'weight': 3,
+                    'fix': '키워드는 제목 앞부분, 본문에 문맥상 한 번, 해시태그로만. "~를 검색하면" 문장은 지운다.'})
+    allt = '\n'.join(f['_paras'])
+    hits = [w for w in SEASON_CLICHE if w in allt]
+    if len(hits) >= 3:
+        out.append({'kind': 'scene', 'id': 'B03', 'name': '계절 소품 클리셰 묶음(잠정 목록): ' + ', '.join(hits[:5]), 'weight': 2,
+                    'fix': '모두가 쓰는 가을 소품 대신 내가 실제로 한 짓 하나로 바꾼다.'})
+    return out
+
+
+def _strip_blog_markup(text: str) -> str:
+    lines = []
+    for ln in text.split('\n'):
+        st_ = ln.strip()
+        if st_.startswith('제목:') or re.fullmatch(r'(#\S+\s*)+', st_):
+            continue  # 제목 줄과 해시태그 줄은 본문이 아니다
+        lines.append(re.sub(r'^(#{1,6}\s+|>\s*)', '', st_))
+    return '\n'.join(lines)
+
+
 def score(text: str):
     text = re.sub(r'<!--.*?-->', '', text, flags=re.S)  # 파일 머리 주석은 본문이 아니다
+    text = _strip_blog_markup(text)
     f = measure(text)
     issues = check_targets(f) + check_preset(f) + check_bans(text, f) + check_scene(f) + check_example_copy(text)
+    if BLOG_MODE:
+        issues += check_blog(f)
     penalty = 0.0
     for it in issues:
         w = it.get('weight', 1)
@@ -295,7 +380,7 @@ def score(text: str):
     f['pos_checked'] = _KIWI is not None
     disc = _DISC.score_text(text) if _DISC else None
     f['_disc'] = disc
-    p_ok = disc is None or disc['p_human_min'] >= TARGETS.get('p_human_threshold', 0.5)
+    p_ok = disc is None or BLOG_MODE or disc['p_human_min'] >= TARGETS.get('p_human_threshold', 0.5)
     if disc is not None:
         disc['outside_max'] = max(len(c['outside_human_range']) for c in disc['chunks'])  # 안내용(합격 조건 아님)
     verdict = 'PASS' if ai_score <= TARGETS['pass_threshold'] and p_ok else 'REWRITE'
@@ -411,14 +496,16 @@ def report(path: str, as_json=False):
         return s
     d = f.get('_disc')
     print(f'=== {path}\nAI_SCORE {s} (패턴 점수, 낮을수록 좋음, 통과 기준 {TARGETS["pass_threshold"]})  → {verdict}')
-    if d:
+    if d and BLOG_MODE:
+        print(f"P_HUMAN {d['p_human_mean']} (--blog: BL 소설 원작 기준 모델이라 블로그에서는 참고만, 판정에 쓰지 않는다)")
+    elif d:
         print(f"P_HUMAN {d['p_human_mean']} (덩어리 최저 {d['p_human_min']}, 통과 기준 {TARGETS.get('p_human_threshold', 0.5)})"
               f"  원작 범위 이탈 {d['outside_max']}개 (원작 덩어리 중앙값 6. {TARGETS.get('outside_range_max', 9)}개를 넘고 고친 뒤 늘었다면 과잉 교정 의심)")
-        for c in d['chunks']:
-            for it in c['push_ai'][:4]:
-                print(f"[판별] {it['diagnosis']} ({it['feature']}={it['value']}, 원작 평균 {it['human_mean']}) → {it['fix']}")
-            for it in c['outside_human_range'][:3]:
-                print(f"[과잉/이탈] {it['feature']}={it['value']} 원작 범위 {it['human_p05']}~{it['human_p95']} 밖")
+    for c in (d['chunks'] if d and not BLOG_MODE else []):
+        for it in c['push_ai'][:4]:
+            print(f"[판별] {it['diagnosis']} ({it['feature']}={it['value']}, 원작 평균 {it['human_mean']}) → {it['fix']}")
+        for it in c['outside_human_range'][:3]:
+            print(f"[과잉/이탈] {it['feature']}={it['value']} 원작 범위 {it['human_p05']}~{it['human_p95']} 밖")
     if not pub.get('pos_checked'):
         print('  (kiwipiepy 없음: 품사 참고 지표 생략. 점수와 무관)')
     print(f"글자 {pub['chars']} / 서술문 {pub['narr_sentences']}")

@@ -73,11 +73,11 @@
     "total": 22
   },
   "fingerprint": {
-    "claim_ledger_hash": "e19d8282823eecf98c26383d984a4b61263fa8a62233499c22eaf15811cdeb26",
-    "code_hash": "91468edaa30fcf45a2890d7d098d1fdd79209491aa7de4d29912e215d7ac3b14",
+    "claim_ledger_hash": "d423ce64b5663c0665a0dab20e532c3230fad68b8eceedfcc64c058108afed21",
+    "code_hash": "b6b3925bf33d70072a38166483c0aa16602a97e2b2d4a62231e12a8d3a75f3a3",
     "execution_ledger_hash": "0b258c17c15aa208f06e24afdbcc697e0e0747a00e4fc30bf90044c9c3cdab7a",
     "schema_hash": "4500134cb385f3579e55d47fb45c9ea470dc8ae1e1adfc4353ea0d4139d85234",
-    "version_hash": "e1d49c569ae09b2ede16e2d83820a3809b35eb6c44c13ba9b5330598d6b8f43c"
+    "version_hash": "1cc3d76ac7c21a664e79848fd481e9791016451b244e7de5feeeb9bea5fd2184"
   },
   "ledger_errors": [],
   "literary_validation": "ASSURANCE_NOT_MET",
@@ -87,7 +87,7 @@
     "compileall": "PASS",
     "full_pytest": {
       "failed": 0,
-      "passed": 205
+      "passed": 213
     },
     "schema_meta_validation": {
       "valid": 8
