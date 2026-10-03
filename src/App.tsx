@@ -10,7 +10,7 @@ import { Romance } from './components/Romance';
 import { Shop } from './components/Shop';
 import { CalendarView } from './components/CalendarView'; 
 import { StatusCard } from './components/StatusCard'; 
-import { getOracleAdvice, generateCharacterPortrait, generateBackground, evaluateQuestDifficulty, editMagicalImage, generateVideoFromImage, generateSideQuests } from './services/geminiService';
+import { getOracleAdvice, generateCharacterPortrait, generateBackground, evaluateQuestDifficulty, editMagicalImage, generateVideoFromImage, generateSideQuests, getStoredApiKey, setStoredApiKey } from './services/geminiService';
 import { GameState, TabId, Skill, ShopItem, MaleLead, Quest, StoryChapter, Choice, Expense, Secret } from './types';
 import { ResponsiveContainer, BarChart, Bar, XAxis, Tooltip } from 'recharts';
 
@@ -207,7 +207,7 @@ export const App: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState<TabId>('home');
   const [showSettings, setShowSettings] = useState(false);
-  const [apiKeyLinked, setApiKeyLinked] = useState(false);
+  const [apiKeyLinked, setApiKeyLinked] = useState(() => !!getStoredApiKey());
   const [lastSavedTime, setLastSavedTime] = useState<string>("");
   const [showEnding, setShowEnding] = useState(false);
 
@@ -272,7 +272,15 @@ export const App: React.FC = () => {
               await window.aistudio.openSelectKey();
               setApiKeyLinked(true);
               alert("Google 계정이 성공적으로 연동되었습니다! 이제 고화질 이미지 생성이 가능합니다.");
-          } else { alert("이 환경에서는 자동 연동을 지원하지 않습니다."); }
+              return;
+          }
+          // Outside AI Studio there is no key picker, so ask for the key directly.
+          const input = window.prompt("Gemini API 키를 입력하세요.\n(https://aistudio.google.com/apikey 에서 발급, 비워두면 연동 해제)", getStoredApiKey());
+          if (input === null) return;
+          const key = input.trim();
+          setStoredApiKey(key);
+          setApiKeyLinked(!!key);
+          alert(key ? "Gemini API 키가 저장되었습니다! 이제 AI 기능을 사용할 수 있습니다." : "Gemini API 연동이 해제되었습니다.");
       } catch (e) { alert("연동 중 오류가 발생했습니다."); }
   };
 

@@ -21,10 +21,40 @@ const cleanJson = (text: string): string => {
     return clean;
 };
 
+// --- API Key ---
+// AI Studio injects process.env.API_KEY; everywhere else (local, StackBlitz, deploys)
+// the key is entered in Settings and kept in localStorage.
+export const API_KEY_STORAGE = "gemini_api_key";
+
+export const getStoredApiKey = (): string => {
+    try { return localStorage.getItem(API_KEY_STORAGE) || ""; } catch { return ""; }
+};
+
+export const setStoredApiKey = (key: string) => {
+    try {
+        if (key) localStorage.setItem(API_KEY_STORAGE, key);
+        else localStorage.removeItem(API_KEY_STORAGE);
+    } catch { /* storage unavailable */ }
+};
+
+const getApiKey = (): string => {
+    const stored = getStoredApiKey();
+    if (stored) return stored;
+    // @ts-ignore - only defined when AI Studio injects it
+    if (typeof process !== "undefined" && process.env?.API_KEY) return process.env.API_KEY;
+    return "";
+};
+
+const getAI = () => {
+    const apiKey = getApiKey();
+    if (!apiKey) throw new Error("Gemini API key is not set. Link it in Settings.");
+    return new GoogleGenAI({ apiKey });
+};
+
 // --- 1. Quest Intelligence (Gemini 3 Flash) ---
 export const evaluateQuestDifficulty = async (questTitle: string): Promise<{ tier: DifficultyTier, gold: number, xp: number, comment: string }> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const ai = getAI();
     const prompt = `
       Role: Strict Royal Butler.
       Task: Analyze the difficulty of this user task: "${questTitle}".
@@ -47,7 +77,7 @@ export const evaluateQuestDifficulty = async (questTitle: string): Promise<{ tie
 
 export const generateSideQuests = async (userState: GameState): Promise<Quest[]> => {
     try {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        const ai = getAI();
         const prompt = `
             Role: Loyal Royal Butler in a Fantasy Otome Game.
             User: A noble lady who needs to build good habits (daily rituals).
